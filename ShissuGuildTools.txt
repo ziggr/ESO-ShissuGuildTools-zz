@@ -1,0 +1,55 @@
+
+## Title: |c779cffShissu's|r Guild Tools v2.6.1
+## APIVersion: 100016
+## Author: |c779cff@Shissu|r [EU]
+## SavedVariables: shissuGT
+## OptionalDependsOn: LibAddonMenu-2.0
+   
+# Main
+General\Globals.lua
+ShissuGuildTools.lua  
+General\SettingsDefault.lua
+General\SettingsMenu.lua
+General\ShissuLib.lua
+General\SlashCommand.lua
+General\Feedback.lua
+General\Feedback.xml
+            
+# Sprache  
+i18n\$(language).lua                     
+
+# Bindings
+General\Bindings.xml
+General\Bindings.lua
+
+# Tools    
+Tools\Notebook\Notebook.lua
+Tools\Notebook\Notebook.xml
+Tools\Teleport\Teleport.lua
+Tools\Teleport\Teleport.xml
+Tools\Member\Member.lua
+Tools\Member\Member.xml
+Tools\Roster.lua
+Tools\Notifications.lua
+Tools\HistoryScanner.lua
+Tools\Chat.lua
+Tools\History.lua
+Tools\ContextMenu.lua
+Tools\Home.lua
+Tools\Misc.lua
+Tools\GuildColor.lua
+
+# Ext. Libraries
+ExtLibs\LibStub\LibStub.lua
+ExtLibs\libChat2\libChat2.lua
+ExtLibs\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
+ExtLibs\LibAddonMenu-2.0\controls\panel.lua
+ExtLibs\LibAddonMenu-2.0\controls\submenu.lua
+ExtLibs\LibAddonMenu-2.0\controls\checkbox.lua
+ExtLibs\LibAddonMenu-2.0\controls\description.lua
+ExtLibs\LibAddonMenu-2.0\controls\editbox.lua
+ExtLibs\LibAddonMenu-2.0\controls\header.lua
+ExtLibs\LibAddonMenu-2.0\controls\slider.lua
+ExtLibs\LibAddonMenu-2.0\controls\colorpicker.lua
+ExtLibs\LibAddonMenu-2.0\controls\button.lua
+ExtLibs\LibAddonMenu-2.0\controls\dropdown.lua

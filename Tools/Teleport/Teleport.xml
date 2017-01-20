@@ -1,0 +1,45 @@
+<!-- Teleporter -->
+<GuiXml>
+	<Controls>
+		<Button name="SGT_Teleport_Index" virtual="true" inherits="ZO_DefaultTextButton" />
+		
+	    <TopLevelControl name="SGT_Teleport" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+			<Dimensions x="330" y="350" />
+	      	<Anchor point="CENTER" offsetX="100" offsetY="100" />      
+	      	<Controls>
+		        <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
+		        
+		        <Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="SGT Teleport">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				</Label>
+				
+				<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Guild Tools">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+				</Label>
+
+				<Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+          			<Dimensions x="360" y="3" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-30" offsetY="35" />
+			  	</Texture>		       
+
+				<Button name="$(parent)_ButtonTeleport" inherits="ZO_DefaultButton">
+		        	<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="185" offsetY="35" relativeTo="$(parent)_Line" />
+		            <Dimensions x="160" y="30" />
+		            <MouseButton enabled="true" />
+		        </Button>
+
+			   	<Button name="$(parent)_ButtonRandom" inherits="ZO_DefaultButton">
+		       		<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="0" offsetY="45" relativeTo="$(parent)_ButtonTeleport" />
+		           	<Dimensions x="160" y="30" />
+		          	<MouseButton enabled="true" />
+		        </Button>
+			   
+			   	<Button name="$(parent)_ButtonRefresh" inherits="ZO_DefaultButton">
+		        	<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="0" offsetY="60" relativeTo="$(parent)_ButtonRandom" />
+		            <Dimensions x="160" y="30" />
+		            <MouseButton enabled="true" />
+		        </Button>
+		    </Controls>
+		</TopLevelControl>    
+	</Controls>
+</GuiXml>

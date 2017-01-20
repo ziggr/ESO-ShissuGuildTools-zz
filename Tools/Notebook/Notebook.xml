@@ -1,0 +1,483 @@
+<!-- Notizblock -->
+<GuiXml>
+	<Controls> 
+		<!-- Scroll/Button Container Notizblock / Mail Empfänger / Protocol -->
+		<Button name="SGT_Notebook_Index" virtual="true" inherits="ZO_DefaultTextButton" />
+    	<Button name="SGT_Notebook_MailIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		<Button name="SGT_Notebook_MailProtocolFullIndex" virtual="true" inherits="ZO_DefaultTextButton" />	
+       	<Button name="SGT_Notebook_MailProtocolIgnoreIndex" virtual="true" inherits="ZO_DefaultTextButton" />	
+		
+		<!-- ChatButton -->
+		<Button name="SGT_ZO_ToogleButton" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+        	<Anchor point="RIGHT" relativeTo="ZO_ChatWindowOptions" relativePoint="RIGHT" offsetX="36" offsetY="0" />
+        	<Dimensions x="36" y="36" />
+          	<Textures normal="/esoui/art/progression/morph_up.dds" mouseOver="//esoui/art/progression/morph_over.dds" />
+          	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.ChatButton)</OnMouseEnter>
+	        <OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+	        <OnMouseUp>ShissuGT.Misc.ChatButton(button)</OnMouseUp>
+		</Button> 	
+        
+        <!-- Mail SplashScreen; während des Versenden von Massen-Emails -->
+		<TopLevelControl name="SGT_Notebook_Splash" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+    		<Dimensions x="400" y="100" />
+    		<Anchor point="CENTER" offsetX="100" offsetY="100"/> 
+    		<Controls>
+		        <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
+		    	
+		    	<Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="E-Mail senden">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				</Label>
+				
+				<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Guild Tools">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+				</Label>
+
+		        <Button name="$(parent)_Continue" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+		        	<Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-30" offsetY="-8" />
+		          	<Dimensions x="48" y="48" />
+		          	<Textures normal="/esoui/art/hud/radialicon_trade_up.dds" mouseOver="/esoui/art/hud/radialicon_trade_over.dds" />
+		          	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipContin)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        </Button>
+ 
+ 		        <Button name="$(parent)_Protocol" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+		        	<Anchor point="TOPRIGHT" relativeTo="$(parent)_Continue" relativePoint="TOPRIGHT" offsetX="-45" offsetY="5" />
+		          	<Dimensions x="40" y="40" />
+		          	<Textures normal="/EsoUI/Art/Journal/journal_tabicon_cadwell_up.dds" mouseOver="/EsoUI/Art/Journal/journal_tabicon_cadwell_over.dds" />
+		          	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ProtocolTT)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        </Button>
+                                          
+        		<Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+          			<Dimensions x="490" y="2" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-55" offsetY="35" />
+			  	</Texture>
+			  	
+			  	<Label name="$(parent)_RecipientLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Empfänger:">
+			  		<Dimensions x="100" y="25" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Line" relativePoint="TOPLEFT" offsetX="50" offsetY="5" />
+				</Label>
+				
+				<Label name="$(parent)_Recipient" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="@Shissu">
+					<Anchor point="RIGHT" relativeTo="$(parent)_RecipientLabel" relativePoint="RIGHT" offsetX="135" offsetY="0" />
+					<Dimensions x="140" y="25" />
+				</Label>
+				
+			  	<Label name="$(parent)_SubjectLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Betreff:">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_RecipientLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+					<Dimensions x="120" y="25" />
+				</Label>
+				
+				<Label name="$(parent)_Subject" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="[Tamrizon] Wochenrundschau">
+					<Anchor point="RIGHT" relativeTo="$(parent)_SubjectLabel" relativePoint="RIGHT" offsetX="115" offsetY="0" />
+					<Dimensions x="140" y="25" />
+				</Label>
+				
+			  	<Label name="$(parent)_ProgressLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Fortschritt:">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Line" relativePoint="TOPLEFT" offsetX="300" offsetY="5" />
+					<Dimensions x="110" y="25" />
+				</Label>
+				
+				<Label name="$(parent)_Progress" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="500/500">
+					<Anchor point="RIGHT" relativeTo="$(parent)_ProgressLabel" relativePoint="RIGHT" offsetX="45" offsetY="0" />
+					<Dimensions x="70" y="25" />
+				</Label>      
+				                                
+			  	<Label name="$(parent)_Waiting" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Bitte warten...">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_ProgressLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+				</Label>				
+		    </Controls>
+    	</TopLevelControl>
+      	
+      	<!-- Mail Protokoll; nachdem Versenden von Massen-Emails -->
+    	<TopLevelControl name="SGT_MailProtocol" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+      		<Dimensions x="330" y="400" />
+    		<Anchor point="CENTER" offsetX="100" offsetY="100"/> 
+    		<Controls>
+		        <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
+           
+      			<Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="SGT Mail Protocol">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				</Label>
+
+    			<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Guild Tools">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+				</Label>
+        
+       			<Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+          			<Dimensions x="400" y="2" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-40" offsetY="35" />
+			  	</Texture>
+       
+          		<Label name="$(parent)_Full" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Postkasten voll">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="10" offsetY="45" />
+				</Label>
+
+        		<Label name="$(parent)_Ignore" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Ignoriert">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Full" relativePoint="TOPRIGHT" offsetX="60" offsetY="0" />
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ProtocolIgnoreTT)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Label>
+      		</Controls>
+      	</TopLevelControl>
+      
+      	<!-- Notizbuch -->
+  		<TopLevelControl name="SGT_Notebook" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+		<Dimensions x="640" y="420" />
+		<Anchor point="CENTER" offsetX="100" offsetY="100" />      
+	   	<Controls>
+		 	<Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
+
+		        <Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="SGT Notebook">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				</Label>
+
+		        <Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Guild Tools">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+				</Label>
+                                          
+        		<Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+          			<Dimensions x="720" y="2" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-55" offsetY="35" />
+			  	</Texture>
+       
+        		<Backdrop name="$(parent)_NoteTitle" inherits="ZO_EditBackdrop">
+          			<Anchor point="TOPLEFT" relativeTo="$(parent)_Line" offsetX="260" offsetY="10" /> 
+          			<Dimensions x="298" y="30" />
+			        <Controls>
+			       		<EditBox name="$(parent)Text" inherits="ZO_DefaultEditForBackdrop">
+							<OnEnter>SGT_Notebook_NoteText:TakeFocus()</OnEnter>
+				            <OnTab>SGT_Notebook_NoteText:TakeFocus()</OnTab>
+				           	<OnEscape>self:LoseFocus()</OnEscape>
+			           	</EditBox>
+			        </Controls>
+				</Backdrop>      
+		        
+				<Button name="$(parent)_Color1" inherits="ZO_DefaultButton" text="1">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetY="40" relativeTo="$(parent)_NoteTitle" />
+					<Dimensions x="30" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color(1)</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.Standard1)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>
+				<Button name="$(parent)_Color2" inherits="ZO_DefaultButton" text="2">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="40" relativeTo="$(parent)_Color1" />
+					<Dimensions x="30" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color(2)</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.Standard2)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>
+				<Button name="$(parent)_Color3" inherits="ZO_DefaultButton" text="3">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="40" relativeTo="$(parent)_Color2" />
+					<Dimensions x="30" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color(3)</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.Standard3)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>
+				<Button name="$(parent)_Color4" inherits="ZO_DefaultButton" text="4">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="40" relativeTo="$(parent)_Color3" />
+					<Dimensions x="30" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color(4)</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.Standard4)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>				
+				<Button name="$(parent)_ColorW" inherits="ZO_DefaultButton" text="W">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="40" relativeTo="$(parent)_Color4" />
+					<Dimensions x="30" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color("W")</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.White)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>
+				<Button name="$(parent)_ColorANY" inherits="ZO_DefaultButton" text="ANY">
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT" offsetX="40" relativeTo="$(parent)_ColorW" />
+					<Dimensions x="40" y="30" />
+					<MouseButton enabled="true" />
+					<OnMouseUp>ShissuGT.Notebook.Color("ANY")</OnMouseUp>
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Color.ANY)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+				</Button>			
+				
+				<Label name="$(parent)_NoteLength" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Chat: 000/350">
+					<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-10" offsetY="105" />
+				</Label>
+								
+		        <Button name="$(parent)_New" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+			        <Anchor point="LEFT" relativeTo="$(parent)_NoteTitle" relativePoint="TOPRIGHT" offsetY="17" />
+			        <Dimensions x="36" y="36" />
+			        <Textures normal="/esoui/art/miscellaneous/spinnerplus_up.dds" mouseOver="/esoui/art/miscellaneous/spinnerplus_over.dds" />
+					<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipNew)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        </Button>    
+
+		        <Button name="$(parent)_Delete" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+			        <Anchor point="LEFT" relativeTo="$(parent)_New" relativePoint="RIGHT" offsetX="-4" offsetY="0" />
+			        <Dimensions x="36" y="36" />
+			        <Textures normal="/esoui/art/miscellaneous/spinnerminus_up.dds" mouseOver="/esoui/art/miscellaneous/spinnerminus_over.dds" />
+			      	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipDelete)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+				</Button>
+				
+		        <Button name="$(parent)_Undo" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+			        <Anchor point="LEFT" relativeTo="$(parent)_Delete" relativePoint="RIGHT" offsetX="-4" offsetY="0" />
+			        <Dimensions x="36" y="36" />
+			        <Textures normal="/esoui/art/inventory/inventory_tabicon_quickslot_up.dds" mouseOver="/esoui/art/inventory/inventory_tabicon_quickslot_over.dds" />
+			        <OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipUndo)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        </Button>   
+		        
+		        <Button name="$(parent)_SendTo" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+			        <Anchor point="LEFT" relativeTo="$(parent)_Undo" relativePoint="RIGHT" offsetX="-4" offsetY="0" />
+			        <Dimensions x="36" y="36" />
+			        <Textures normal="/esoui/art/progression/morph_up.dds" mouseOver="//esoui/art/progression/morph_over.dds" />
+			        <OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipChat)</OnMouseEnter>
+	        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        </Button>       																
+
+		        <Backdrop name="$(parent)_Note" inherits="ZO_EditBackdrop" >
+			        <Anchor point="TOPLEFT" relativeTo="$(parent)_Color1" offsetX="0" offsetY="40" /> 
+			        <Dimensions x="420" y="220" />
+			        <Controls>
+			        	<EditBox name="$(parent)Text" inherits="ZO_DefaultEditMultiLineForBackdrop">
+							<OnEscape>self:LoseFocus()</OnEscape>
+				            <OnTab>SGT_Notebook_AutoStringText:TakeFocus()</OnTab>
+			            </EditBox>
+			       	</Controls>
+		        </Backdrop>               
+		        
+		        <Backdrop name="$(parent)_AutoString" inherits="ZO_EditBackdrop">
+		        	<Anchor point="BOTTOMRIGHT" relativeTo="$(parent)_Note" offsetX="0" offsetY="35" /> 
+		          	<Dimensions x="290" y="30" />
+		          	<Controls>
+		            	<EditBox name="$(parent)Text" inherits="ZO_DefaultEditForBackdrop">
+		            		<OnEscape>self:LoseFocus()</OnEscape>
+				            <OnTab>SGT_Notebook_SlashText:TakeFocus()</OnTab>
+		            	</EditBox>
+		          	</Controls>
+		        </Backdrop>   
+		        
+				<Button name="$(parent)_AutoStringEnabled" inherits="ZO_CheckButton">
+					<Anchor point="RIGHT" relativeTo="$(parent)_AutoString" relativePoint="RIGHT" offsetX="-375" offsetY="0" />
+		            <Dimensions x="16" y="16" />
+			        <MouseButton enabled="true" />
+		        </Button>
+
+		        <Backdrop name="$(parent)_Slash" inherits="ZO_EditBackdrop">
+		        	<Anchor point="BOTTOMRIGHT" relativeTo="$(parent)_AutoString" offsetX="0" offsetY="37" /> 
+		          	<Dimensions x="290" y="30" />
+		          	<Controls>
+		            	<EditBox name="$(parent)Text" inherits="ZO_DefaultEditForBackdrop">
+		              		<OnEscape>self:LoseFocus()</OnEscape>
+				            <OnTab>SGT_Notebook_NoteTitleText:TakeFocus()</OnTab>	
+		            	</EditBox>
+		          	</Controls>
+		        </Backdrop>    
+		        
+				<Label name="$(parent)_SlashInfo" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER">
+					<Anchor point="RIGHT" relativeTo="$(parent)_Slash" relativePoint="RIGHT" offsetX="-300" offsetY="0" />
+				</Label>
+				
+				<Label name="$(parent)_UserSlash" hidden="true" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER">
+					<Anchor point="RIGHT" relativeTo="$(parent)_Slash" relativePoint="RIGHT" offsetX="10" offsetY="50" />
+					<Controls>
+						<Backdrop name="$(parent)_BG" inherits="ZO_DefaultBackdrop"></Backdrop>
+					</Controls>
+				</Label>
+
+		        <!-- Notizblock | E-Mail Empfänger -->  
+				<Backdrop name="$(parent)_MessagesRecipient" mouseEnabled="true" inherits="ZO_DefaultBackdrop">
+		        	<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPRIGHT"  offsetX="10" offsetY="-8" /> 
+		          	<Dimensions x="385" y="436" />
+          			<Controls>
+						<Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_MessagesRecipient" relativePoint="TOPLEFT" offsetX="20" offsetY="10" />
+						</Label>
+			
+						<Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+		          			<Dimensions x="390" y="2" />
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-30" offsetY="35" />
+					  	</Texture>
+						
+						 <Button name="$(parent)_Add" hidden="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+					        <Anchor point="TOPLEFT" relativeTo="$(parent)_Line" relativePoint="TOPLEFT" offsetX="160" offsetY="90" />
+					        <Dimensions x="32" y="32" />
+					        <Textures normal="/esoui/art/miscellaneous/spinnerplus_up.dds" mouseOver="/esoui/art/miscellaneous/spinnerplus_over.dds" />
+							<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ListPlayerAdd)</OnMouseEnter>
+			        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        		</Button> 
+
+				        <Button name="$(parent)_Delete" hidden="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+					        <Anchor point="LEFT" relativeTo="$(parent)_Add" relativePoint="LEFT" offsetX="0" offsetY="40" />
+					        <Dimensions x="32" y="32" />
+					        <Textures normal="/esoui/art/miscellaneous/spinnerminus_up.dds" mouseOver="/esoui/art/miscellaneous/spinnerminus_over.dds" />
+					      	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ListPlayerRemove)</OnMouseEnter>
+			        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+						</Button>
+						
+				        <Button name="$(parent)_BuildGroup" hidden="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+					        <Anchor point="LEFT" relativeTo="$(parent)_Add" relativePoint="LEFT" offsetX="0" offsetY="120" />
+					        <Dimensions x="32" y="32" />
+					        <Textures normal="/esoui/art/contacts/tabicon_friends_up.dds" mouseOver="/esoui/art/contacts/tabicon_friends_over.dds" />
+					      	<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ListPlayerBuildGroup)</OnMouseEnter>
+			        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+						</Button>						
+																						
+						<Label name="$(parent)_GuildsLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Gilde">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_Line" relativePoint="TOPLEFT" offsetX="180" offsetY="15" />
+						</Label>
+												
+				        <Control name="$(parent)_Guilds" width="100" inherits="ZO_StatsDropdownRow">
+				        	<Anchor point="TOPLEFT" relativeTo="$(parent)_GuildsLabel" relativePoint="TOPRIGHT" offsetX="20" offsetY="-3" />
+				        </Control>
+				        
+				        <Button name="$(parent)_NewList" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+					        <Anchor point="TOPRIGHT" relativeTo="$(parent)_Guilds" relativePoint="TOPRIGHT" offsetX="33" offsetY="-3" />
+					        <Dimensions x="32" y="32" />
+					        <Textures normal="/esoui/art/progression/morph_up.dds" mouseOver="//esoui/art/progression/morph_over.dds" />
+							<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ListAddRemove)</OnMouseEnter>
+			        		<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit>  
+		        		</Button> 
+				
+						<Label name="$(parent)_RanksLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Rank">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_GuildsLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="40" />
+						</Label>
+				        <Control name="$(parent)_Ranks" width="100" inherits="ZO_StatsDropdownRow">
+				        	<Anchor point="TOPLEFT" relativeTo="$(parent)_RanksLabel" relativePoint="TOPRIGHT" offsetX="21" offsetY="-3" />
+				        </Control>		
+				        
+				       	<!-- Fraktion Checkbox -->  
+				       	<Label name="$(parent)_FactionLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Fraktion">
+				       		<Dimensions x="60" />
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_RanksLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="40" />
+						</Label>
+				       	<Button name="$(parent)_FactionAldmeri" inherits="ZO_CheckButton">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="8" relativeTo="$(parent)_FactionLabel" />
+		                    <Dimensions x="16" y="16" />
+			                <MouseButton enabled="true" />
+		                </Button>
+				       	<Button name="$(parent)_FactionEbonheart" inherits="ZO_CheckButton">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="30" relativeTo="$(parent)_FactionAldmeri" />
+		                    <Dimensions x="16" y="16" />
+			                <MouseButton enabled="true" />
+		                </Button>
+				       	<Button name="$(parent)_FactionDaggerfall" inherits="ZO_CheckButton">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="30" relativeTo="$(parent)_FactionEbonheart" />
+		                    <Dimensions x="16" y="16" />
+			                <MouseButton enabled="true" />
+		                </Button>
+		                				                		
+		               <!-- Status Checkbox --> 		
+				       <Label name="$(parent)_StatusLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Status">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_FactionLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+						</Label>
+
+				       <Button name="$(parent)_StatusOnline" inherits="ZO_CheckButton">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="20" relativeTo="$(parent)_StatusLabel" />
+		                    <Dimensions x="16" y="16" />
+			                <MouseButton enabled="true" />
+			                <OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipOnline)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 	
+		                </Button>
+				       <Button name="$(parent)_StatusOffline" inherits="ZO_CheckButton">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="30" relativeTo="$(parent)_StatusOnline" />
+		                    <Dimensions x="16" y="16" />
+			                <MouseButton enabled="true" />
+			                <OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipOffline)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+		                </Button>
+		                									
+						<Label name="$(parent)_OfflineSinceLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Offline">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_StatusLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+						</Label>
+						
+						<Label name="$(parent)_OfflineSince" font="ZoFontChat" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="0">
+				        	<Dimensions x="100" y="25" />
+				       		<Anchor point="TOPLEFT" relativeTo="$(parent)_OfflineSinceLabel" relativePoint="TOPRIGHT" offsetX="20" offsetY="0" />
+				        </Label>	
+				        											
+						<Texture name="$(parent)_Line2" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+		          			<Dimensions x="190" y="2" />
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_OfflineSinceLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+					  	</Texture>
+		
+						<Label name="$(parent)_ChoiceLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Auswahl">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_Line2" relativePoint="TOPLEFT" offsetX="0" offsetY="5" />
+						</Label>	
+						
+						<Label name="$(parent)_Choice" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="...">
+							<Dimensions x="80" y="25"/>
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_ChoiceLabel" relativePoint="TOPRIGHT" offsetX="10" offsetY="-1" />
+						</Label>
+						
+						<Texture name="$(parent)_Line3" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+		          			<Dimensions x="190" y="2" />
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_ChoiceLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+					  	</Texture>
+						
+						<Label name="$(parent)_MailLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="E-Mail">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_Line3" relativePoint="TOPLEFT" offsetX="0" offsetY="20" />
+						</Label>
+
+						<Button name="$(parent)_ButtonChoice" inherits="ZO_DefaultButton" text="Auswahl">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="5" offsetY="-5" relativeTo="$(parent)_MailLabel" />
+		                    <Dimensions x="90" y="30" />
+		                    <MouseButton enabled="true" />
+		                    <OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipEMail)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+		                </Button>
+										
+						<Button name="$(parent)_ButtonAll" inherits="ZO_DefaultButton" text="Liste">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="-5" relativeTo="$(parent)_ButtonChoice" />
+		                    <Dimensions x="60" y="30" />
+                   			<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipEMailList)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 		  
+		                    <MouseButton enabled="true" />
+		                </Button>
+		                
+						<Texture name="$(parent)_Line4" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+		          			<Dimensions x="190" y="2" />
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_MailLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="40" />
+					  	</Texture>
+                
+						<Label name="$(parent)_EMailKickLabel" font="ZoFontChat" mouseEnabled="true" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Nachrichtenkick: ">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_Line4" relativePoint="TOPLEFT" offsetX="0" offsetY="15" />
+			
+						</Label>	
+						<Label name="$(parent)_EMailKickLabeChoice" font="ZoFontChat" mouseEnabled="true" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="AN">
+							<Dimensions x="80" y="25"/>
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_EMailKickLabel" relativePoint="TOPRIGHT" offsetX="10" offsetY="-1" />
+							<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipEMaikKick)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 		
+						</Label>
+		                
+		                <Label name="$(parent)_KickLabel" font="ZoFontChat" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Kick">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)_EMailKickLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="45" />
+						</Label>
+		                
+		               <Button name="$(parent)_ButtonKick" inherits="ZO_DefaultButton" text="Auswahl">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="25" offsetY="-5" relativeTo="$(parent)_KickLabel" />
+		                    <Dimensions x="90" y="30" />
+							<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipKick)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+		                    <MouseButton enabled="true" />
+		                </Button>
+		                
+		                <Button name="$(parent)_ButtonAllKick" inherits="ZO_DefaultButton" text="Liste">
+		                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" offsetX="-5" relativeTo="$(parent)_ButtonKick" />
+		                    <Dimensions x="60" y="30" />
+							<OnMouseEnter>ShissuGT.Lib.ToolTip(self,ShissuGT.i18n.Notebook.ToolTipKickList)</OnMouseEnter>
+	        				<OnMouseExit>ZO_Tooltips_HideTextTooltip()</OnMouseExit> 
+		                    <MouseButton enabled="true" />
+		                </Button>
+			
+					</Controls>
+        		</Backdrop>      
+     		</Controls> 
+		</TopLevelControl> 
+	</Controls>
+</GuiXml>
+
