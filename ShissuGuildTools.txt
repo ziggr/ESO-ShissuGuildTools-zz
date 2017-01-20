@@ -1,6 +1,6 @@
 
-## Title: |c779cffShissu's|r Guild Tools v2.6.1
-## APIVersion: 100016
+## Title: |c779cffShissu's|r Guild Tools v2.6.2
+## APIVersion: 100017
 ## Author: |c779cff@Shissu|r [EU]
 ## SavedVariables: shissuGT
 ## OptionalDependsOn: LibAddonMenu-2.0
