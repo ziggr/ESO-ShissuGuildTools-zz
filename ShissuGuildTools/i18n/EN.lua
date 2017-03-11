@@ -114,6 +114,8 @@ ZO_CreateStringId("ShissuContextMenu_forward", "Forward")
 ZO_CreateStringId("ShissuContextMenu_answer2", "Reply")
 ZO_CreateStringId("ShissuContextMenu_del", "Erase")
 ZO_CreateStringId("ShissuContextmenu_note", "Personal notes")
+ZO_CreateStringId("ShissuContextMenu_forward_prefix", "Fwd: ")
+ZO_CreateStringId("ShissuContextMenu_answer_prefix", "Re: ")
 
 -- Modul: ShissuMemberStatus
 ZO_CreateStringId("ShissuMemberStatus", "Guild members status")
