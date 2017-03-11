@@ -1,0 +1,17 @@
+## Title: |cAFD3FFShissu's|r|ceeeeee Suite Manager|r v1.4.0
+## APIVersion: 100018
+## Author: |c779cff@Shissu|r [EU]
+
+# Main
+Settings.lua          
+ShissuSuiteManager.lua
+
+ShissuSuiteManager.xml   
+Bindings.xml   
+
+i18n\EN.lua
+i18n\$(language).lua
+
+# Standardmodule
+LanguageChanger.lua
+StandardCommands.lua

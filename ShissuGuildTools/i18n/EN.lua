@@ -1,415 +1,265 @@
+-- Shissu GuildTools LanguageFile
+---------------------------------
 -- File: EN.lua
--- Zuletzt geändert: 09. Januar 2016
+-- Version: v1.3.0
+-- Last Update: 05.03.2017
+-- Written by Christian Flory (@Shissu) - esoui@flory.one
 
-ShissuGT.i18n = {
-  ["InviteC"] = ShissuGT.Color[5] .. "Invite into " .. ShissuGT.Color[6] .. "%1",
-  ["MoTD_CHANGED"] = ShissuGT.Color[7] .. "(Change) ",
-  ["Invite"] = ShissuGT.Color[1] .. "joined",
-  ["Leave"] = ShissuGT.Color[3] .. "leave",  
-  ["MemberInSight"] = "Players in the guild?",
-  ["Alliance"] = GetString(SI_LEADERBOARDS_HEADER_ALLIANCE),
-  ["ChatButton"] = ShissuGT.Color[6] .. "Left mousebutton" ..  ShissuGT.Color[5] .." - Notebook\n"..  ShissuGT.Color[6] .. "Right mousebutton".. ShissuGT.Color[5].. " - Free Teleport",
-  ["ToolTipHTML"] = "HTML Fontcolor \n\n e.g. for black color #000000 \n replace xxxxxx with 000000",
-  ["Disabled"] = "Disabled",
-  ["RollChatde"] = " hat bei einem Zufallswurf (1-MAX) die Zahl: RND erwürfelt.",
-  ["RollChatfr"] = " roule le nombre RND dans un jet aléatoire de 1-MAX",
-  ["RollChaten"] = " rolls the number RND in a random throw of 1-MAX", 
-  ["RestTime"] = "Left Time",
-}
+-- Released under terms in license accompanying this file.
+-- Distribution without license is prohibited!
+ 
+local _color = {
+  blue = "|cAFD3FF",
+  white = "|ceeeeee",
+}              
+            
+-- General
+ZO_CreateStringId("ShissuGeneral", GetString(SI_HOUSEPERMISSIONOPTIONSCATEGORIES1))
+ZO_CreateStringId("Shissu_friend", GetString(SI_MAIN_MENU_CONTACTS))
+ZO_CreateStringId("Shissu_guild", GetString(SI_QUEST_JOURNAL_GUILD_CATEGORY)) -- Gilde
+ZO_CreateStringId("Shissu_chat", GetString(SI_CHAT_TAB_GENERAL))
+ZO_CreateStringId("Shissu_yourText", "YOURTEXT")
+ZO_CreateStringId("Shissu_mail", GetString(SI_CUSTOMERSERVICESUBMITFEEDBACKSUBCATEGORIES209))
+ZO_CreateStringId("Shissu_add", "Add")
+ZO_CreateStringId("Shissu_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))
+ZO_CreateStringId("Shissu_rank", GetString(SI_STAT_GAMEPAD_RANK_LABEL))
+ZO_CreateStringId("Shissu_info", GetString(SI_SCOREBOARD_HELPER_TAB_TOOLTIP))
+ZO_CreateStringId("Shissu_addInfo", "Additional Information")
 
-ShissuGT.i18n.Notebook = {
-  ["Title"] = "Notenbook",   
-  ["MessagesLength"] = "E-Mail: ",  
-  ["ChatLength"] = "Chat: ",
-  ["All"] = "- all",   
-  ["FriendList"] = ShissuGT.Color[2] .. " - |r" .. "friends list",   
-  ["PageTitle"] = "Page ",  
-  ["ChatCommand"] = "Chat Command /sgt n:"..ShissuGT.Color[6],
-  ["SlashCommand"] = "Chat Command",     
-  ["MailTitle"] = "Lists",
-  ["MailChoiceL"] ="Choice: ",
-  ["MailOfflineSince"] = "Offline",
-  ["MailDays"] = " Days",
-  ["MailERR_FAIL_BLANK_MAIL"] = "Message Blank" ,      
-  ["MailDoneL"] ="DONE!",
-  ["MailKick"] = "Messageskick", -- NEU,
-  ["MailOn"] = "ON",
-  ["MailOff"] = "OFF",  
-  ["MailGuild"] = GetString(SI_QUEST_JOURNAL_GUILD_CATEGORY),
-  ["MailRank"] = GetString(SI_STAT_GAMEPAD_RANK_LABEL),
-  ["MailSend"] = GetString(SI_MAIL_SEND_SEND),  
-  ["MailProgress"] ="Please wait...",
-  ["ProgressKickTitle"] ="Remove player",
-  ["ProgressTitle"] = "Send E-Mail",
-  ["ProgressAbort"] = "Canceled",
-  ["List"] = "List",
-  ["Choice"] = "Selection",
-  ["ToolTipToogle"] = "Notebook",
-  ["ToolTipNew"] = "New Note",
-  ["ToolTipDelete"] = "Delete Note",
-  ["ToolTipChat"] =  ShissuGT.Color[6] .. "Left mousebutton" ..  ShissuGT.Color[5] .." - Send Note to the Chat\n"..  ShissuGT.Color[6] .. "Right mousebutton".. ShissuGT.Color[5].. " - Save Note",
-  ["ToolTipUndo"] = "Undo Changes",  
-  ["ToolTipRed"] = "Red font",
-  ["ToolTipYellow"] = "Yellow font",
-  ["ToolTipGreen"] = "Green font",
-  ["ToolTipBlue"] = "blue font",
-  ["ToolTipWhite"] = "white font",
-  ["ToolTipHTML"] = "HTML fontcolor \n\n e.g. for #000000 \n/h000000Hallo/c",
-  ["ToolTipEMail"] = "Send email to selection",
-  ["ToolTipEMailList"] = "Send e-mail to players in the list",
-  ["ToolTipKick"] = "Select from the guild kick (possibly with e-mail)",
-  ["ToolTipKickList"] = "Players in the list from the guild kick (possibly with e-mail)",
-  ["ToolTipEMaikKick"] = "Send e-mail when kicking players",
-  ["ToolTipName"] = "Click with the " .. ShissuGT.Color[6] .. "right mousebutton" .. ShissuGT.Color[5] .." on a name to avoid this player",
-  ["ToolTipOnline"] = "Online, BRB, AFK",
-  ["ToolTipOffline"] = "Offline",  
-  ["ToolTipAbort"] = ShissuGT.Color[6] .. "Window " .. ShissuGT.Lib.ReplaceCharacter("shutdown") .. ShissuGT.Color[5] .. "\nBy closing the sending / kicking is canceled.",
-  ["ToolTipContin"] = "If the shipment for any reason " .. ShissuGT.Color[6] .. "not progress".. ShissuGT.Color[5] .. ", please click on this button. The current receiver is ignored.",
-  ["Disabled"] = "The Notebook is in your settings ",
-  ["ConfirmNoteDelete"] = "Do you want to delete the note?",
-  ["ConfirmEmailKick"]  = "If the player in the list, or your selection are removed from the guild? Players that you remove, will receive an e -mail from you.",
+-- Main
+ZO_CreateStringId("ShissuModule_module", "Modules / Functions")
+ZO_CreateStringId("ShissuModule_moduleInfo", "If you want to accelerate SGT, you can deactivate individual modules and functions according to your needs.")
+ZO_CreateStringId("ShissuModule_moduleInfo2", "Switching the individual modules off and on requires a reloading of the interface (/ reloadui).")
 
-  ["Protocol"] = "Log",
-  ["ProtocolTT"] = "Displays the players who have a full mailbox, or ignore you.",
-  ["ProtocolIgnore"] = "Ignored",
-  ["ProtocolFull"] = "Mailbox full",
-  ["ProtocolIgnoreTT"] = "The player ignores you, or you ignore the player!",
-  ["Subject"] = "Subject",
-  ["Progress"] = "Progress",
+ZO_CreateStringId("ShissuModule_rightMouse", "Right mousekey")
+ZO_CreateStringId("ShissuModule_leftMouse", "Left mousekey")
+ZO_CreateStringId("ShissuModule_middleMouse", "Middle mousekey")
+
+-- Modules
+----------
   
-  ["ListAddRemove"] = ShissuGT.Color[6] .. "Left mousebutton" ..  ShissuGT.Color[5] .." - New List\n"..  ShissuGT.Color[6] .. "Right mousebutton".. ShissuGT.Color[5].. " - Remove List",
-  ["ListPlayerAdd"] = "Add Player", 
-  ["ListPlayerRemove"] = "Remove Player",
-  ["ListPlayerBuildGroup"] = "Invite all Player in Group",
-}
+-- Module: ShissuWelcomeInvite                                                                                             
+ZO_CreateStringId("ShissuWelcomeInvite", "Welcome message")
+ZO_CreateStringId("ShissuWelcomeDesc1", "You can use the following placeholders to create welcome messages")
+ZO_CreateStringId("ShissuWelcomeDesc2", "Name of the player")
+ZO_CreateStringId("ShissuWelcomeDesc3", "Name of the guild")
+ZO_CreateStringId("ShissuWelcomeDesc4", "Separation of different greetings (The coincidence decides)")
 
-ShissuGT.i18n.History = {
-  ["Gold"] = "Toogle " .. ShissuGT.Color[6] .. "Gold ".. ShissuGT.Color[5] .. "Records",
-  ["Item"] = "Toogle " .. ShissuGT.Color[6] .. "Items " .. ShissuGT.Color[5] .. "Records",
-  ["Choice"] = "Number of "..ShissuGT.Color[6] .. "selected" .. ShissuGT.Color[5] .." entries in list",
-  ["Filter"] = "Search for " .. ShissuGT.Color[6] .. "xyz " .. ShissuGT.Color[5] .. "in the records: name, items, prices.",
-  ["FilterBox"] = GetString(SI_HELP_FILTER_BY),
-  ["Choice2"] = "Choice",
-  ["OnOff"] = "Show / Hide",
+-- Modul: ShissuTeleporter
+ZO_CreateStringId("ShissuTeleporter", "Teleporter")
+ZO_CreateStringId("ShissuTeleporter_tele", "Teleport")
+ZO_CreateStringId("ShissuTeleporter_rnd", "Random")
+ZO_CreateStringId("ShissuTeleporter_refresh", "To update")
+ZO_CreateStringId("ShissuTeleporter_grp", "Group leader")
+ZO_CreateStringId("ShissuTeleporter_house", "Home dwelling")
+ZO_CreateStringId("ShissuTeleporter_legends1", "Legend")
+ZO_CreateStringId("ShissuTeleporter_legends2", "Friends")
+ZO_CreateStringId("ShissuTeleporter_legends3", "Group players")
 
-  ["Trader"] = "since trader",
-  ["AllPage"] = "open all pages",
-  ["AllPageInfo"] = "Open all pages in the guild records.\n\n" .. ShissuGT.Color[2] .. "WARNING" .. ShissuGT.Color[5] .. ": Opening the SALES can take a long time!",
-  ["GoldAdded"] = "Paid:",
-  ["GoldRemoved"] = "Withdrawed:",
-  ["ItemAdded"] = "Stored:",
-  ["ItemRemoved"] = "Taken:",
-  ["Sells"] = "Sells", 
-  ["Intern"] = "Intern:",
-  ["Sales"] = "Sales:",
-  ["Tax"] = "Tax:", 
-  ["Member"] = "Member since",
-  
-  ["Total"] = "Total",
-  ["Last"] = "Last",
-  ["thisWeek"] = "This Week",
-  ["lastWeek"] = "Last Week",
-  ["before"] = "vor",
-  ["scanner1"] = "The Guild history of ",
-  ["scanner2"] = "are being read. Please wait...",  
-}
+-- Modul: ShissuNotifications
+ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
+ZO_CreateStringId("ShissuNotifications_info", "Note")
+ZO_CreateStringId("ShissuNotifications_mail", "Delete email / message")
+ZO_CreateStringId("ShissuNotifications_inSight", "Guild member in sight field?")
+ZO_CreateStringId("ShissuNotifications_friend", "Friend Status [online, afk, brb/dnd, offline]")
+ZO_CreateStringId("ShissuNotifications_motD", GetString(SI_GUILD_MOTD_HEADER))
+ZO_CreateStringId("ShissuNotifications_background", GetString(SI_GUILD_BACKGROUND_INFO_HEADER))
+ZO_CreateStringId("ShissuNotifications_rank", "Ranking lists")
+ZO_CreateStringId("ShissuNotifications_guild", GetString(SI_GAMEPAD_CAMPAIGN_BROWSER_TOOLTIP_GUILD_MEMBERS))
+ZO_CreateStringId("ShissuNotifications_background2", "from")
+ZO_CreateStringId("ShissuNotifications_background3", "was changed")
 
-ShissuGT.i18n.Roster = {
-  ["Online"] = ShissuGT.Color[6] .. "Online ".. ShissuGT.Color[5] .. "Player [Online, AFK, BRB] toogle",
-  ["Offline"] = ShissuGT.Color[6] .. "Offline " .. ShissuGT.Color[5] .. "Player toogle",
-  ["Choice"] = "Number & percentage share of "..ShissuGT.Color[6] .. "selected" .. ShissuGT.Color[5] .." Player in list",
-  ["Aldmeri"] = ShissuGT.Lib.CutStringAtLetter(GetString(SI_ALLIANCE1),"^"), -- "Aldmeri Dominion"
-  ["Ebonheart"] = ShissuGT.Lib.CutStringAtLetter(GetString(SI_ALLIANCE2),"^"), --"Ebenherz-Pakt"
-  ["Daggerfall"] = ShissuGT.Lib.CutStringAtLetter(GetString(SI_ALLIANCE3),"^"), --"Dolchsturz Bündnis"  
-  ["Character"] = "CHARACTER",
-}
+-- Modul: ShissuHistory
+ZO_CreateStringId("ShissuHistory", "Guild: " .. GetString(SI_WINDOW_TITLE_GUILD_HISTORY))
+ZO_CreateStringId("ShissuHistory_filter", "Filter")
+ZO_CreateStringId("ShissuHistory_status", "Show / Hide")
+ZO_CreateStringId("ShissuHistory_choice", "Selection")
+ZO_CreateStringId("ShissuHistory_goldAdded", "Paid")
+ZO_CreateStringId("ShissuHistory_goldRemoved", "Paid out")
+ZO_CreateStringId("ShissuHistory_itemAdded", "Stored")
+ZO_CreateStringId("ShissuHistory_itemRemoved", "Taken from")
+ZO_CreateStringId("ShissuHistory_tax", "3,5% Tax")
+ZO_CreateStringId("ShissuHistory_sales", "Sales")
+ZO_CreateStringId("ShissuHistory_turnover", "Sales")
+ZO_CreateStringId("ShissuHistory_extern", "External")
+ZO_CreateStringId("ShissuHistory_trader", "since trader")
+ZO_CreateStringId("ShissuHistory_pages", "open all pages")
+ZO_CreateStringId("ShissuHistory_player", GetString(SI_PLAYER_MENU_PLAYER))
+ZO_CreateStringId("ShissuHistory_set1", "Bank: Deposits and withdrawals (Gold + items)")                      
+ZO_CreateStringId("ShissuHistory_set2", "Sales: sales, non-guild members (external), 3.5% stake")
+ZO_CreateStringId("ShissuHistory_opt", "OPTIONS")
+ZO_CreateStringId("ShissuHistory_last", "last week")
 
-ShissuGT.i18n.Setting = {
-  ["ContextMenu"] = ShissuGT.Color[6].. "Context menu",
-  ["InviteMessage"] = "Welcome message in the chat?",
-  ["InviteMessageDesc"] = ShissuGT.Color[6] .. "%1" .. ShissuGT.Color[5] .. " = Player name \n\n ".. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .." = Release holder for various random messages \n\n e.g. welcome".. ShissuGT.Color[6] .."%1" .. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .. "Welcome by us, " .. ShissuGT.Color[6] ..  "%1" .. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .. "Hi " .. ShissuGT.Color[6] .. "%1",
-  ["GuildInfo"] = ShissuGT.Color[6].. "Guild information|r",
-  ["GuildInfoInvite"] = "Players in the field of view in guild",
-  ["Guild"] = "Guildwindow",
-  ["General"] = GetString(SI_KEYBINDINGS_CATEGORY_GENERAL),
-  ["Notif"] = GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS),
-  ["Roster"] = "Filter: " .. GetString(SI_GUILDRANKS2),
-  ["History"] = "Filter: " .. GetString(SI_GUILD_HISTORY_ACTIVITY_LOG),
-  ["NewMail"] = GetString(SI_SOCIAL_MENU_SEND_MAIL),
-  ["Invite"] = GetString(SI_NOTIFICATIONTYPE2),
-  ["MoTD"] = GetString(SI_GUILD_MOTD_HEADER), 
-  ["Status"] = GetString(SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
-  ["PInvite"] = GetString(SI_GUILDEVENTTYPE7),
-  ["PRemove"] = GetString(SI_GUILDEVENTTYPE8),
-  ["PDay"] = GetString(SI_GUILD_MOTD_HEADER),
-  ["MailDeleteNotif"] = ShissuGT.Lib.ReplaceCharacter("E-Mail Deleted"),
-  ["CAutoSwitch"] = "Automatic Chatchannel",
-  ["CAutoChat"] =  "Automatic message",
-  ["CAutoChatDesc"] =  ShissuGT.Lib.ReplaceCharacter("The notebook must be enabled for this feature. Put in your notebook to any note corresponding auto post to keywords."),
-  ["Whisper"] = GetString(SI_SOCIAL_LIST_PANEL_WHISPER),
-  ["Group"] = GetString(SI_SOCIAL_MENU_GROUP),    
-  ["PlayerStatus"] = ShissuGT.Color[6].. GetString(SI_FRIENDS_LIST_PANEL_TOOLTIP_STATUS),
-  ["PlayerStatusChat"] = "Player status changes via chat command",
-  ["AutoAFK"] = "Automatically AFK",    
-  ["AutoAFKMin"] = "Automatically AFK after xx minutes",  
-  ["InviteE"] = "(other) Player",
-  ["InviteC"] = "Contextmenue",
-  ["GuildColor"] = "colored Notes, MoTD, ...",
-  ["ChatAlliance"] = "Emphasize alliances color",
-  ["ChatLevel"] = "Levelinfo in guild chat",
-}
+-- Modul: ShissuColor
+ZO_CreateStringId("ShissuColor_title", "To dye")
+ZO_CreateStringId("ShissuColor_std", "Standard color")
+ZO_CreateStringId("ShissuColor_desc1", "The following 5 colors are the standard colors used in various modules & functions")
 
-ShissuGT.i18n.Context = {
-  ["Del"] = "Delete",
-  ["Forward"] = "Forward",
-  ["Answer"] = "Answer",
-  ["ContextResetChar"] = "Reset Characternames",  
-  ["PersNote"] = "Edit personal note",
-}
+-- Modul: AutoAFK
+ZO_CreateStringId("ShissuAutoAFK", "AutoAFK")
+ZO_CreateStringId("ShissuAFK_reminder", "Reminder")
+ZO_CreateStringId("ShissuAFK_infoOffline", "You are currently offline!")
+ZO_CreateStringId("ShissuAFK_autoOnline", "Automatic switching from offline to online!")
+ZO_CreateStringId("ShissuAFK_reminderOffline", "Reminder: Offline?")
+ZO_CreateStringId("ShissuAFK_minute", "after X minutes")
 
-ShissuGT.i18n.Bindings = {
-  ["Notebook"] = "Toogle Notebook",  
-  ["Helm"] = "Toogle Helm",  
-  ["Reload"] = "Reload UI",    
-  ["Teleport"] = "Free Random Teleport",   
-}
+-- Modul: ShissuContextMenu
+ZO_CreateStringId("ShissuContextMenu", "Context menu")
+ZO_CreateStringId("ShissuContextMenu_mail", GetString(SI_SOCIAL_MENU_MAIL))
+ZO_CreateStringId("ShissuContextMenu_invite", GetString(SI_NOTIFICATIONTYPE2))
+ZO_CreateStringId("ShissuContextMenu_inviteC", "|ceeeeeeGuInvite to Guild: |cAFD3FF%1")
+ZO_CreateStringId("ShissuContextMenu_answer", "Reply, Forward")
+ZO_CreateStringId("ShissuContextMenu_newMail", "New message")
+ZO_CreateStringId("ShissuContextMenu_forward", "Forward")
+ZO_CreateStringId("ShissuContextMenu_answer2", "Reply")
+ZO_CreateStringId("ShissuContextMenu_del", "Erase")
+ZO_CreateStringId("ShissuContextmenu_note", "Personal notes")
 
-ShissuGT.i18n.Teleport = {
-  ["Random"] = "Random Teleport",  
-  ["New"] = "To Refresh",  
-  ["Title"] = "Teleporter (Free)",    
-  ["Disabled"] = "The Teleporter is in your settings ",
-}
+-- Modul: ShissuMemberStatus
+ZO_CreateStringId("ShissuMemberStatus", "Guild members status")
+ZO_CreateStringId("ShissuContextMenu_memberStatus", "Player status (Online/BRB/AFK/Offline)")
+ZO_CreateStringId("ShissuContextMenu_added", "to join")
+ZO_CreateStringId("ShissuContextMenu_removed", "left / kicked")
+                                                        
+-- Modul: ShissuGuildHome
+ZO_CreateStringId("ShissuGuildHome", "Guild: " .. GetString(SI_WINDOW_TITLE_GUILD_HOME))
+ZO_CreateStringId("ShissuGuildHome_kiosk", "Time to the next trader offer")
+ZO_CreateStringId("ShissuGuildHome_textures", "Textures")
+ZO_CreateStringId("ShissuGuildHome_rest", "New trader in")
+ZO_CreateStringId("ShissuGuildHome_c", "Standard color")
+ZO_CreateStringId("ShissuGuildHome_leftTime", "Remaining time")
+ZO_CreateStringId("ShissuGuildHome_color", GetString(SI_GUILD_HERALDRY_COLOR))
 
-ShissuGT.i18n.SlashCommand = {  
-  ["RemoveChar1"] = "Player: << 1 >> has been reset in the character database.",
-  ["RemoveChar2"] = "It was with the account name no player: <<1>> found.",
-  ["RemoveChar3"] = "The character database has been completely reset.",
-  ["RemoveChar1N"] = "If the player: 1<<1>> are really back in the character database (RESET)?",
-  ["RemoveChar4"] = "Reset Character Database?",
-    
-  ["Help"] = " Chat commands:\n\n" ..
-   "<<1>>/sgt<<2>>" .. "                       - A list of all chat commands\n"  ..
-   "<<1>>/sgt note<<2>>" .. "             - Open notepad\n" ..
-   "<<1>>/sgt n:X<<2>>" .. "                - Publish Note X from the notebook\n" ..
-   "<<1>>/sgt tele<<2>>" .. "               - Open guild teleporters\n" ..
-   "<<1>>/sgt char reset<<2>>" .. "      - Resets the character database\n" ..
-   "<<1>>/sgt char X<<2>>" .. "               - Reset Characterdatabase of the player X\n" ..
-   "<<1>>/roll X, /dice X<<2>>" .. "    - Dice a random number between 1 - X\n" ..
-   "<<1>>/ginv X Y<<2>>" .. "               - Invite players Y in guild X (1-5)\n" ..
-   "<<1>>/teleport X" ..   "                - Teleports to Player X" .. 
-   "<<1>>/on, /online<<2>>" .. "         - Changes the player status to ONLINE\n" ..
-   "<<1>>/dnd, /brb<<2>>" .. "            - Changes the player status to BRB\n" ..
-   "<<1>>/AFK<<2>>" .. "                      - Changes the player status to AFK\n" ..
-   "<<1>>/off, /offline<<2>>" .. "        - Changes the player status to OFFLINE\n" .. 
-   "<<1>>/rl<<2>>" .. "                           - Reload UI\n",  
-}
+-- Modul: ShissuNotebook
+ZO_CreateStringId("ShissuNotebook", "Notebook")
+ZO_CreateStringId("ShissuNotebook_slash", "Chat command:")
+ZO_CreateStringId("ShissuNotebook_noSlash", "No matching text found (see Notebook)")
+ZO_CreateStringId("ShissuNotebook_ttDelete", "Delete the note")
+ZO_CreateStringId("ShissuNotebook_ttNew", "New note")
+ZO_CreateStringId("ShissuNotebook_ttUndo", "Undo changes")
+ZO_CreateStringId("ShissuNotebook_ttSendTo", _color.blue .. "Left mousekey" ..  _color.white .." - Write in chat\n"..  _color.blue .. "Middle mousekey" ..  _color.white .." - As an E-Mail(post)\n" ..  _color.blue.. "Right mousekey".. _color.white .. " - To save a note")
 
-ShissuGT.i18n.Color = {
-  ["Standard1"] = "Standard color 1",
-  ["Standard2"] = "Standard color 2",
-  ["Standard3"] = "Standard color 3",
-  ["Standard4"] = "Standard color 4",
-  ["White"] = "White Color",
-  ["ANY"] = "Choose a color",
-}
+-- Modul: ShissuNotebookMail
+ZO_CreateStringId("ShissuNotebookMail", "Notebook Mailer")
+ZO_CreateStringId("ShissuNotebookMail_title", "Mail recipient")
+ZO_CreateStringId("ShissuNotebookMail_choice", "Selection")
+ZO_CreateStringId("ShissuNotebookMail_mailKick", "Mailkick")
+ZO_CreateStringId("ShissuNotebookMail_mailOn", "ON")
+ZO_CreateStringId("ShissuNotebookMail_mailOff", "OFF")
+ZO_CreateStringId("ShissuNotebookMail_list", "List")
+ZO_CreateStringId("ShissuNotebookMail_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))
+ZO_CreateStringId("ShissuNotebookMail_offlineSince", "Offline")
+ZO_CreateStringId("ShissuNotebookMail_all", "- All")
+ZO_CreateStringId("ShissuNotebookMail_days", "Days")
+ZO_CreateStringId("ShissuNotebookMail_send", GetString(SI_MAIL_SEND_SEND))
+ZO_CreateStringId("ShissuNotebookMail_progressKickTitle", "Remove player")
+ZO_CreateStringId("ShissuNotebookMail_progressTitle", "Send e-mail")
+ZO_CreateStringId("ShissuNotebookMail_progressAbort", "Canceled")
+ZO_CreateStringId("ShissuNotebookMail_mailProgress", "Please wait...")
+ZO_CreateStringId("ShissuNotebookMail_doneL", "DONE!")
+ZO_CreateStringId("ShissuNotebookMail_all2", "All")
+ZO_CreateStringId("ShissuNotebookMail_listAddRemove", _color.blue .. "Left mousekey" ..  _color.white .." - Add list\n"..  _color.blue .. "Right Mousekey".. _color.white .. " - Delete list")
+ZO_CreateStringId("ShissuNotebookMail_listPlayerAdd", "Add player")
+ZO_CreateStringId("ShissuNotebookMail_listPlayerRemove", "Delete player")
+ZO_CreateStringId("ShissuNotebookMail_listPlayerBuildGroup", "Invite players to group")
+ZO_CreateStringId("ShissuNotebookMail_online", "Online, BRB, AFK")
+ZO_CreateStringId("ShissuNotebookMail_ttEMail", "Send e-mail to selection")
+ZO_CreateStringId("ShissuNotebookMail_ttEMailList", "Send e-mail to player in the list")
+ZO_CreateStringId("ShissuNotebookMail_ttEMailKick", "Send an e-mail when the player is kicked")
+ZO_CreateStringId("ShissuNotebookMail_ttKick", "Select from the guild (possibly with e-mail)")
+ZO_CreateStringId("ShissuNotebookMail_ttKickList", "Players in the list from the guild kicken (if necessary with e-mail)")
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnoreTT", "The player ignores you, or you ignore the player!")
+ZO_CreateStringId("ShissuNotebookMail_ttContin", "If the shipping for some reason " .. _color.blue .. "do not proceed".. _color.white .. ", then click on this button. The current recipient is called i.d.F. ignored.")
+ZO_CreateStringId("ShissuNotebookMail_protocolTT", "Shows the players who have a full mailbox or ignore you.")
+ZO_CreateStringId("ShissuNotebookMail_newList", "New list")
+ZO_CreateStringId("ShissuNotebookMail_listName", "Listname?")
+ZO_CreateStringId("ShissuNotebookMail_invite", "Invite players")
+ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Do you want to remove the players in the list, or your selection from the guild? Players who remove them will receive an email from you.")
+ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Subject")
+ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")       
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")       
+ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postbox full")       
+ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")       
+ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Close the window" .. _color.white .. "\nClosing completes sending / kicking.")
+ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
+ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Message incomplete")
 
-ShissuGT.i18n.Settings = {
-  [1] = {
-    Head = "Guild General Functions",
+-- Modul: ShissuRoster
+ZO_CreateStringId("ShissuRoster", "Guild: Members")
+ZO_CreateStringId("ShissuRoster_char", GetString(SI_BINDING_NAME_TOGGLE_CHARACTER))
+ZO_CreateStringId("ShissuRoster_goldDeposit", "Gold deposit")
+ZO_CreateStringId("ShissuRoster_goldDeposit2", "Gold Deposits")
+ZO_CreateStringId("ShissuRoster_goldDeposit3", "Gold deposit")
+ZO_CreateStringId("ShissuRoster_member", "Member since")
+ZO_CreateStringId("ShissuRoster_thisWeek", "Current Week")
+ZO_CreateStringId("ShissuRoster_lastWeek", "last week")
+ZO_CreateStringId("ShissuRoster_today", "today")
+ZO_CreateStringId("ShissuRoster_yesterday", "yesterday")
+ZO_CreateStringId("ShissuRoster_sinceKiosk", "since trader")
+ZO_CreateStringId("ShissuRoster_last", "last")
+ZO_CreateStringId("ShissuRoster_total", "total")
+ZO_CreateStringId("ShissuRoster_sum", "Total")  
+ZO_CreateStringId("ShissuRoster_colAdd", "Show additional columns")
+ZO_CreateStringId("ShissuRoster_colAdd2", "After a change you have to reloaded the interface.")
+ZO_CreateStringId("ShissuRoster_colChar", "Column: Character")
+ZO_CreateStringId("ShissuRoster_colGold", "Column: Gold deposits")
+ZO_CreateStringId("ShissuRoster_colNote", "Column: Personal Notes")
+ZO_CreateStringId("ShissuRoster_noData", "No Data")
+
+-- Modul: Scanner
+ZO_CreateStringId("ShissuScanner", "Guild: History Scan")
+ZO_CreateStringId("ShissuScanner_scan1", "The guild records of")
+ZO_CreateStringId("ShissuScanner_scan2", "are currently being read. Please wait...")
+
+-- Modul: Chat
+ZO_CreateStringId("ShissuChat", "Chat")
+ZO_CreateStringId("ShissuChat_auto", "Automatic change")
+ZO_CreateStringId("ShissuChat_date", "Show date")
+ZO_CreateStringId("ShissuChat_time", "Show time")
+ZO_CreateStringId("ShissuChat_sound", "Acoustic Sound (Whispers)")
+ZO_CreateStringId("ShissuChat_guilds", "GildenzugehÃ¶rigkeit")
+ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
+ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                       
+ZO_CreateStringId("ShissuChat_lvl", "Level")
+ZO_CreateStringId("ShissuChat_char", "Character names")
+ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
+ZO_CreateStringId("ShissuChat_party", GetString(SI_CHAT_CHANNEL_NAME_PARTY))
+ZO_CreateStringId("ShissuChat_guildchan", GetString(SI_CHAT_OPTIONS_GUILD_CHANNELS))
+ZO_CreateStringId("ShissuChat_charAcc1", "Account")
+ZO_CreateStringId("ShissuChat_charAcc2", "Character")
+ZO_CreateStringId("ShissuChat_charAcc3", "Account + Character")
+ZO_CreateStringId("ShissuChat_guildInfo", "Guild Information")
+ZO_CreateStringId("ShissuChat_guildWhich", "On which guilds should the information be based?")
+ZO_CreateStringId("ShissuChat_guildNames1", "Names")
+ZO_CreateStringId("ShissuChat_guildNames2", "How should your guilds be in chat?")
      
-    Section1 = GetString(SI_KEYBINDINGS_CATEGORY_GENERAL),
-    Notebook = "Notebook",
-    NotebookEMail = "Notebook: E-mail features",
-    Teleporter = "Teleporter",
-
-    Section2 = "Notifications / Notices",
-    EMailDel = "Note: Delete E-Mail",
-         
-    Section3 = "Guild Window",
-    KioskTimer = "Guild Trader Countdown",
-    History = "Guild Records : Filter",
-    Roster = "Guild Roster",
-    Color = "Colored notes, MotD, ...",
-     
-    Section4 = "Chat",
-    ChatInGuild = "Player in Guild?",
-    ChatTime = "Time in Chat",
-    ChatAutoSwitchGroup = "Group: Automatic Chatchannel",
-    ChatAutoChatGroup = "Group: Auto messages",
-    ChatAutoSwitchWhisper = "@Whisper : Automatic Chatchannel",
-    ChatWhisperGuildInfo = "@Whisper: Auto messages",
-    ChatGuildName = "Chat: Guildname",
-    ChatWhisperSound = "Whisper: Sound",
-         
-    Section5 = "Shortcut menu",
-    ContextMenuChatInvite = "Chat: " .. GetString(SI_NOTIFICATIONTYPE2),
-    ContextMenuChatEMail = "Chat: " .. GetString(SI_SOCIAL_MENU_SEND_MAIL),
-    ContextMenuEMail = "E-Mail: Reply, Forward",
-    ContextMenuEMailInvite = "E-Mail: " .. GetString(SI_NOTIFICATIONTYPE2),
-    ContextMenuGuild = GetString(SI_QUEST_JOURNAL_GUILD_CATEGORY) .. ": " .. GetString(SI_NOTIFICATIONTYPE2),
-    
-    Section6 = "Player Status",
-    PlayerStatusChat = "Player Status: Chat commands",
-    PlayerStatusAFK = "Automatic AFK",
-    PlayerStatusAFKMin = "Automatic AFK after XX minutes",    
-  },
-  [2] = {
-    Head = "Guild Specific Functions",
-     
-    -- Mitglieder
-    Section1 = GetString(SI_GAMEPAD_GUILD_RANK_PERMISSIONS_MEMBERS),
-    MemberStatus = "Playerstatus (Online, AFK, BRB, DND)",
-    MemberAdd = "Player has join the guild",
-    MemberRemove = "Player has left the guild",
-    MemberInSight = "Guild member in the field of view",
-    
-    -- Benachrichtigungen
-    Section2 = GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS),
-    NotificationMoTD = GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS) .. ": " .. GetString(SI_GUILD_MOTD_HEADER),
-    Section3 = "Chat",
-    ChatCharacter = "Chat: Charaktername@Accountname",
-    ChatLevel = "Chat: Level",
-    ChatAlliance = "Chat: " .. GetString(SI_GAMEPAD_WORLD_MAP_TOOLTIP_ALLIANCE_OWNER),
-    ChatLead = "Chat: Highlight guild leader and officer",
-    ChatLead2 = "",
-    ChatAutoSwitch = "Chat: Automatic Chatchannel",
-    ChatAutoChat = "Chat: Auto messages",
-    ChatAutoWelcome = "Chat: Welcome Message",
-    ChatAutoWelcome2 = "Chat: Welcome Message, other players",
-    ChatAutoDescription = ShissuGT.Color[5] .. "Welcome Message\n" .. ShissuGT.Color[6] .. "%1" .. ShissuGT.Color[5] .. " = Playername\n" .. ShissuGT.Color[2] .. "%2" .. ShissuGT.Color[5] .. " = Guildname\n" .. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .." = Separating retainer for different random news",
-    ChatAutoExample = "\ne.g. Welcome " .. ShissuGT.Color[6] .."%1" .. ShissuGT.Color[5] .. " in " .. ShissuGT.Color[2] .. "%2" .. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .. "Hi " .. ShissuGT.Color[6] ..  "%1" .. ShissuGT.Color[1] .. "||||||" .. ShissuGT.Color[5] .. "Meow Meow " .. ShissuGT.Color[6] .. "%1",
-  },
-  [3] = {
-    Head = "Colors",
-     
-    Section1 = "Standard color",
-    Standard1 = ShissuGT.i18n.Color.Standard1,
-    Standard2 = ShissuGT.i18n.Color.Standard2,
-    Standard3 = ShissuGT.i18n.Color.Standard3,
-    Standard4 = ShissuGT.i18n.Color.Standard4,
-     
-    Section2 = "Chat",
-    Time = "Time",
-    Character = "Charaktername",
-  },
-  [4] = {
-    Head = "Other options", 
-    MemberInSightLock = "Guild member in field of view: window position",
-    MemberInSightMore = "Guild member in field of view: Advanced",
-    MemberData = "Delete Member Data, when leaving",
-    RosterNote = "Roster: Personal Notes, Guild across",
-    TimeZone = "time zone (UTC+X)",
-    GuildData = "Delete all Guild Data, when leaving",
-  },
-}
-
-ShissuGT.i18n.SettingsToolTip = {
-  [1] = {
-    -- Section1: Allgemein
-    Notebook = "Enable / Disable notebook",
-    NotebookEMail = "Notebook: Email-Functions (Enable / Disable)",
-    Teleporter = "Enable / Disable teleporter",
-    
-    -- Section2: Benachrichtigungen
-    EMailDel = "Enable/disable the confirmation dialog: E-mail to delete ?",
-
-    -- Section3: Gildenfenster
-    KioskTimer = "Hides in the guild window, the time to acquire the next Guild Trader.",
-    History = "Enables / Disables the modified Guild records.",
-    Roster = "Enables / Disables the modified Guild Roster",
-    RosterNote = "Enables / Disables the personal notes in the guild roster",
-    Color = "Enables / Disables colored notes, MotD , ... in the guild window",
-     
-    -- Section4: Chat
-    ChatInGuild = "Hides additional the guild name of a player in chat, if it is located in one of your Guild.",
-    ChatTime = "Shows the time in chat.\n\nExample:\n [16:12:13] [Zone] [Shissu]: Hallo",
-    ChatAutoSwitchGroup = "The chat will automatically enter the group chat, if what is written.",
-    ChatAutoSwitchWhisper = "The chat will automatically enter the @whisper chat, if what is written.",
-    ChatAutoChatGroup = "The chat will automatically enter the group chat, and prepares a corresponding message from the notebook, if it finds the corresponding keyword.",
-    ChatWhisperGuildInfo = "If the player is seated in one of your guild, the additional information is displayed.",
-    ChatGuildName = "Chat: Show the guildname in the chat. \n\nExample:\n [16:12:13] [Gebiet] [Tamrizon] [Shissu@Shissu]: Hallo",
-         
-    -- Section5: Kontextmenü
-    ContextMenuChatInvite = "Chat: " .. GetString(SI_NOTIFICATIONTYPE2),
-    ContextMenuChatEMail = "Chat: " .. GetString(SI_SOCIAL_MENU_SEND_MAIL),
-    ContextMenuEMail = "E-Mail: Reply, Forward",
-    ContextMenuEMailInvite = "E-Mail: " .. GetString(SI_NOTIFICATIONTYPE2),
-    ContextMenuGuild = GetString(SI_QUEST_JOURNAL_GUILD_CATEGORY) .. ": " .. GetString(SI_NOTIFICATIONTYPE2),
-     
-    -- Section6: Spielerstatus
-    PlayerStatusChat = "Enabled to change the chat commands to the player status (see /sgt)",
-    PlayerStatusAFK = "Changes the player status automatically after x minutes to AFK, if nothing is done.",
-    PlayerStatusAFKMin = "Automatic AFK after xx minutes",        
-  },
-  [2] = {
-    -- Section1: Mitglieder
-    MemberStatus = "Show the player status in the Chatbox (Online, AFK, BRB, DND).\n\Example:\n [16:12:13] ".. ShissuGT.Color[6] .. "Legacy of Heaven: " .. ShissuGT.Color[5] .. "Shissu@Shissu - ".. ShissuGT.Color[1] .. "Online",
-    MemberAdd = "Displays in the chatbox the info on when a player has joined the guild.\n\nExample:\n [16:12:13] ".. ShissuGT.Color[6] .. "Legacy of Heaven: " .. ShissuGT.Color[5] .. "Shissu@Shissu - ".. ShissuGT.Color[1] .. "invited",
-    MemberRemove = "Displays in the chatbox the info on when a player has leaved the guild.\n\nExample:\n [16:12:13] ".. ShissuGT.Color[6] .. "Legacy of Heaven: " .. ShissuGT.Color[5] .. "Shissu@Shissu - ".. ShissuGT.Color[1] .. "leaved",
-    MemberInSight = "Shows you if a player is in your field of vision in your guild.",
-    
-    -- Section2: Benachrichtigungen
-    NotificationMoTD = "Enables / Disables the notification: Message of the Day",
-     
-    -- Section3: Chat
-    ChatCharacter = "Show additional the charactername in chat.\n\nExample:\n [16:12:13] [Gebiet] [Shissu@Shissu]: Hallo",
-    ChatLevel = "Show additional the level of a guildmember in chat",
-    ChatLead = "Chat: highlight guild leader and officer",
-    ChatLead2 = "Chat: Guild Leaders & officers from Rank",
-    ChatAlliance = "Displays the fraction of the guild member in a guild chat, with a colored character names and @ sign.",
-    ChatAutoChat = "The chat will automatically enter the group chat, and prepares a corresponding message from the notebook, if it finds the corresponding keyword.",
-    ChatAutoSwitch = "The chat will automatically enter the guild chat if what is written.",
-    ChatAutoWelcome = "If you invite a player into the guild , the relevant text of your choice in the chatbox is prepared.",
-    ChatAutoWelcome2 = "If someone invites a player to the guild, the relevant text of your choice in the chatbox is prepared.",
-  },
-  [3] = {
-    -- Section1: Standarfarben
-    Standard1 = "Standard color 1 in Notebook & Guild Window",
-    Standard2 = "Standard color 2 in Notebook & Guild Window",
-    Standard3 = "Standard color 3 in Notebook & Guild Window",
-    Standard4 = "Standard color 4 in Notebook & Guild Window",
-     
-    -- Section2: Chat
-    Time = "The color of time in chat ([xx:xx:xx])",
-    Level = "The color of the level information in chat ([V14])",
-    Character = "The color of charactername in chat",
-  },
-  [4] = {
-    MemberInSightLock = "Change the position of the window 'Guild member in the field of view' .",
-    MemberInSightMore = "Show Additional information about the guild member in the field of view: Allianz, Level, character names, etc ...",
-    MemberData = "Remove all information of a player when he is not represented more in any of your guild.",  
-    RosterNote = "The personal notes to an account are made available across guild.",  
-    TimeZone = "TimeZone Setting (UTC+X) for all Time Functions",
-    GuildData = "Delete all Guild Data, when leaving a guild.",
-  },
-}
-
-ShissuGT.i18n.Feedback = {
-  [1] = "I get your e-mail only if you play on the EU-server!",
-  [2] = "I hope that's Shissu Guild Tools (SGT) will help you further! Feedback is always important. Therefore, your feedback is always welcome. If you want to send me some feedback, then write a small ingame note as an email, with or without a donation. Your donation helps my group based ESO-time, as well as the organization of my own guild to reduce. Finally, I can focus on other features and new add-ons for ESO.",
-}
-
-ShissuGT.i18n.Sounds = {
-  [SOUNDS.NONE] = "OFF",
-  [SOUNDS.EMPEROR_DEPOSED_ALDMERI] = "AVA 1",
-  [SOUNDS.AVA_GATE_CLOSED] = "AVA 2",
-  [SOUNDS.NEW_NOTIFICATION] = "Notification",
-  [SOUNDS.CHAMPION_POINTS_COMMITTED] =  "Championspoint 1",
-  [SOUNDS.CHAMPION_ZOOM_IN] =  "Championspoint 2",
-  [SOUNDS.CHAMPION_ZOOM_OUT] =  "Championspoint 3",
-  [SOUNDS.CHAMPION_STAR_MOUSEOVER] =  "Championspoint 4",
-  [SOUNDS.CHAMPION_CYCLED_TO_MAGE] =  "Championspoint 5",
-  [SOUNDS.BLACKSMITH_EXTRACTED_BOOSTER] =  "Crafting 1",
-  [SOUNDS.ENCHANTING_ASPECT_RUNE_REMOVED] =  "Crafting 2",
-  [SOUNDS.SMITHING_OPENED] =  "Crafting 3",
-  [SOUNDS.GUILD_ROSTER_REMOVED] =  "Guild 1",
-  [SOUNDS.GUILD_ROSTER_ADDED] =  "Guild 2",
-  [SOUNDS.GUILD_WINDOW_OPEN] =  "Guild 3",
-  [SOUNDS.GROUP_DISBAND] = "Group",
-  [SOUNDS.DEFAULT_CLICK] = "Click 1",
-  [SOUNDS.EDIT_CLICK] = "Click 2",
-  [SOUNDS.STABLE_FEED_STAMINA] = "Misc 1",
-  [SOUNDS.QUICKSLOT_SET] = "Quickslot",
-  [SOUNDS.MARKET_CROWNS_SPENT] = "Shop",
-}
+-- Modul: Marks
+ZO_CreateStringId("ShissuMarks", "Markings")
+ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Player Markers")
+ZO_CreateStringId("ShissuMarks_misc", "Misc")
+ZO_CreateStringId("ShissuMarks_kick", "Auto Kick")
+ZO_CreateStringId("ShissuMarks_heal", "Heal")
+ZO_CreateStringId("ShissuMarks_observe", "Observe")
+ZO_CreateStringId("ShissuMarks_all", "All What You See")
+ZO_CreateStringId("ShissuMarks_confirmDel", "Delete list?")
+ZO_CreateStringId("ShissuMarks_confirmDel2", "Are you sure you want to delete the list content?")  
+ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Player")
+ZO_CreateStringId("ShissuMarks_add2", "What is the name of the monster / player?")
+ZO_CreateStringId("ShissuMarks_add3", "Monster / player in group")
+ZO_CreateStringId("ShissuMarks_add4", "added")
+ZO_CreateStringId("ShissuMarks_add5", "Monster / Player already exists in group")
+ZO_CreateStringId("ShissuMarks_leftMouse", "Add")
+ZO_CreateStringId("ShissuMarks_rightMouse", "Complete list completely")
+ZO_CreateStringId("ShissuMarks_middleMouse", "Guilds check")
+ZO_CreateStringId("ShissuMarks_observeInfo", "Players in the list: Watch are highlighted in the chat")
+ZO_CreateStringId("ShissuMarks_observeInfo2", "- When logging in")
+ZO_CreateStringId("ShissuMarks_observeInfo3", "- When entering the guild")
+ZO_CreateStringId("ShissuMarks_observeInfo4", "- When leaving the guild")
+ZO_CreateStringId("ShissuMarks_autoKick", "Automatic kicks")
+ZO_CreateStringId("ShissuMarks_autoKickInfo", "Players in the list: AutoKick are directly kicked:")
+ZO_CreateStringId("ShissuMarks_autoKickInfo2", "- When logging in")
+ZO_CreateStringId("ShissuMarks_autoKickInfo3", "- When entering the guild")
+ZO_CreateStringId("ShissuMarks_found", "is in the guilds.")
+ZO_CreateStringId("ShissuMarks_found2", "The player was kicked (if rights exist).")
+ZO_CreateStringId("ShissuMarks_rightItem", "Remove player / monster")
+ZO_CreateStringId("ShissuMarks_rightItem2", "Right-click on name")           

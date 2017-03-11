@@ -1,0 +1,42 @@
+<!-- Teleporter      <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" /> -->
+<GuiXml>
+	<Controls>
+		<Button name="SGT_Teleport_Index" virtual="true" inherits="ZO_DefaultTextButton" />
+		
+	    <TopLevelControl name="SGT_Teleport" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+			<Dimensions x="330" y="500" />
+	      	<Anchor point="CENTER" offsetX="100" offsetY="100" />      
+	      	<Controls>
+		   
+		    <Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Teleporter">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				</Label>
+
+				<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Guild Tools">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-60" offsetY="-0" />
+				</Label>
+
+        <Label name="$(parent)_Position" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Eldenwurz">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)_Line" relativePoint="PLEFT" offsetX="30" offsetY="2" />
+				</Label>
+
+        <Backdrop name="$(parent)_Filter" inherits="ZO_EditBackdrop">
+          <Anchor point="TOPLEFT" relativeTo="$(parent)_Position" offsetX="0" offsetY="18" /> 
+          <Dimensions x="140" y="30" />
+			    <Controls>
+            <EditBox name="$(parent)Text" inherits="ZO_DefaultEditForBackdrop">
+					    <OnEnter></OnEnter>
+				      <OnTab></OnTab>
+				      <OnEscape></OnEscape>
+			      </EditBox>
+			    </Controls>
+				</Backdrop>  
+        
+        <Label name="$(parent)_Legends" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="dummy\n\ndummy">
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-100" offsetY="590" />
+				</Label>
+        
+		    </Controls>
+		</TopLevelControl>    
+	</Controls>
+</GuiXml>

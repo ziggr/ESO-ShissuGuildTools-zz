@@ -1,0 +1,132 @@
+<!-- File: Member.xml -->
+<!-- Zuletzt geändert: 15. August 2015 -->
+
+<!-- Gildenmitglied in Sichtfeld -->
+<GuiXml>
+	<Controls>
+    <TopLevelControl name="SMM_Symbol" mouseEnabled="false" hidden="true" movable="false" clampedToScreen="true">
+      <Dimensions x="64" y="64" /><Anchor point="CENTER" offsetX="100" offsetY="100"/>      
+			<Controls>
+        <Texture name="$(parent)_Image" textureFile="/esoui/art/guild/guildhistory_indexicon_guild_up.dds">
+          <Dimensions x="64" y="64" />
+			    <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="0" offsetY="0" />
+				</Texture>
+			</Controls>
+		</TopLevelControl> 
+		
+		<!-- Teleporter -->
+		<Button name="SM_HealIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		<Button name="SM_MiscIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		<Button name="SM_KickIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		<Button name="SM_ObserveIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		
+		<Button name="SM_AllIndex" virtual="true" inherits="ZO_DefaultTextButton" />
+		
+		<!-- Friendy Group PvP; Group 1; Group 2; Group 3; All what you See-->CT_TEXTURE
+                                                                                
+    <TopLevelControl name="SGT_Marks" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
+			<Dimensions x="850" y="400" />
+        <Anchor point="CENTER" offsetX="100" offsetY="100" />      
+        <Controls>
+          <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
+          
+          <Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="|cff7d77Shissu's|r Monster/Player Marks (|cff7d77SMM|r)">
+					 <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
+				  </Label>
+
+  				<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Monster/Player Marks">
+  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+  				</Label>
+          
+  				<Label name="$(parent)_KickInfo" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Spieler/Monster entfernen = Rechte Maustaste auf Name">
+  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="120" offsetY="12" />
+  				</Label>
+
+				  <Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
+            <Dimensions x="800" y="3" />
+					  <Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-30" offsetY="35" />
+			  	</Texture>		 
+				
+				  <!-- List Button -->
+  				<Button name="$(parent)_HealButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+            <Dimensions x="48" y="48" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="50" offsetY="40" />
+            <Textures normal="ESOUI/art/lfg/lfg_healer_down_64.dds" mouseOver="ESOUI/art/lfg/lfg_healer_down_over_64.dds" />
+          </Button>		
+  				<Label name="$(parent)_Heal" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="Heiler">
+  					<Dimensions x="150" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="BOTTOMLEFT" offsetX="-2" offsetY="45" />
+  				</Label>		
+
+				  <Button name="$(parent)_MiscButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+            <Dimensions x="48" y="48" />
+					  <Anchor point="TOPLEFT" relativeTo="$(parent)_HealButton" relativePoint="TOPRIGHT" offsetX="120" offsetY="0" />
+		        <Textures normal="ESOUI/art/progression/progression_indexicon_world_down.dds" mouseOver="ESOUI/art/progression/progression_indexicon_world_over.dds" />
+		      </Button>	
+          <Label name="$(parent)_Misc" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER"  text="Misc">
+  					<Dimensions x="150" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Heal" relativePoint="TOPRIGHT" offsetX="19" offsetY="0" />
+  				</Label>	
+          
+          					  				  	
+				  <Button name="$(parent)_ObserveButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+            <Dimensions x="48" y="48" />
+            <Anchor point="TOPLEFT" relativeTo="$(parent)_MiscButton" relativePoint="TOPRIGHT" offsetX="110" offsetY="0" />
+		        <Textures normal="ESOUI/art/emotes/emotes_indexicon_personality_down.dds" mouseOver="ESOUI/art/emotes/emotes_indexicon_personality_over.dds" />
+		      </Button>		  	
+  				<Label name="$(parent)_Observe" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="Beobachten">
+  					<Dimensions x="150" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Misc" relativePoint="TOPRIGHT" offsetX="8" offsetY="0" />
+  				</Label>	
+          
+				  <Button name="$(parent)_KickButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+            <Dimensions x="48" y="48" />
+					  <Anchor point="TOPLEFT" relativeTo="$(parent)_ObserveButton" relativePoint="TOPRIGHT" offsetX="110" offsetY="0" />
+            <Textures normal="ESOUI/art/emotes/emotes_indexicon_fidget_down.dds" mouseOver="ESOUI/art/emotes/emotes_indexicon_fidget_over.dds" />
+          </Button>	
+  				<Label name="$(parent)_Kick" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="Auto Kick">
+  					<Dimensions x="150" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Observe" relativePoint="TOPRIGHT" offsetX="12" offsetY="0" />
+  				</Label>		
+
+				  <Button name="$(parent)_AllButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
+            <Dimensions x="48" y="48" />
+					  <Anchor point="TOPLEFT" relativeTo="$(parent)_KickButton" relativePoint="TOPRIGHT" offsetX="135" offsetY="0" />
+            <Textures normal="ESOUI/art/lfg/lfg_tabicon_grouptools_down.dds" mouseOver="ESOUI/art/lfg/lfg_tabicon_grouptools_down.dds" />
+          </Button>	
+
+  				<Label name="$(parent)_All" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="All What You See">
+  					<Dimensions x="190" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Kick" relativePoint="TOPRIGHT" offsetX="15" offsetY="0" />
+  				</Label>	
+				
+  				<!-- Transfer to List Button -->
+  				<Label name="$(parent)_Info_Label" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="--">
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="640" offsetY="173" />
+  					<Dimensions x="30" />
+  				</Label>	
+  				
+  				<Button name="$(parent)_ButtonHeal" inherits="ZO_DefaultButton">
+  					<Anchor point="RIGHT" relativeTo="$(parent)_Line" relativePoint="RIGHT" offsetX="-90" offsetY="130" />
+  					<Dimensions x="40" y="32" />
+  					<MouseButton enabled="true" />
+            <Textures normal="ESOUI/art/lfg/lfg_healer_down_64.dds" mouseOver="ESOUI/art/lfg/lfg_healer_down_over_64.dds" />
+  				</Button>
+  
+  		    <Button name="$(parent)_ButtonMisc" inherits="ZO_DefaultButton">
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)_ButtonHeal" relativePoint="BOTTOMLEFT" offsetX="0" offsetY="5" />
+  					<Dimensions x="40" y="32" />
+  					<MouseButton enabled="true" />
+            <Textures normal="ESOUI/art/progression/progression_indexicon_world_down.dds" mouseOver="ESOUI/art/progression/progression_indexicon_world_over.dds" />
+  				</Button>
+  							  	
+          <Texture name="$(parent)_Line2" mouseEnabled="true" textureFile="">
+            <Dimensions y="0" />
+            <Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-30" offsetY="100" />
+          </Texture>		       
+       
+    </Controls>
+  </TopLevelControl>    
+		  
+  </Controls>    
+</GuiXml>

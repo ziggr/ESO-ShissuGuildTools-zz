@@ -1,55 +1,54 @@
+; This Add-on is not created by, affiliated with or sponsored by ZeniMax
+; Media Inc. or its affiliates. The Elder Scrolls® and related logos are
+; registered trademarks or trademarks of ZeniMax Media Inc. in the United
+; States and/or other countries. All rights reserved.
+; You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
-## Title: |c779cffShissu's|r Guild Tools v2.6.2
-## APIVersion: 100017
+; Author: @Shissu on EU-Server!
+ 
+## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.0.4.14
+## APIVersion: 100018
 ## Author: |c779cff@Shissu|r [EU]
 ## SavedVariables: shissuGT
-## OptionalDependsOn: LibAddonMenu-2.0
-   
-# Main
-General\Globals.lua
-ShissuGuildTools.lua  
-General\SettingsDefault.lua
-General\SettingsMenu.lua
-General\ShissuLib.lua
-General\SlashCommand.lua
-General\Feedback.lua
-General\Feedback.xml
-            
-# Sprache  
-i18n\$(language).lua                     
+## DependsOn: ShissuSuiteManager
 
-# Bindings
-General\Bindings.xml
-General\Bindings.lua
+# Libs, Language, Depends
+i18n\EN.lua
+i18n\$(language).lua
+globals.lua
+lib.lua
 
-# Tools    
-Tools\Notebook\Notebook.lua
-Tools\Notebook\Notebook.xml
-Tools\Teleport\Teleport.lua
-Tools\Teleport\Teleport.xml
-Tools\Member\Member.lua
-Tools\Member\Member.xml
-Tools\Roster.lua
-Tools\Notifications.lua
-Tools\HistoryScanner.lua
-Tools\Chat.lua
-Tools\History.lua
-Tools\ContextMenu.lua
-Tools\Home.lua
-Tools\Misc.lua
-Tools\GuildColor.lua
+#Main
+ShissuGuildTools.lua
+SGT.xml
+
+# Module   
+module/contextmenu.lua
+module/memberstatus.lua
+module/welcome.lua
+module/guildhome.lua
+module/guildhome.xml
+module/history.lua
+module/color.lua
+module/autoafk.lua
+module/notebook.lua
+module/notebookMail.lua
+module/notebook.xml
+module/teleport.lua
+module/teleport.xml
+module/notifications.lua
+module/notifications.xml
+module/roster.lua
+module/scanner.lua
+module/chat.lua
+module/marker.lua
+module/marker.xml
+
+notimplemented/collectedData.xml
+notimplemented/collectedData.lua
+
+bindings.xml
 
 # Ext. Libraries
-ExtLibs\LibStub\LibStub.lua
-ExtLibs\libChat2\libChat2.lua
-ExtLibs\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
-ExtLibs\LibAddonMenu-2.0\controls\panel.lua
-ExtLibs\LibAddonMenu-2.0\controls\submenu.lua
-ExtLibs\LibAddonMenu-2.0\controls\checkbox.lua
-ExtLibs\LibAddonMenu-2.0\controls\description.lua
-ExtLibs\LibAddonMenu-2.0\controls\editbox.lua
-ExtLibs\LibAddonMenu-2.0\controls\header.lua
-ExtLibs\LibAddonMenu-2.0\controls\slider.lua
-ExtLibs\LibAddonMenu-2.0\controls\colorpicker.lua
-ExtLibs\LibAddonMenu-2.0\controls\button.lua
-ExtLibs\LibAddonMenu-2.0\controls\dropdown.lua
+libs\LibStub\LibStub.lua
+libs\libChat2\libChat2.lua

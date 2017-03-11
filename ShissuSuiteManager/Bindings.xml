@@ -1,0 +1,15 @@
+<!--
+    Shissu's Suite Manager Feedback Layout and Bindings File
+    Last Updated October 29, 2016
+    Written July 2015 by Christian Krause (@Shissu [EU])
+-->
+
+<Bindings>
+	<Layer name="SI_KEYBINDINGS_LAYER_GENERAL">
+		<Category name="|cAFD3FFShissu's|r|ceeeeee Suite Manager|r">
+			<Action name="SGT_helmToogle"><Down>Shissu_SuiteManager._bindings.helmToogle()</Down></Action>
+			<Action name="SGT_offlineToogle"><Down>Shissu_SuiteManager._bindings.offlineToogle()</Down></Action>
+      <Action name="SGT_reload"><Down>Shissu_SuiteManager._bindings.reload()</Down></Action>
+		</Category>
+	</Layer>
+</Bindings>
