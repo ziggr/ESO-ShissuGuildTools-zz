@@ -36,32 +36,32 @@ _addon.controls = {}
 
 function _addon.core.createSettingMenu()
   local controls = Shissu_SuiteManager._settings[_addon.Name].controls
-  
+
   controls[#controls+1] = {
-    type = "description", 
+    type = "description",
     text = getString(ShissuColor_desc1) .. ":",
   }
-  
+
   controls[#controls+1] = {
-    type = "description", 
+    type = "description",
     text = "- " .. blue .. getString(ShissuNotebook) .. white .. "\n- " ..
-      blue .. getString(ShissuContextmenu_note) .. white .. "\n- " .. 
+      blue .. getString(ShissuContextmenu_note) .. white .. "\n- " ..
       blue .. getString(ShissuNotifications_motD) .. white .. "\n- " .. blue .. "...",
   }
-  
+
   for i = 1, 5 do
     controls[#controls+1] = {
-      type = "colorpicker", 
+      type = "colorpicker",
       name = getString(ShissuGuildHome_c) .. " " .. i,
-      getFunc = _addon.settings["c" .. i], 
-      setFunc = function (r, g, b, a) 
-                                                                                                                                                                                           
+      getFunc = _addon.settings["c" .. i],
+      setFunc = function (r, g, b, a)
+
         _addon.settings["c" .. i] = {r, g, b, a}
       end,
-    }    
+    }
   end
 end
- 
+
 -- * Initialisierung
 function _addon.core.initialized()
   shissuGT = shissuGT or {}
@@ -69,10 +69,10 @@ function _addon.core.initialized()
   shissuGT[_addon.Name] = shissuGT[_addon.Name] or _addon.settings
   _addon.settings = shissuGT[_addon.Name]
 
-  _addon.core.createSettingMenu()  
-end                               
+  _addon.core.createSettingMenu()
+end
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
-Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel                                       
-Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
-Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized    
+Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
+Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls
+Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

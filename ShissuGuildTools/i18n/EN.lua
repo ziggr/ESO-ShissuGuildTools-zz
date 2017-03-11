@@ -7,12 +7,12 @@
 
 -- Released under terms in license accompanying this file.
 -- Distribution without license is prohibited!
- 
+
 local _color = {
   blue = "|cAFD3FF",
   white = "|ceeeeee",
-}              
-            
+}
+
 -- General
 ZO_CreateStringId("ShissuGeneral", GetString(SI_HOUSEPERMISSIONOPTIONSCATEGORIES1))
 ZO_CreateStringId("Shissu_friend", GetString(SI_MAIN_MENU_CONTACTS))
@@ -37,8 +37,8 @@ ZO_CreateStringId("ShissuModule_middleMouse", "Middle mousekey")
 
 -- Modules
 ----------
-  
--- Module: ShissuWelcomeInvite                                                                                             
+
+-- Module: ShissuWelcomeInvite
 ZO_CreateStringId("ShissuWelcomeInvite", "Welcome message")
 ZO_CreateStringId("ShissuWelcomeDesc1", "You can use the following placeholders to create welcome messages")
 ZO_CreateStringId("ShissuWelcomeDesc2", "Name of the player")
@@ -57,7 +57,7 @@ ZO_CreateStringId("ShissuTeleporter_legends2", "Friends")
 ZO_CreateStringId("ShissuTeleporter_legends3", "Group players")
 
 -- Modul: ShissuNotifications
-ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
+ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS))
 ZO_CreateStringId("ShissuNotifications_info", "Note")
 ZO_CreateStringId("ShissuNotifications_mail", "Delete email / message")
 ZO_CreateStringId("ShissuNotifications_inSight", "Guild member in sight field?")
@@ -85,7 +85,7 @@ ZO_CreateStringId("ShissuHistory_extern", "External")
 ZO_CreateStringId("ShissuHistory_trader", "since trader")
 ZO_CreateStringId("ShissuHistory_pages", "open all pages")
 ZO_CreateStringId("ShissuHistory_player", GetString(SI_PLAYER_MENU_PLAYER))
-ZO_CreateStringId("ShissuHistory_set1", "Bank: Deposits and withdrawals (Gold + items)")                      
+ZO_CreateStringId("ShissuHistory_set1", "Bank: Deposits and withdrawals (Gold + items)")
 ZO_CreateStringId("ShissuHistory_set2", "Sales: sales, non-guild members (external), 3.5% stake")
 ZO_CreateStringId("ShissuHistory_opt", "OPTIONS")
 ZO_CreateStringId("ShissuHistory_last", "last week")
@@ -120,7 +120,7 @@ ZO_CreateStringId("ShissuMemberStatus", "Guild members status")
 ZO_CreateStringId("ShissuContextMenu_memberStatus", "Player status (Online/BRB/AFK/Offline)")
 ZO_CreateStringId("ShissuContextMenu_added", "to join")
 ZO_CreateStringId("ShissuContextMenu_removed", "left / kicked")
-                                                        
+
 -- Modul: ShissuGuildHome
 ZO_CreateStringId("ShissuGuildHome", "Guild: " .. GetString(SI_WINDOW_TITLE_GUILD_HOME))
 ZO_CreateStringId("ShissuGuildHome_kiosk", "Time to the next trader offer")
@@ -176,12 +176,12 @@ ZO_CreateStringId("ShissuNotebookMail_listName", "Listname?")
 ZO_CreateStringId("ShissuNotebookMail_invite", "Invite players")
 ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Do you want to remove the players in the list, or your selection from the guild? Players who remove them will receive an email from you.")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Subject")
-ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")       
-ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")       
-ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postbox full")       
-ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")       
+ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")
+ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postbox full")
+ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Close the window" .. _color.white .. "\nClosing completes sending / kicking.")
-ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
+ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Message incomplete")
 
 -- Modul: ShissuRoster
@@ -198,7 +198,7 @@ ZO_CreateStringId("ShissuRoster_yesterday", "yesterday")
 ZO_CreateStringId("ShissuRoster_sinceKiosk", "since trader")
 ZO_CreateStringId("ShissuRoster_last", "last")
 ZO_CreateStringId("ShissuRoster_total", "total")
-ZO_CreateStringId("ShissuRoster_sum", "Total")  
+ZO_CreateStringId("ShissuRoster_sum", "Total")
 ZO_CreateStringId("ShissuRoster_colAdd", "Show additional columns")
 ZO_CreateStringId("ShissuRoster_colAdd2", "After a change you have to reloaded the interface.")
 ZO_CreateStringId("ShissuRoster_colChar", "Column: Character")
@@ -219,7 +219,7 @@ ZO_CreateStringId("ShissuChat_time", "Show time")
 ZO_CreateStringId("ShissuChat_sound", "Acoustic Sound (Whispers)")
 ZO_CreateStringId("ShissuChat_guilds", "Gildenzugehörigkeit")
 ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
-ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                       
+ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))
 ZO_CreateStringId("ShissuChat_lvl", "Level")
 ZO_CreateStringId("ShissuChat_char", "Character names")
 ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
@@ -232,7 +232,7 @@ ZO_CreateStringId("ShissuChat_guildInfo", "Guild Information")
 ZO_CreateStringId("ShissuChat_guildWhich", "On which guilds should the information be based?")
 ZO_CreateStringId("ShissuChat_guildNames1", "Names")
 ZO_CreateStringId("ShissuChat_guildNames2", "How should your guilds be in chat?")
-     
+
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Markings")
 ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Player Markers")
@@ -242,7 +242,7 @@ ZO_CreateStringId("ShissuMarks_heal", "Heal")
 ZO_CreateStringId("ShissuMarks_observe", "Observe")
 ZO_CreateStringId("ShissuMarks_all", "All What You See")
 ZO_CreateStringId("ShissuMarks_confirmDel", "Delete list?")
-ZO_CreateStringId("ShissuMarks_confirmDel2", "Are you sure you want to delete the list content?")  
+ZO_CreateStringId("ShissuMarks_confirmDel2", "Are you sure you want to delete the list content?")
 ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Player")
 ZO_CreateStringId("ShissuMarks_add2", "What is the name of the monster / player?")
 ZO_CreateStringId("ShissuMarks_add3", "Monster / player in group")
@@ -262,4 +262,4 @@ ZO_CreateStringId("ShissuMarks_autoKickInfo3", "- When entering the guild")
 ZO_CreateStringId("ShissuMarks_found", "is in the guilds.")
 ZO_CreateStringId("ShissuMarks_found2", "The player was kicked (if rights exist).")
 ZO_CreateStringId("ShissuMarks_rightItem", "Remove player / monster")
-ZO_CreateStringId("ShissuMarks_rightItem2", "Right-click on name")           
+ZO_CreateStringId("ShissuMarks_rightItem2", "Right-click on name")

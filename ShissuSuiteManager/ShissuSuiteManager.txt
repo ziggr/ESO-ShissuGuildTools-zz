@@ -3,11 +3,11 @@
 ## Author: |c779cff@Shissu|r [EU]
 
 # Main
-Settings.lua          
+Settings.lua
 ShissuSuiteManager.lua
 
-ShissuSuiteManager.xml   
-Bindings.xml   
+ShissuSuiteManager.xml
+Bindings.xml
 
 i18n\EN.lua
 i18n\$(language).lua

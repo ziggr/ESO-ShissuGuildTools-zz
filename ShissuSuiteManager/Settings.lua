@@ -6,7 +6,7 @@ local ZO = {
 
 local modulList = {}
 local optionsMap = {}
-local optionsCreated = {}                                     
+local optionsCreated = {}
 
 local ShissuCreateControl = {}
 local _settings = {}
@@ -69,7 +69,7 @@ function _settings.CreateModulList(name, parent)
   	control:SetText(data.name)
 		control:SetSelected(not data.panel:IsHidden())
 	end
-  
+
 	ZO_ScrollList_AddDataType(modulList, 1, "ZO_SelectableLabel", 28, modulListRow_Setup)
 	ZO_ScrollList_EnableHighlight(modulList, "ZO_ThinListHighlight")
 	ZO_ScrollList_EnableSelection(modulList, "ZO_ThinListHighlight", modulListRow_Select)
@@ -113,7 +113,7 @@ function ShissuCreateControl.panel(parent, panelData, controlName)
 	info:SetAnchor(TOPLEFT, label, BOTTOMLEFT, 0, -2)
 	info:SetText(string.format("Version: %s  -  %s: %s", panelData.version, GetString(SI_ADDON_MANAGER_AUTHOR), "@Shissu [EU]"))
 
-  control.feedback = CreateControlFromVirtual(nil, control, "ZO_DefaultButton")  
+  control.feedback = CreateControlFromVirtual(nil, control, "ZO_DefaultButton")
   control.feedback:SetWidth(200)
   control.feedback:SetText("|t36:36:EsoUI/Art/notifications/notification_cs.dds|tFeedback")
   control.feedback:SetAnchor(TOPRIGHT, control, TOPRIGHT, -10, -40 )
@@ -123,8 +123,8 @@ function ShissuCreateControl.panel(parent, panelData, controlName)
       Shissu_Feedback_1000:SetHandler("OnClicked", function() Shissu_SuiteManager._lib.feedback(1000, panelData.displayName) end)
       Shissu_Feedback_5000:SetHandler("OnClicked", function() Shissu_SuiteManager._lib.feedback(5000, panelData.displayName) end)
       Shissu_Feedback_10000:SetHandler("OnClicked", function() Shissu_SuiteManager._lib.feedback(10000, panelData.displayName) end)
-        
-      Shissu_Feedback:SetHidden(false) 
+
+      Shissu_Feedback:SetHidden(false)
   end)
 
 	control.container = CreateControlFromVirtual("ShissuAddonPanelContainer"..ShissuCreateControl.scrollCount, control, "ZO_ScrollContainer")
@@ -141,7 +141,7 @@ function ShissuCreateControl.panel(parent, panelData, controlName)
 	return control
 end
 
--- Standardelement 
+-- Standardelement
 function _settings.CreateBaseControl(parent, controlData, controlName)
 	local control = CreateControl(controlName or controlData.reference, parent.scroll or parent, CT_CONTROL)
 
@@ -168,7 +168,7 @@ function ShissuCreateControl.colorpicker(parent, colorData)
   control.thumb:SetAnchor(TOPRIGHT, control.label, TOPRIGHT)
   control.thumb:SetDimensions(36, 36)
   control.thumb:SetMouseEnabled(true)
-  
+
   local function ColorPickerCallback(r, g, b, a)
     control.thumb:SetColor(r, g, b, a or 1)
 
@@ -178,11 +178,11 @@ function ShissuCreateControl.colorpicker(parent, colorData)
       colorData.setFunc(r, g, b, a or 1)
     end
   end
-  
+
   if colorData.getFunc then
     local r, g, b, a = colorData.getFunc
     control.thumb:SetColor(colorData.getFunc[1], colorData.getFunc[2], colorData.getFunc[3], colorData.getFunc[4])
-	end    
+	end
 
   control.thumb:SetHandler("OnMouseUp", function(self, btn, upInside)
     if self.isDisabled then return end
@@ -209,7 +209,7 @@ function ShissuCreateControl.title(parent, titleData)
 	control.header:SetAnchor(TOPLEFT, control.divider, BOTTOMLEFT)
 	control.header:SetAnchor(BOTTOMRIGHT)
 	control.header:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(titleData.name))
-  
+
 	return control
 end
 
@@ -218,7 +218,7 @@ function ShissuCreateControl.combobox(parent, dropdownData)
 	local control = _settings.CreateBaseControl(parent, dropdownData, nil)
 	local width = control:GetWidth()
 	control:SetDimensions(width, 30)
-  
+
   control.label = CreateControl(nil, control, CT_LABEL)
   control.label:SetFont("ZoFontGame")
   control.label:SetText(dropdownData.name)
@@ -229,27 +229,27 @@ function ShissuCreateControl.combobox(parent, dropdownData)
 	control.combobox:SetAnchor(TOPRIGHT, control.label, TOPRIGHT)
 	control.combobox:SetDimensions(150, 30)
   control.combobox.dropdown = ZO_ComboBox_ObjectFromContainer(control.combobox)
-  
+
   for i = 1, #dropdownData.items do
     control.combobox.dropdown:AddItem(control.combobox.dropdown:CreateItemEntry(dropdownData.items[i], dropdownData.setFunc))
   end
 
-  if dropdownData.tooltip then 
+  if dropdownData.tooltip then
     control.combobox:SetHandler("OnMouseEnter", function(self)
       ZO_Tooltips_ShowTextTooltip(control.combobox, TOPRIGHT, Shissu_SuiteManager._lib.ReplaceCharacter(dropdownData.tooltip))
     end)
-    
+
     control.combobox:SetHandler("OnMouseExit", function(self)
       ZO_Tooltips_HideTextTooltip()
-    end)   
+    end)
   end
- 
-  if dropdownData.getFunc then  
+
+  if dropdownData.getFunc then
     control.combobox.dropdown:SetSelectedItem(dropdownData.getFunc)
-  end 
+  end
 
 	return control
-end                                   
+end
 
 
 -- Checkbox AN/AUS
@@ -263,33 +263,33 @@ function ShissuCreateControl.checkbox(parent, checkboxData)
   control.label:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.name))
 	control.label:SetWidth(width-100)
   control.label:SetAnchor(TOPLEFT)
-	
+
   control.checkbox = CreateControlFromVirtual(nil, control, "ZO_CheckButton")
   control.checkbox:SetAnchor(TOPRIGHT, control.label, TOPRIGHT)
   control.checkbox:SetDimensions(20, 20)
-  
+
   if checkboxData.tooltip == nil then
-    checkboxData.tooltip = checkboxData.name  
+    checkboxData.tooltip = checkboxData.name
   end
-    
-  if checkboxData.tooltip then 
+
+  if checkboxData.tooltip then
     control.checkbox:SetHandler("OnMouseEnter", function(self)
       ZO_Tooltips_ShowTextTooltip(control.checkbox, TOPRIGHT, Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.tooltip))
     end)
-    
+
     control.checkbox:SetHandler("OnMouseExit", function(self)
       ZO_Tooltips_HideTextTooltip()
-    end)   
+    end)
   end
 
   if checkboxData.getFunc then
     ZO_CheckButton_SetChecked(control.checkbox)
-  end 
-  
+  end
+
   if checkboxData.setFunc then
     ZO_CheckButton_SetToggleFunction(control.checkbox, checkboxData.setFunc)
   end
-  
+
 	return control
 end
 
@@ -304,41 +304,41 @@ function ShissuCreateControl.editbox(parent, editboxData)
   control.label:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(editboxData.name))
 	control.label:SetWidth(width-100)
   control.label:SetAnchor(TOPLEFT)
-	
+
   control.container = CreateControl(nil, control, CT_CONTROL)
   control.container:SetDimensions(width / 3, 26)
 	control.container:SetAnchor(TOPRIGHT, control, TOPRIGHT, 0, 0)
-  
+
 	control:SetMouseEnabled(true)
 	control:SetHandler("OnMouseEnter", ZO_Options_OnMouseEnter)
 	control:SetHandler("OnMouseExit", ZO_Options_OnMouseExit)
 
 	control.bg = CreateControlFromVirtual(nil, control.container, "ZO_EditBackdrop")
 	control.bg:SetAnchorFill()
-  
+
   control.editbox = CreateControlFromVirtual(nil, control.bg, "ZO_DefaultEditMultiLineForBackdrop")--"ZO_DefaultEditForBackdrop")
 	control.editbox:SetMaxInputChars(3000)
   control.editbox:SetHandler("OnMouseEnter", function() ZO_Options_OnMouseEnter(control) end)
-	
+
   control.editbox:SetHandler("OnEscape", function(self) self:LoseFocus() end)
-  control.editbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)	
-  
+  control.editbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)
+
 	local width = control.container:GetWidth()
 	local height = 100
   local value = control.editbox:GetText()
-  
+
   control.container:SetHeight(height)
 	control.editbox:SetDimensionConstraints(width, height, width, 500)
   control:SetHeight(height)
 
   if editboxData.getFunc then
     control.editbox:SetText(editboxData.getFunc)
-  end 
-  
-  if editboxData.setFunc then   
+  end
+
+  if editboxData.setFunc then
     control.editbox:SetHandler("OnTextChanged", function()
       editboxData.setFunc(control.editbox:GetText())
-    end)  
+    end)
   end
 
 	return control
@@ -359,21 +359,21 @@ function ShissuCreateControl.textbox(parent, textBoxData)
   control.container = CreateControl(nil, control, CT_CONTROL)
   control.container:SetDimensions(width / 3, 26)
 	control.container:SetAnchor(TOPRIGHT, control, TOPRIGHT, 0, 0)
-  
+
 	control:SetMouseEnabled(true)
 	control:SetHandler("OnMouseEnter", ZO_Options_OnMouseEnter)
 	control:SetHandler("OnMouseExit", ZO_Options_OnMouseExit)
 
 	control.bg = CreateControlFromVirtual(nil, control.container, "ZO_EditBackdrop")
 	control.bg:SetAnchorFill()
-  
+
   control.textbox = CreateControlFromVirtual(nil, control.bg, "ZO_DefaultEditForBackdrop")--"ZO_DefaultEditForBackdrop")
 	control.textbox:SetMaxInputChars(3000)
   control.textbox:SetHandler("OnMouseEnter", function() ZO_Options_OnMouseEnter(control) end)
 
   control.textbox:SetHandler("OnEscape", function(self) self:LoseFocus() end)
-  control.textbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)	
-  
+  control.textbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)
+
 	local width = control.container:GetWidth()
 	local height = 30
   local value = control.textbox:GetText()
@@ -384,12 +384,12 @@ function ShissuCreateControl.textbox(parent, textBoxData)
 
   if textBoxData.getFunc then
     control.textbox:SetText(textBoxData.getFunc)
-  end 
+  end
 
-  if textBoxData.setFunc then   
-    control.textbox:SetHandler("OnTextChanged", function() 
+  if textBoxData.setFunc then
+    control.textbox:SetHandler("OnTextChanged", function()
       textBoxData.setFunc(control.textbox:GetText(), textBoxData.name)
-    end)  
+    end)
   end
 
 	return control
@@ -405,15 +405,15 @@ function ShissuCreateControl.slider(parent, checkboxData)
   control.label:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.name))
 	control.label:SetWidth(width-100)
   control.label:SetAnchor(TOPLEFT)
-	
+
   control.slider = CreateControl(nil, control, CT_SLIDER)
   control.slider:SetDimensions(190, 14)
   control.slider:SetMinMax(checkboxData.minimum, checkboxData.maximum)
   control.slider:SetAnchor(TOPRIGHT, control.label, TOPRIGHT)
- 
+
   control.slider:SetMouseEnabled(true)
 	control.slider:SetOrientation(ORIENTATION_HORIZONTAL)
-  control.slider:SetThumbTexture("EsoUI\\Art\\Miscellaneous\\scrollbox_elevator.dds", "EsoUI\\Art\\Miscellaneous\\scrollbox_elevator_disabled.dds", nil, 8, 16) 
+  control.slider:SetThumbTexture("EsoUI\\Art\\Miscellaneous\\scrollbox_elevator.dds", "EsoUI\\Art\\Miscellaneous\\scrollbox_elevator_disabled.dds", nil, 8, 16)
   control.slider:SetHandler("OnMouseEnter", function() ZO_Options_OnMouseEnter(control) end)
 	control.slider:SetHandler("OnMouseEnter", function() ZO_Options_OnMouseExit(control) end)
 
@@ -432,35 +432,35 @@ function ShissuCreateControl.slider(parent, checkboxData)
 	control.slider:SetHandler("OnValueChanged", function(self, value, eventReason)
 			if eventReason == EVENT_REASON_SOFTWARE then return end
 			self:SetValue(value)
-			control.valueText:SetText("|c779cff" .. value .. "|r")	
+			control.valueText:SetText("|c779cff" .. value .. "|r")
   end)
 
   if checkboxData.tooltip == nil then
-    checkboxData.tooltip = Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.name)  
+    checkboxData.tooltip = Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.name)
   end
-    
-  if checkboxData.tooltip then 
+
+  if checkboxData.tooltip then
     control.slider:SetHandler("OnMouseEnter", function(self)
       ZO_Tooltips_ShowTextTooltip(control.slider, TOPRIGHT, Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.tooltip))
     end)
-    
+
     control.slider:SetHandler("OnMouseExit", function(self)
       ZO_Tooltips_HideTextTooltip()
-    end)   
+    end)
   end
 
-  
+
   if checkboxData.getFunc then
     control.valueText:SetText(checkboxData.getFunc)
     control.slider:SetValue(checkboxData.getFunc)
   end
-  
+
   if checkboxData.setFunc then
     control.slider:SetHandler("OnSliderReleased", function(self, value)
       checkboxData.setFunc(value)
-    end)  
+    end)
   end
-   
+
 	return control
 end
 
@@ -477,12 +477,12 @@ function ShissuCreateControl.description(parent, descriptionData)
 	control.desc:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(descriptionData.text))
 	control.desc:SetWidth(width)
   control.desc:SetAnchor(TOPLEFT)
-	
+
 	--control.UpdateValue = UpdateValue
 
 	return control
 end
-         
+
 function _settings.CreateOptionsControls(panel)
 	local modulId = panel:GetName()
 	local optionsTable = optionsMap[modulId]
@@ -494,7 +494,7 @@ function _settings.CreateOptionsControls(panel)
 			if not status then
 				return err or true, offsetY, anchorTarget, wasHalf
 			else
-				if not anchorTarget then 
+				if not anchorTarget then
 					widget:SetAnchor(TOPLEFT)
 					anchorTarget = widget
 				else
@@ -522,17 +522,17 @@ function _settings.CreateOptionsControls(panel)
 				fifo[#fifo + 1] = function()
           local startIndex = i
           local endIndex = zo_min(i + THROTTLE_COUNT - 1, count)
-          
+
           for i=startIndex,endIndex do
             local widgetData = widgetDataTable[i]
-				  
+
             if widgetData then
               local widgetType = widgetData.type
 					    local offsetX = 0
 
 					    err, anchorOffset, lastAddedControl, wasHalf = CreateAndAnchorWidget(parent, widgetData, offsetX, anchorOffset, lastAddedControl, wasHalf)
 				    end
-			    end           
+			    end
 				end
 			end
 		end
@@ -555,15 +555,15 @@ function _settings.CreateOptionsControls(panel)
     SetupCreationCalls(panel, optionsTable)
 		DoCreateSettings()
 	end
-end           
+end
 
 function _settings.ToggleAddonPanels(panel)
 	local currentlySelected = shissuModulMenu.currentAddonPanel
-  
+
 	if currentlySelected and currentlySelected ~= panel then
 		currentlySelected:SetHidden(true)
 	end
-  
+
 	shissuModulMenu.currentAddonPanel = panel
 
 	ZO_ScrollList_RefreshVisible(shissuModulMenu.addonList)
@@ -598,15 +598,15 @@ function _settings.CreateAddonSettingsWindow()
 
 	local divider = CreateControlFromVirtual("$(parent)Divider", tlw, "ZO_Options_Divider")
 	divider:SetAnchor(TOPLEFT, nil, TOPLEFT, 65, 120)
-  divider:SetAnchor(TOPRIGHT, nil, TOPRIGHT, 65, 120)  
+  divider:SetAnchor(TOPRIGHT, nil, TOPRIGHT, 65, 120)
   divider:SetColor(0.2705882490, 0.5725490451, 1, 1)
-                                                    
+
 	local addonList = _settings.CreateModulList("$(parent)AddonList", tlw)
 	addonList:SetAnchor(TOPLEFT, nil, TOPLEFT, 65, 140)
 	addonList:SetDimensions(285, 665)
 
 	shissuModulMenu.addonList = addonList
-  
+
 	local panelContainer = CreateControl("$(parent)PanelContainer", tlw, CT_CONTROL)
 	panelContainer:SetAnchor(TOPLEFT, nil, TOPLEFT, 365, 120)
 	panelContainer:SetDimensions(645, 675)
@@ -673,15 +673,15 @@ function _settings.CreateAddonSettingsMenuEntry()
 
 		local title = ShissuAddonSettingsWindow:GetNamedChild("Title")
 		title:SetText(panelData.name)
-	   
+
     table.sort(modulList, function(a, b) return a.name < b.name end)
 		_settings.PopulateAddonList(shissuModulMenu.addonList)
   end
 
 	function panelData.unselectedCallback()
     ZO.sm:RemoveFragment(_settings.GetModulSettingsFragment())
-    
-    if SetCameraOptionsPreviewModeEnabled then 
+
+    if SetCameraOptionsPreviewModeEnabled then
       SetCameraOptionsPreviewModeEnabled(false)
     end
 	end
@@ -696,7 +696,7 @@ function _settings.GetModulSettingsFragment()
 		ShissuAddonSettingsFragment = ZO_FadeSceneFragment:New(window, true, 100)
 		_settings.CreateAddonSettingsMenuEntry()
 	end
-  
+
 	return ShissuAddonSettingsFragment
 end
 
@@ -711,7 +711,7 @@ end
 -- Einstellungen | Standardpanel pro AddOn /& Modul anlegen
 function Shissu_SuiteManager_SettingMenu.RegisterAddonPanel(modulId, panelData, optionsTable)
 	_settings.CheckInitialize(modulId)
-  
+
 	local container = GetModulPanelContainer()
 	local panel = ShissuCreateControl.panel(container, panelData, modulId)
 	panel:SetHidden(true)
@@ -724,6 +724,6 @@ function Shissu_SuiteManager_SettingMenu.RegisterAddonPanel(modulId, panelData, 
 	}
 
 	table.insert(modulList, modulData)
-  
+
   optionsMap[modulId] = optionsTable
 end

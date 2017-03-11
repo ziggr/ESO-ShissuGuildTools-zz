@@ -16,18 +16,18 @@ _addon.panel = Shissu_SuiteManager._lib.setPanel("Standard Commands", _addon.for
 _addon.controls = {
   [1] = {
     type = "title",
-    name = Shissu_SuiteManager._lib.getString(SGT_Standard1),     
-  }, 
+    name = Shissu_SuiteManager._lib.getString(SGT_Standard1),
+  },
   [2] = {
     type = "description",
     text = Shissu_SuiteManager._lib.getString(SGT_Standard2),
-  },          
+  },
 }
 
 function _addon.core.initialized()
 end
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
-Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel                                       
-Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
-Shissu_SuiteManager._init[_addon.Name] = function() end 
+Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
+Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls
+Shissu_SuiteManager._init[_addon.Name] = function() end

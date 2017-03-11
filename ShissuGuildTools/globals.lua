@@ -20,7 +20,7 @@ _globals["color"] = {
   yellow = "|cf1ff77",
   gray = "|cd5d1d1",
   orange = "|cff3300",
-}        
+}
 
 _globals["ZOS"] = {
   ["History"] = GUILD_HISTORY_GENERAL,
@@ -30,7 +30,7 @@ _globals["ZOS"] = {
   ["GoldRemoved"] = GUILD_EVENT_BANKGOLD_REMOVED,
   ["ItemAdded"] = GUILD_EVENT_BANKITEM_ADDED,
   ["ItemRemoved"] = GUILD_EVENT_BANKITEM_REMOVED,
-}        
+}
 
 -- Dialogbox
 ESO_Dialogs["SGT_DIALOG"] = {
@@ -41,13 +41,13 @@ ESO_Dialogs["SGT_DIALOG"] = {
       text = SI_DIALOG_REMOVE,
       callback = function(dialog) end, },
     [2] = { text = SI_DIALOG_CANCEL, }
-  }                                       
+  }
 }
 
 ESO_Dialogs["SGT_EDIT"] = {
   title = { text = "TITEL", },
   mainText = { text = "TEXT", },
-  editBox = { 
+  editBox = {
     defaultText = "Liste",
   },
   buttons = {
@@ -57,7 +57,7 @@ ESO_Dialogs["SGT_EDIT"] = {
       callback = function(dialog) end,
     },
     [2] = { text = SI_DIALOG_CANCEL, }
-  }                                       
+  }
 }
 
 Shissu_SuiteManager._globals = _globals

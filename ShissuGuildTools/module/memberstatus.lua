@@ -12,7 +12,7 @@ local blue = _globals["color"]["blue"]
 local green = _globals["color"]["green"]
 local red = _globals["color"]["red"]
 local yellow = _globals["color"]["yellow"]
-local gray = _globals["color"]["gray"] 
+local gray = _globals["color"]["gray"]
 
 local _lib = Shissu_SuiteManager._lib
 local _SGT = Shissu_SuiteManager._lib["SGT"]
@@ -25,8 +25,8 @@ _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuMemberStatus))
 
 _addon.settings = {
-  added = {}, 
-  removed = {}, 
+  added = {},
+  removed = {},
   memberstatus = {},
 }
 
@@ -42,11 +42,11 @@ function _addon.core.createGuildSettings(title, var, oneMore)
 
   controls[#controls+1] = {
     type = "title",
-    name = getString(title),  
+    name = getString(title),
   }
-  
+
   for guildId = 1, numGuild do
-    local name = GetGuildName(guildId)           
+    local name = GetGuildName(guildId)
 
     controls[#controls+1] = {
       type = "checkbox",
@@ -62,7 +62,7 @@ end
 -- Event: EVENT_GUILD_MEMBER_ADDED
 function _addon.core.playerAdded(_, guildId, accName)
   local guildName = GetGuildName(guildId)
-  
+
   if _addon.settings["added"][guildName] == false then return end
 
   text = blue .. guildName .. ": " .. white .. accName .. " - " .. green .. getString(ShissuContextMenu_added)
@@ -72,27 +72,27 @@ end
 -- Event: EVENT_GUILD_MEMBER_REMOVED
 function _addon.core.playerRemoved(_, guildId, accName)
   local guildName = GetGuildName(guildId)
-  
+
   if _addon.settings["removed"][guildName] == false then return end
 
   text = blue .. guildName .. ": " .. white .. accName .. " - " .. red .. getString(ShissuContextMenu_removed)
   d(text)
-end         
+end
 
 -- Event: EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
 function _addon.core.playerStatusChanged(_, guildId, accName, _, newStatus)
   if (_guildId == guildId and _status == newStatus) then return end
   local guildName = GetGuildName(guildId)
-  
+
   if _addon.settings["memberstatus"][guildName] == false then return end
-  
+
   _guildId = guildId
   _status = newStatus
-  
+
   local statusText = {
     green .. "Online",
     yellow .. "AFK",
-    red .. "BRB",                                   
+    red .. "BRB",
     gray .. "Offline",
   }
 
@@ -103,17 +103,17 @@ end
 
 -- Initialisierung
 function _addon.core.initialized()
-  shissuGT = shissuGT or {}  
+  shissuGT = shissuGT or {}
   shissuGT[_addon.Name] = shissuGT[_addon.Name] or _addon.settings
   _addon.settings = shissuGT[_addon.Name]
 
-   -- Hat jemand die neue SaveVar schon?  
+   -- Hat jemand die neue SaveVar schon?
   if (_addon.settings["memberstatus"] == nil) then _addon.settings["invite"] = {} end
   if (_addon.settings["added"] == nil) then _addon.settings["message"] = {} end
   if (_addon.settings["removed"] == nil) then _addon.settings["message"] = {} end
-  
+
   for guildId=1, GetNumGuilds() do
-    local guildName = GetGuildName(guildId)  
+    local guildName = GetGuildName(guildId)
     if (_addon.settings["memberstatus"][guildName] == nil) then _addon.settings["memberstatus"][guildName] = false end
     if (_addon.settings["added"][guildName] == nil) then _addon.settings["added"][guildName] = true end
     if (_addon.settings["removed"][guildName] == nil) then _addon.settings["removed"][guildName] = true end
@@ -126,9 +126,9 @@ function _addon.core.initialized()
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_REMOVED, _addon.core.playerRemoved)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_ADDED, _addon.core.playerAdded)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED, _addon.core.playerStatusChanged)
-end                               
+end
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
-Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel                                       
-Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
-Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized    
+Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
+Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls
+Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

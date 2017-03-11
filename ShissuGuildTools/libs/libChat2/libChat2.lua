@@ -24,7 +24,7 @@ Under the following terms:
     No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
 
-Please read full licence at : 
+Please read full licence at :
 http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 
@@ -43,7 +43,7 @@ CHAT_SYSTEM does not permit to get 2 libraries running together and using ChatBo
 
 - If you REWRITE message, you're hugely prompted to use LibChat2, without it, you'll surely kill other chat Addons
 	eg: Append some text, rewrite sender name, rewrite colors, etc
-	
+
 - DO NOT USE this library if you don't REWRITE the message sent
 - If you only APPEND something with a d() or a AddMessage(), you don't need LibChat2
 
@@ -110,14 +110,14 @@ local function showCustomerService(isCustomerService)
 	if(isCustomerService) then
 		return "|t16:16:EsoUI/Art/ChatWindow/csIcon.dds|t"
 	end
-	
+
 	return ""
-	
+
 end
 
 -- Listens for EVENT_CHAT_MESSAGE_CHANNEL event from ZO_ChatSystem
 local function libChatMessageChannelReceiver(channelID, from, text, isCustomerService, fromDisplayName)
-	
+
 	local message
 	local DDSBeforeAll = ""
 	local TextBeforeAll = ""
@@ -131,60 +131,60 @@ local function libChatMessageChannelReceiver(channelID, from, text, isCustomerSe
 	local DDSAfterText = ""
 	local originalFrom = from
 	local originalText = text
-	
+
 	-- Get channel information
 	local ChanInfoArray = ZO_ChatSystem_GetChannelInfo()
 	local info = ChanInfoArray[channelID]
-	
+
 	if not info or not info.format then
 		return
 	end
-	
+
 	-- Function to append
 	if funcDDSBeforeAll then
 		DDSBeforeAll = funcDDSBeforeAll(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcTextBeforeAll then
 		TextBeforeAll = funcTextBeforeAll(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcDDSBeforeSender then
 		DDSBeforeSender = funcDDSBeforeSender(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcTextBeforeSender then
 		TextBeforeSender = funcTextBeforeSender(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcDDSAfterSender then
 		DDSAfterSender = funcDDSAfterSender(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcTextAfterSender then
 		TextAfterSender = funcTextAfterSender(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcDDSBeforeText then
 		DDSBeforeText = funcDDSBeforeText(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcTextBeforeText then
 		TextBeforeText = funcTextBeforeText(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcTextAfterText then
 		TextAfterText = funcTextAfterText(channelID, from, text, isCustomerService, fromDisplayName)
 	end
-	
+
 	-- Function to append
 	if funcDDSAfterText then
 		DDSAfterText = funcDDSAfterText(channelID, from, text, isCustomerService, fromDisplayName)
@@ -195,28 +195,28 @@ local function libChatMessageChannelReceiver(channelID, from, text, isCustomerSe
 		from = funcName(channelID, from, isCustomerService, fromDisplayName)
 		if not from then return	end
 	end
-	
+
 	-- Function to format text
 	if funcText then
 		text = funcText(channelID, from, text, isCustomerService, fromDisplayName)
 		if not text then return end
 	end
-	
+
 	-- Function to format message
 	if funcFormat then
 		message = funcFormat(channelID, from, text, isCustomerService, fromDisplayName, originalFrom, originalText, DDSBeforeAll, TextBeforeAll, DDSBeforeSender, TextBeforeSender, TextAfterSender, DDSAfterSender, DDSBeforeText, TextBeforeText, TextAfterText, DDSAfterText)
 		if not message then return end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
-		
+
 		-- Create channel link
 		local channelLink
 		if info.channelLinkable then
 			local channelName = GetChannelName(info.id)
 			channelLink = ZO_LinkHandler_CreateChannelLink(channelName)
 		end
-		
+
 		-- Create player link
 		local playerLink
 		if info.playerLinkable and not from:find("%[") then
@@ -224,9 +224,9 @@ local function libChatMessageChannelReceiver(channelID, from, text, isCustomerSe
 		else
 			playerLink = DDSBeforeSender .. TextBeforeSender .. from .. TextAfterSender .. DDSAfterSender
 		end
-		
+
 		text = DDSBeforeText .. TextBeforeText .. text .. TextAfterText .. DDSAfterText
-		
+
 		-- Create default formatting
 		if channelLink then
 			message = DDSBeforeAll .. TextBeforeAll .. zo_strformat(info.format, channelLink, playerLink, text)
@@ -234,17 +234,17 @@ local function libChatMessageChannelReceiver(channelID, from, text, isCustomerSe
 			message = DDSBeforeAll .. TextBeforeAll .. zo_strformat(info.format, playerLink, text, showCustomerService(isCustomerService))
 		end
 	end
-	
+
 	return message, info.saveTarget
-	
+
 end
 
 -- Listens for EVENT_FRIEND_PLAYER_STATUS_CHANGED event from ZO_ChatSystem
 local function libChatFriendPlayerStatusChangedReceiver(displayName, characterName, oldStatus, newStatus)
-	
+
 	-- If function registrered in Addon, code will run
 	local friendStatusMessage
-	
+
 	if funcFriendStatus then
 		friendStatusMessage = funcFriendStatus(displayName, characterName, oldStatus, newStatus)
 		if friendStatusMessage then
@@ -253,17 +253,17 @@ local function libChatFriendPlayerStatusChangedReceiver(displayName, characterNa
 			return
 		end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
-	
+
 		local wasOnline = oldStatus ~= PLAYER_STATUS_OFFLINE
 		local isOnline = newStatus ~= PLAYER_STATUS_OFFLINE
-		
+
 		-- DisplayName is linkable
 		local displayNameLink = ZO_LinkHandler_CreateDisplayNameLink(displayName)
 		-- CharacterName is linkable
 		local characterNameLink = ZO_LinkHandler_CreateCharacterLink(characterName)
-		
+
 		-- Not connected before and Connected now (no messages for Away/Busy)
 		if(not wasOnline and isOnline) then
 			-- Return
@@ -272,17 +272,17 @@ local function libChatFriendPlayerStatusChangedReceiver(displayName, characterNa
 		elseif(wasOnline and not isOnline) then
 			return zo_strformat(SI_FRIENDS_LIST_FRIEND_CHARACTER_LOGGED_OFF, displayNameLink, characterNameLink)
 		end
-		
+
 	end
-	
+
 end
 
 -- Listens for EVENT_IGNORE_ADDED event from ZO_ChatSystem
 local function libChatIgnoreAddedReceiver(displayName)
-	
+
 	-- If function registrered in Addon, code will run
 	local ignoreAddMessage
-	
+
 	if funcIgnoreAdd then
 		ignoreAddMessage = funcIgnoreAdd(displayName)
 		if ignoreAddMessage then
@@ -291,25 +291,25 @@ local function libChatIgnoreAddedReceiver(displayName)
 			return
 		end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
-		
+
 		-- DisplayName is linkable
 		local displayNameLink = ZO_LinkHandler_CreateDisplayNameLink(displayName)
 		ignoreAddMessage = zo_strformat(SI_FRIENDS_LIST_IGNORE_ADDED, displayNameLink)
-		
+
 	end
-	
+
 	return ignoreAddMessage
-	
+
 end
 
 -- Listens for EVENT_IGNORE_REMOVED event from ZO_ChatSystem
 local function libChatIgnoreRemovedReceiver(displayName)
-	
+
 	-- If function registrered in Addon, code will run
 	local ignoreRemoveMessage
-	
+
 	if funcIgnoreRemove then
 		ignoreRemoveMessage = funcIgnoreRemove(displayName)
 		if ignoreRemoveMessage then
@@ -318,25 +318,25 @@ local function libChatIgnoreRemovedReceiver(displayName)
 			return
 		end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
-		
+
 		-- DisplayName is linkable
 		local displayNameLink = ZO_LinkHandler_CreateDisplayNameLink(displayName)
 		ignoreRemoveMessage = zo_strformat(SI_FRIENDS_LIST_IGNORE_REMOVED, displayNameLink)
-		
+
 	end
-	
+
 	return ignoreRemoveMessage
-	
+
 end
 
 -- Listens for EVENT_GROUP_MEMBER_LEFT event from ZO_ChatSystem
 local function libChatGroupMemberLeftReceiver(characterName, reason, isLocalPlayer, isLeader, memberDisplayName, actionRequiredVote)
-	
+
 	-- If function registrered in Addon, code will run
 	local groupMemberLeftMessage
-	
+
 	if funcGroupMemberLeft then
 		groupMemberLeftMessage = funcGroupMemberLeft(characterName, reason, isLocalPlayer, isLeader, memberDisplayName, actionRequiredVote)
 		if groupMemberLeftMessage then
@@ -345,24 +345,24 @@ local function libChatGroupMemberLeftReceiver(characterName, reason, isLocalPlay
 			return
 		end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
 		if reason == GROUP_LEAVE_REASON_KICKED and isLocalPlayer and actionRequiredVote then
 			groupMemberLeftMessage = GetString(SI_GROUP_ELECTION_KICK_PLAYER_PASSED)
 		end
-		
+
 	end
-	
+
 	return groupMemberLeftMessage
-	
+
 end
 
 -- Listens for EVENT_GROUP_TYPE_CHANGED event from ZO_ChatSystem
 local function libChatGroupTypeChangedReceiver(largeGroup)
-	
+
 	-- If function registrered in Addon, code will run
 	local GroupTypeChangedMessage
-	
+
 	if funcGroupTypeChanged then
 		GroupTypeChangedMessage = funcGroupTypeChanged(largeGroup)
 		if GroupTypeChangedMessage then
@@ -371,17 +371,17 @@ local function libChatGroupTypeChangedReceiver(largeGroup)
 			return
 		end
 	else
-	
+
 		-- Code to run with libChat loaded and Addon not registered to libchat - IT MUST BE ~SAME~ AS ESOUI -
-		
+
         if largeGroup then
             return GetString(SI_CHAT_ANNOUNCEMENT_IN_LARGE_GROUP)
         else
             return GetString(SI_CHAT_ANNOUNCEMENT_IN_SMALL_GROUP)
         end
-		
+
 	end
-	
+
 end
 
 local function registerFunction(addonFunc, funcToUse, ...)
@@ -423,11 +423,11 @@ local function registerFunction(addonFunc, funcToUse, ...)
 	elseif funcToUse == "registerAppendDDSAfterText" then
 		funcDDSAfterText = addonFunc
 	end
-	
+
 	if not libchat.manager[funcToUse] then
 		libchat.manager[funcToUse] = {}
 	end
-	
+
 	-- Adding the registration to manager
 	local addonName = select(1, ...)
 	-- AddonName registered!
@@ -441,7 +441,7 @@ local function registerFunction(addonFunc, funcToUse, ...)
 	else
 		table.insert(libchat.manager[funcToUse],"Anonymous AddOn")
 	end
-	
+
 end
 
 -- Register a function to be called to modify MessageChannel Sender Name
@@ -535,25 +535,25 @@ function libchat:registerAppendDDSAfterText(func, ...)
 end
 
 local function libchatdebug()
-	
+
 	local message
-	
+
 	CHAT_SYSTEM:AddMessage("---- libchat2 debug ----")
 	CHAT_SYSTEM:AddMessage("Note : 2 addons registering same method will provoke conflicts")
-	
+
 	for keymanager, subarray in pairs(libchat.manager) do
 		message = keymanager .. " set with addon "
-		if keymanager == "registerFormat" then 
+		if keymanager == "registerFormat" then
 			message = message .. "WARNING : method overwrite Sender name and Message !"
 		end
 		for addonIndex, addonName in ipairs(subarray) do message = message .. " #" .. addonIndex .. " " .. addonName .. "," end
 		CHAT_SYSTEM:AddMessage(message)
 	end
-	
+
 	CHAT_SYSTEM:AddMessage("---- end of libchat2 debug ----")
-	
+
 end
- 
+
 SLASH_COMMANDS["/libchat"] = libchatdebug
 
 -- AddEventHandler to ZO_ChatSystem with same name than the original one cause the Event triggers library instead of ESOUI

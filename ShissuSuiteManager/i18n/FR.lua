@@ -9,12 +9,12 @@
 
 Shissu_SuiteManager = Shissu_SuiteManager or {}
 Shissu_SuiteManager._i18n = Shissu_SuiteManager._i18n or {}
-             
+
 -- Feedback
 ZO_CreateStringId("SGT_Feedback1", "I hope you are enjoying the AddOn..  Your feedback is always welcome, so please drop me a note with or without a donation.  Your donation will help me focus my non adventuring ESO time on more features.")
 ZO_CreateStringId("SGT_Feedback2", "")
 ZO_CreateStringId("SGT_Feedback3", "INFO!!! I get your e-mail only if you play on the EU-server!")
-        
+
 -- Bindings
 ZO_CreateStringId("SI_BINDING_NAME_SGT_helmToogle", "Toogle Helm")
 ZO_CreateStringId("SI_BINDING_NAME_SGT_offlineToogle", "Toogle Playerstatus On-/Offline")
@@ -27,9 +27,9 @@ ZO_CreateStringId("SGT_Language3", "Changes the language of Elder Scrolls Online
 
 -- Modul: Standard
 ZO_CreateStringId("SGT_Standard1", "Standard Befehle")
-ZO_CreateStringId("SGT_Standard2", "|cAFD3FF/rl|r - RELOADUI\n\n" .. 
-    "|cAFD3FF/helm|r - Toogle helm \n\n" .. 
-    "|cAFD3FF/on|r - Player status " .. EsoStrings[SI_PLAYERSTATUS1] .. "\n\n" .. 
+ZO_CreateStringId("SGT_Standard2", "|cAFD3FF/rl|r - RELOADUI\n\n" ..
+    "|cAFD3FF/helm|r - Toogle helm \n\n" ..
+    "|cAFD3FF/on|r - Player status " .. EsoStrings[SI_PLAYERSTATUS1] .. "\n\n" ..
     "|cAFD3FF/off|r - Player status " .. EsoStrings[SI_PLAYERSTATUS4] .. "\n\n" ..
     "|cAFD3FF/brb|r - Player status " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
     "|cAFD3FF/dnd|r - Player status " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..

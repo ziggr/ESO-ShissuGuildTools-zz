@@ -24,7 +24,7 @@ _addon.fN = _SGT["title"](getString(ShissuNotifications))
 _addon.settings = {
   ["mail"] = false,
   ["inSight"] = {},
-  ["motD"] = {}, 
+  ["motD"] = {},
   ["background"] = {},
   ["raid"] = { true, true },
   ["friend"] = true,
@@ -32,7 +32,7 @@ _addon.settings = {
 
 _addon.panel = _lib.setPanel(getString(ShissuNotifications), _addon.fN, _addon.Version)
 _addon.controls = {}
-  
+
 local fString = {
   ["mail"] = blue .. getString(ShissuNotifications_info) .. "|r " .. getString(ShissuNotifications_mail),
   ["inSight"] = blue .. getString(ShissuNotifications_info) .. "|r " .. getString(ShissuNotifications_inSight),
@@ -41,58 +41,58 @@ local fString = {
   ["background"] = blue .. getString(ShissuNotifications_info) .. "|r " .. getString(ShissuNotifications_background),
   ["friendRaid"] = blue .. getString(ShissuNotifications) .. "|r " .. getString(Shissu_friend),
   ["guild"] = blue .. getString(ShissuNotifications) .. "|r " .. getString(ShissuNotifications_guild),
-}  
-  
+}
+
 function _addon.core.createControls()
-  local controls = _addon.controls 
-  
+  local controls = _addon.controls
+
   controls[#controls+1] = {
     type = "title",
     name = getString(ShissuGeneral),
    }
-     
+
   controls[#controls+1] = {
-    type = "checkbox", 
+    type = "checkbox",
     name = fString["mail"],
     getFunc = _addon.settings["mail"],
     setFunc = function(_, value)
       _addon.settings["mail"] = value
-      
-      if (not value) then 
+
+      if (not value) then
         MAIL_INBOX.Delete = _addon.core.mailInBoxDelete
       end
     end,
   }
-    
+
   controls[#controls+1] = {
-    type = "checkbox", 
+    type = "checkbox",
     name = fString["friend"],
     getFunc = _addon.settings["friend"],
     setFunc = function(_, value)
       _addon.settings["friend"] = value
-      
-      if (not value) then 
-        _addon.core.deactiveFriendStatus() 
+
+      if (not value) then
+        _addon.core.deactiveFriendStatus()
       end
     end,
   }
-    
+
   controls[#controls+1] = {
     type = "title",
-    name = getString(ShissuNotifications_rank),     
+    name = getString(ShissuNotifications_rank),
   }
-    
+
   controls[#controls+1] = {
-    type = "checkbox", 
+    type = "checkbox",
     name = fString["guild"],
-    getFunc = _addon.settings["raid"][1],    
+    getFunc = _addon.settings["raid"][1],
     setFunc = function(_, value)
       _addon.settings["raid"][1] = value
     end,
   }
-  
+
   controls[#controls+1] = {
-    type = "checkbox", 
+    type = "checkbox",
     name = fString["friendRaid"],
     getFunc = _addon.settings["raid"][2],
     setFunc = function(_, value)
@@ -102,17 +102,17 @@ function _addon.core.createControls()
 end
 
 function _addon.core.createGuildSettings(title)
-  local controls = _addon.controls 
-  
+  local controls = _addon.controls
+
   controls[#controls+1] = {
     type = "title",
-    name = fString[title],     
+    name = fString[title],
   }
-  
+
   local numGuild = GetNumGuilds()
-  
+
   for guildId = 1, numGuild do
-    local name = GetGuildName(guildId)           
+    local name = GetGuildName(guildId)
 
     controls[#controls+1] = {
       type = "checkbox",
@@ -131,7 +131,7 @@ function _addon.core.mailInBoxDelete(self)
   if self.mailId then
     if self:IsMailDeletable() then
       local numAttachments, attachedMoney = GetMailAttachmentInfo(self.mailId)
-      
+
       if numAttachments > 0 and attachedMoney > 0 then
         ZO_Dialogs_ShowDialog("DELETE_MAIL_ATTACHMENTS_AND_MONEY", self.mailId)
       elseif numAttachments > 0 then
@@ -142,29 +142,29 @@ function _addon.core.mailInBoxDelete(self)
         if _addon.settings["mail"] then
           ZO_Dialogs_ShowDialog("DELETE_MAIL", {callback = function(...) self:ConfirmDelete(...) end, mailId = self.mailId})
         else
-          self:ConfirmDelete(self.mailId) 
+          self:ConfirmDelete(self.mailId)
         end
       end
     end
-  end  
+  end
 end
 
-function _addon.core.deactiveFriendStatus() 
+function _addon.core.deactiveFriendStatus()
   ZO_PreHook(ZO_ChatSystem_GetEventHandlers(), EVENT_FRIEND_PLAYER_STATUS_CHANGED, function() return true end )
   EVENT_MANAGER:UnregisterForEvent( "FriendsList", EVENT_FRIEND_PLAYER_STATUS_CHANGE)
-end      
+end
 
 -- GuildMoTD deaktivieren
 -- Original ZOS LUA Code + Modifikation: notifications_common.lua, Version 01.09.2015
-function ZO_GuildMotDProvider:BuildNotificationList() 
+function ZO_GuildMotDProvider:BuildNotificationList()
   if self.sv then
     ZO_ClearNumericallyIndexedTable(self.list)
     local numGuilds = GetNumGuilds()
 
     for i = 1, numGuilds do
       local guildId = GetGuildId(i)
-      
-      if _addon.settings["motD"][guildId] then 
+
+      if _addon.settings["motD"][guildId] then
         local guildName = GetGuildName(guildId)
         local savedMotDHash = self.sv[guildName]
         local currentMotD = GetGuildMotD(guildId)
@@ -183,10 +183,10 @@ function ZO_GuildMotDProvider:BuildNotificationList()
             message = message,
             guildId = guildId,
             shortDisplayText = guildName,
-          })           
+          })
         end
       end
-    end    
+    end
   end
 end
 
@@ -216,7 +216,7 @@ function ZO_LeaderboardRaidProvider:BuildNotificationList()
 
             if hasPlayer then
                 -- Player just received a notification about themselves, so filter it out
-                self:Decline({ notificationId = notificationId, })                            
+                self:Decline({ notificationId = notificationId, })
             elseif (hasFriend and _addon.settings["raid"][2]) or (_addon.settings["raid"][1] and hasGuildMember) then
                 local raidName = GetRaidName(raidId)
 
@@ -230,40 +230,40 @@ function ZO_LeaderboardRaidProvider:BuildNotificationList()
                     message = self:CreateMessage(raidName, raidScore, numKnownMembers, hasFriend, hasGuildMember, notificationId),
                     shortDisplayText = zo_strformat(SI_NOTIFICATIONS_LEADERBOARD_RAID_NOTIFICATION_SHORT_TEXT_FORMATTER, raidName),
                 })
-                
-                
+
+
             end
         end
     end
 end
 
--- EVENT_GUILD_DESCRIPTION_CHANGED (integer eventCode, integer guildId) 
+-- EVENT_GUILD_DESCRIPTION_CHANGED (integer eventCode, integer guildId)
 function _addon.core.guildDescriptionChanged(_, guildId)
   local guildId = GetGuildId(guildId)
-  
-  
+
+
   local guildName = GetGuildName(guildId)
   local guildDescription = GetGuildDescription(guildId)
 
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
-  
+
   local text = white .. getString(ShissuNotifications_background) .. " " .. getString(ShissuNotifications_background2)  .. " " .. allianceIcon .. blue .. guildName .. " " .. getString(ShissuNotifications_background3)
     .. "|r:\n\n|ceeeeee" .. guildDescription
-      
-  d(text)  
+
+  d(text)
 end
 
 function _addon.core.memberInSight(_, name)
   local target = GetUnitName('reticleover')
   local unitName = GetRawUnitName('reticleover')
   local count = 0
-  
+
   ZO_Tooltips_HideTextTooltip()
-  
-  if unitName ~= "" and _SGTcharacterList[unitName] then   
+
+  if unitName ~= "" and _SGTcharacterList[unitName] then
     local memberData = _SGTcharacterList[unitName]
-    
-    if memberData then                                                         
+
+    if memberData then
       local _, _, _, class, alliance, lvl, vr = GetGuildMemberCharacterInfo( memberData["gid"], memberData["id"])
       local text = GetGuildMemberInfo(memberData["gid"], memberData["id"])
 
@@ -272,7 +272,7 @@ function _addon.core.memberInSight(_, name)
 
       local class = "|t28:28:" .. GetClassIcon(class) .. "|t"
       local alliance = "|t28:28:" .. GetAllianceBannerIcon(alliance) .. "|t"
- 
+
       text = blue .. acc .. "\n"
       text = text .. alliance .. class .. "|ceeeeee" .. charName
 
@@ -281,28 +281,28 @@ function _addon.core.memberInSight(_, name)
       else
         text = text .. " |ceeeeee(|cAFD3FFCP " .. "|ceeeeee" .. vr .. ")"
       end
-      
-      if (_addon.settings["inSight"][1] or _addon.settings["inSight"][2] or _addon.settings["inSight"][3] or _addon.settings["inSight"][4] or _addon.settings["inSight"][5]) then   
-        memberData = memberData["guilds"]                        
-        
+
+      if (_addon.settings["inSight"][1] or _addon.settings["inSight"][2] or _addon.settings["inSight"][3] or _addon.settings["inSight"][4] or _addon.settings["inSight"][5]) then
+        memberData = memberData["guilds"]
+
         local first = 0
 
         for numGuild = 1, #memberData do
-          if (_addon.settings["inSight"][1] and memberData[numGuild][2] == 1 
-          or _addon.settings["inSight"][2] and memberData[numGuild][2] == 2 
-          or _addon.settings["inSight"][3] and memberData[numGuild][2] == 3 
-          or _addon.settings["inSight"][4] and memberData[numGuild][2] == 4 
+          if (_addon.settings["inSight"][1] and memberData[numGuild][2] == 1
+          or _addon.settings["inSight"][2] and memberData[numGuild][2] == 2
+          or _addon.settings["inSight"][3] and memberData[numGuild][2] == 3
+          or _addon.settings["inSight"][4] and memberData[numGuild][2] == 4
           or _addon.settings["inSight"][5] and memberData[numGuild][2] == 5) then
-            
+
             count = count + 1
-                
+
             if (first == 0) then
               first = 1
               text = text .. "\n\n"
             end
 
             text = text .. "|ceeeeee" .. memberData[numGuild][1]
-            
+
             if numGuild ~= #memberData then
               text = text .. "\n"
             end
@@ -315,32 +315,32 @@ function _addon.core.memberInSight(_, name)
       end
     end
   end
-end    
-                                            
+end
+
 -- Initialisierung
-function _addon.core.initialized() 
+function _addon.core.initialized()
   shissuGT = shissuGT or {}
   shissuGT[_addon.Name] = shissuGT[_addon.Name] or _addon.settings
   _addon.settings = shissuGT[_addon.Name]
- 
-  if (not _addon.settings.mail) then        
-    MAIL_INBOX.Delete = _addon.core.mailInBoxDelete 
+
+  if (not _addon.settings.mail) then
+    MAIL_INBOX.Delete = _addon.core.mailInBoxDelete
   end
-  
+
   if (not _addon.settings.friend) then _addon.core.deactiveFriendStatus() end
 
-  -- Hat jemand die neue SaveVar schon?  
+  -- Hat jemand die neue SaveVar schon?
   if (_addon.settings["inSight"] == nil) then _addon.settings["inSight"] = {} end
   if (_addon.settings["motD"] == nil) then _addon.settings["motD"] = {} end
   if (_addon.settings["background"] == nil) then _addon.settings["background"] = {} end
-  
+
   for guildId=1, GetNumGuilds() do
-    local guildName = GetGuildName(guildId)  
+    local guildName = GetGuildName(guildId)
     if (_addon.settings["inSight"][guildName] == nil) then _addon.settings["inSight"][guildName] = true end
     if (_addon.settings["motD"][guildName] == nil) then _addon.settings["motD"][guildName] = true end
     if (_addon.settings["background"][guildName] == nil) then _addon.settings["background"][guildName] = true end
   end
- 
+
   _addon.core.createControls()
   _addon.core.createGuildSettings("inSight")
   _addon.core.createGuildSettings("motD")
@@ -348,9 +348,9 @@ function _addon.core.initialized()
 
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_DESCRIPTION_CHANGED, _addon.core.guildDescriptionChanged)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_RETICLE_TARGET_CHANGED, _addon.core.memberInSight)
-end                               
+end
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
-Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel                                       
-Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls       
-Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized    
+Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
+Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls
+Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

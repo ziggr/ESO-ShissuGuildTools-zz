@@ -14,8 +14,8 @@ _addon.panel = Shissu_SuiteManager._lib.setPanel("Language Changer", _addon.form
 _addon.controls = {
   [1] = {
     type = "title",
-    name = Shissu_SuiteManager._lib.getString(SGT_Language1),     
-  }, 
+    name = Shissu_SuiteManager._lib.getString(SGT_Language1),
+  },
   [2] = {
     type = "combobox",
     name = Shissu_SuiteManager._lib.getString(SGT_Language2),
@@ -24,17 +24,17 @@ _addon.controls = {
     getFunc = GetCVar("Language.2"),
     setFunc = function(_, value)
       SetCVar("Language.2", value)
-      SLASH_COMMANDS["/reloadui"]() 
+      SLASH_COMMANDS["/reloadui"]()
     end,
-  },  
+  },
   [3] = {
     type = "title",
-    name = "Info",     
+    name = "Info",
   },
   [4] = {
     type = "description",
-    text = Shissu_SuiteManager._lib.getString(SGT_Language3),  
-  },          
+    text = Shissu_SuiteManager._lib.getString(SGT_Language3),
+  },
 }
 
 function _addon.core.initialized()
@@ -42,6 +42,6 @@ function _addon.core.initialized()
 end
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
-Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel                                       
-Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
-Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized    
+Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
+Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls
+Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

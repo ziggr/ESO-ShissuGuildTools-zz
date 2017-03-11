@@ -35,11 +35,11 @@ _addon.hexColorPicker = nil
 
 _addon.settings = {
   ["position"] = {},
-}        
+}
 
-local _color = { 
+local _color = {
   "|ceeeeee",
-  "|ceeeeee", 
+  "|ceeeeee",
   "|ceeeeee",
   "|ceeeeee",
   "|ceeeeee",
@@ -61,29 +61,29 @@ _note.command = ""
 
 -- Notebook
 function _note.setControlToolTip(control)
-  control:SetHandler("OnMouseEnter", function(self) 
+  control:SetHandler("OnMouseEnter", function(self)
     if control:GetText() ~= "" then ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, control:GetText()) end
   end)
-  
+
   control:SetHandler("OnMouseExit", function(self) ZO_Tooltips_HideTextTooltip() end)
 end
 
 function _note.createIndexButton(indexPool)
   local control = ZO_ObjectPool_CreateControl("SGT_Notebook_Index", indexPool, _note.list.scrollChild)
   local anchorBtn = _note.scrollItem == 1 and _note.list.scrollChild or indexPool:AcquireObject(_note.scrollItem-1)
-  
+
   control:SetAnchor(TOPLEFT, anchorBtn, _note.scrollItem == 1 and TOPLEFT or BOTTOMLEFT)
   control:SetHorizontalAlignment(TEXT_ALIGN_LEFT)
   control:SetWidth(180)
   control:SetHandler("OnMouseUp", function(self, button)
     _note.selected:SetHidden(false)
     _note.selected:ClearAnchors()
-    _note.selected:SetAnchorFill(self)      
+    _note.selected:SetAnchorFill(self)
     _note.currentID = self.ID
 
-    SGT_Notebook_NoteTitleText:SetText(self.noteTitle) 
+    SGT_Notebook_NoteTitleText:SetText(self.noteTitle)
     SGT_Notebook_NoteText:SetText(self.text)
-    SGT_Notebook_SlashText:SetText(self.command) 
+    SGT_Notebook_SlashText:SetText(self.command)
     SGT_Notebook_AutoStringText:SetText(self.autoString)
 
     if self.autopost then ZO_CheckButton_SetChecked(SGT_Notebook_AutoStringEnabled)
@@ -96,19 +96,19 @@ function _note.createIndexButton(indexPool)
     if (_note.cache.autoPost) then
       _note.cache.autoPost = _note.autoPost
     end
-    
+
     _note.cache.command = _note.command
-    
+
     if button == 2 then
       --SGT.NoteDelete()
     end
   end)
-  
+
   control:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, white .. self.noteTitle) end)
-  control:SetHandler("OnMouseExit", function(self) ZO_Tooltips_HideTextTooltip() end)  
+  control:SetHandler("OnMouseExit", function(self) ZO_Tooltips_HideTextTooltip() end)
 
   _note.scrollItem = _note.scrollItem  + 1
-  
+
   return control
 end
 
@@ -124,13 +124,13 @@ function _note.fillScrollList()
   for i = 1, numPages do
     table.insert(sortedTitle, i, _note.data[i].title .. "**shissu" ..i)
   end
-  
+
   table.sort(sortedTitle)
-  
+
   for i = 1, numPages do
     local length = string.len(sortedTitle[i])
     local number = string.sub(sortedTitle[i], string.find(sortedTitle[i], "**shissu"), length)
-    
+
     number = string.gsub(number, "**shissu", "")
     number = string.gsub(number, " ", "")
     number = tonumber(number)
@@ -155,7 +155,7 @@ function _note.fillScrollList()
     control:SetText(white .. sortedData[i].title)
     control:SetHidden(false)
   end
-  
+
   local activePages = _note.indexPool:GetActiveObjectCount()
   if activePages > numPages then
     for i = numPages+1, activePages do _note.indexPool:ReleaseObject(i) end
@@ -166,23 +166,23 @@ function _addon.core.selectColor(color)
   if (_note.lastFocus ~= nil) then
     local currentText = _note.lastFocus:GetText()
     local addText = ""
-  
+
     if color == "ANY" then
       local htmlString
-  
+
       local function ColorPickerCallback(r, g, b, a)
         htmlString = RGBtoHex(r,g,b)
-      end    
-      
+      end
+
       local ZOS_BUTTON = ESO_Dialogs.COLOR_PICKER["buttons"][1].callback
-     
-      ESO_Dialogs.COLOR_PICKER["buttons"][1].callback = function() 
+
+      ESO_Dialogs.COLOR_PICKER["buttons"][1].callback = function()
         local cache = SGT_Notebook_NoteText:GetText()
         _note.lastFocus:SetText(currentText .. "|c" .. htmlString .. getString(Shissu_yourText) .. "|r")
-        
+
         ESO_Dialogs.COLOR_PICKER["buttons"][1].callback = ZOS_BUTTON
       end
-      
+
       COLOR_PICKER:Show(ColorPickerCallback, r, g, b, a, "Farbe")
     else
       _note.lastFocus:SetText(currentText .. _color[color] .. getString(Shissu_yourText) .. "|r")
@@ -195,20 +195,20 @@ function _note.onTextChanged()
   local length = string.len(SGT_Notebook_NoteText:GetText())
 
   if length > 700 then control:SetText(getString(Shissu_mail) .. " " .. orange .. length .. "|r/700")
-  elseif length > 400 then control:SetText(getString(Shissu_chat) .. " " .. blue .. length .. "|r/700") 
+  elseif length > 400 then control:SetText(getString(Shissu_chat) .. " " .. blue .. length .. "|r/700")
   elseif length > 350 then control:SetText(getString(Shissu_chat) .. " " .. blue .. length .. "|r/350")
   else control:SetText(getString(Shissu_chat) .. " " .. length .. "/350")
   end
 end
 
-function _note.new() 
+function _note.new()
   _note.clearAllElements()
   _note.cache.title = nil
   _note.currentID = nil
-  
+
   SGT_Notebook_NoteTitleText:SetText(":-)")
   SGT_Notebook_NoteTitleText:TakeFocus()
-end  
+end
 
 function _note.clearAllElements()
   SGT_Notebook_NoteTitleText:Clear()
@@ -222,20 +222,20 @@ function _note.delete()
   if _note.currentID ~= nil then
     showDialog(getString(ShissuNotebook_ttDelete), getString(ShissuNotebook_ttDelete) .. ": " .. _note.data[_note.currentID].title, function()
       table.remove(_note.data, _note.currentID)
-      _note.clearAllElements()   
+      _note.clearAllElements()
       _note.fillScrollList()
     end, nil)
   end
 end
 
 function _note.sendTo(self, button)
-  if button == 1 then CHAT_SYSTEM:StartTextEntry(SGT_Notebook_NoteText:GetText()) 
+  if button == 1 then CHAT_SYSTEM:StartTextEntry(SGT_Notebook_NoteText:GetText())
   elseif button == 2 then _note.save()
   elseif button == 3 then
     SCENE_MANAGER:Show('mailSend')
     ZO_MailSendBodyField:SetText(SGT_Notebook_NoteText:GetText())
     ZO_MailSendSubjectField:SetText(SGT_Notebook_NoteTitleText:GetText())
-    ZO_MailSendBodyField:TakeFocus()  
+    ZO_MailSendBodyField:TakeFocus()
   end
 end
 
@@ -249,25 +249,25 @@ function _note.save()
     table.insert(_note.data, {["title"] = noteTitle, ["text"] = noteText, ["command"] = noteSlashCommand, ["autopost"]= _note.autoPost, ["autostring"] = noteAutoPost})
     _note.currentID = #_note.data
   else
-    if (_note.data[_note.currentID] ~= nil) then  
+    if (_note.data[_note.currentID] ~= nil) then
       _note.data[_note.currentID].title = noteTitle
       _note.data[_note.currentID].text = noteText
       _note.data[_note.currentID].command = noteSlashCommand
       _note.data[_note.currentID].autopost = _note.autoPost
-      _note.data[_note.currentID].autostring = noteAutoPost 
+      _note.data[_note.currentID].autostring = noteAutoPost
     end
   end
-      
+
   _note.fillScrollList()
 end
 
 function _note.undo()
   if _note.cache.title ~= nil then
-    SGT_Notebook_NoteTitleText:SetText(_note.cache.title) 
+    SGT_Notebook_NoteTitleText:SetText(_note.cache.title)
     SGT_Notebook_NoteText:SetText(_note.cache.text)
-    SGT_Notebook_SlashText:SetText(_note.cache.command) 
-    SGT_Notebook_AutoStringText:SetText(_note.cache.autoString) 
-      
+    SGT_Notebook_SlashText:SetText(_note.cache.command)
+    SGT_Notebook_AutoStringText:SetText(_note.cache.autoString)
+
     if _note.cache.autopost then ZO_CheckButton_SetChecked(SGT_Notebook_AutoStringEnabled)
     else ZO_CheckButton_SetUnchecked(SGT_Notebook_AutoStringEnabled) end
   end
@@ -277,18 +277,18 @@ function _addon.core.getColor()
   if (shissuGT["ShissuColor"] ~= nil) then
     for i = 1, 5 do
       if (shissuGT["ShissuColor"]["c" .. i] ~= nil) then
-        _color[i] = "|c" .. RGBtoHex(shissuGT["ShissuColor"]["c" .. i][1], shissuGT["ShissuColor"]["c" .. i][2], shissuGT["ShissuColor"]["c" .. i][3]) 
+        _color[i] = "|c" .. RGBtoHex(shissuGT["ShissuColor"]["c" .. i][1], shissuGT["ShissuColor"]["c" .. i][2], shissuGT["ShissuColor"]["c" .. i][3])
       end
     end
   end
-  
+
   SGT_Notebook_Color1:SetText(_color[1] .. "1")
   SGT_Notebook_Color2:SetText(_color[2] .. "2")
   SGT_Notebook_Color3:SetText(_color[3] .. "3")
   SGT_Notebook_Color4:SetText(_color[4] .. "4")
   SGT_Notebook_Color5:SetText(_color[5] .. "5")
   SGT_Notebook_ColorW:SetText(white .. "W")
-  SGT_Notebook_ColorANY:SetText(white .. "ANY")  
+  SGT_Notebook_ColorANY:SetText(white .. "ANY")
 end
 
 -- Notebook UI
@@ -297,21 +297,21 @@ function _addon.core.notebook()
   SGT_Notebook_NoteText:SetMaxInputChars(1024)
   SGT_Notebook_SlashText:SetMaxInputChars(24)
   SGT_Notebook_SlashInfo:SetText(getString(ShissuNotebook_slash))
-  --SGT_Notebook_UserSlash:SetText(_g["command"])  
+  --SGT_Notebook_UserSlash:SetText(_g["command"])
   SGT_Notebook_Title:SetText(getString(ShissuNotebook))
   SGT_Notebook_Version:SetText(_addon.fN .. " " .. _addon.Version)
   setDefaultColor(SGT_Notebook_Line)
-  
+
   _addon.core.getColor()
 
-  SGT_Notebook_Color1:SetHandler("OnMouseUp", function() _addon.core.selectColor(1) end) 
+  SGT_Notebook_Color1:SetHandler("OnMouseUp", function() _addon.core.selectColor(1) end)
   SGT_Notebook_Color2:SetHandler("OnMouseUp", function() _addon.core.selectColor(2) end)
   SGT_Notebook_Color3:SetHandler("OnMouseUp", function() _addon.core.selectColor(3) end)
   SGT_Notebook_Color4:SetHandler("OnMouseUp", function() _addon.core.selectColor(4) end)
   SGT_Notebook_Color5:SetHandler("OnMouseUp", function() _addon.core.selectColor(5) end)
   SGT_Notebook_ColorW:SetHandler("OnMouseUp", function() _addon.core.selectColor("W") end)
   SGT_Notebook_ColorANY:SetHandler("OnMouseUp", function() _addon.core.selectColor("ANY") end)
-    
+
   SGT_Notebook_NoteText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
   SGT_Notebook_NoteTitleText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
   SGT_Notebook_NoteText:SetHandler("OnTextChanged",_note.onTextChanged)
@@ -319,67 +319,67 @@ function _addon.core.notebook()
   SGT_Notebook_New:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, getString(ShissuNotebook_ttNew)) end)
   SGT_Notebook_Delete:SetHandler("OnClicked", _note.delete)
   SGT_Notebook_Delete:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, getString(ShissuNotebook_ttDelete)) end)
-  SGT_Notebook_SendTo:SetHandler("OnMouseUp", _note.sendTo) 
+  SGT_Notebook_SendTo:SetHandler("OnMouseUp", _note.sendTo)
   SGT_Notebook_SendTo:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, getString(ShissuNotebook_ttSendTo)) end)
-  SGT_Notebook_Undo:SetHandler("OnMouseUp", _note.undo) 
+  SGT_Notebook_Undo:SetHandler("OnMouseUp", _note.undo)
   SGT_Notebook_Undo:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, getString(ShissuNotebook_ttUndo)) end)
 
-  SGT_Notebook_SlashText:SetHandler("OnEnter", function(self) self:LoseFocus() _note.save() end)     
-  SGT_Notebook_SlashText:SetHandler("OnTextChanged", function() 
+  SGT_Notebook_SlashText:SetHandler("OnEnter", function(self) self:LoseFocus() _note.save() end)
+  SGT_Notebook_SlashText:SetHandler("OnTextChanged", function()
     local text = SGT_Notebook_SlashText:GetText()
-    
+
     if (string.len(text) > 0) then
       ZO_Tooltips_ShowTextTooltip(self, BOTTOMRIGHT, blue .. "/note " .. white .. text)
     else
       ZO_Tooltips_HideTextTooltip()
     end
-    
+
     _note.onTextChanged()
-  end) 
-     
+  end)
+
   _ui.divider = createBlueLine("SGT_Notebook_Divider", SGT_Notebook, SGT_Notebook_Line, 200)
   _ui.closeButton = createCloseButton("SGT_Notebook_Close", SGT_Notebook, function() SGT_Notebook:SetHidden(true) end)
-  
+
   ZO_CheckButton_SetLabelText(SGT_Notebook_AutoStringEnabled, white .. "Auto Post")
   ZO_CheckButton_SetToggleFunction(SGT_Notebook_AutoStringEnabled, function(control, checked) _note.autoPost = checked end)
-  
+
     -- ScrollContainer + UI
-  _note.indexPool = ZO_ObjectPool:New(_note.createIndexButton, _note.removeIndexButton) 
+  _note.indexPool = ZO_ObjectPool:New(_note.createIndexButton, _note.removeIndexButton)
   _note.list = createScrollContainer("SGT_Notebook_List", 185, SGT_Notebook, SGT_Notebook_Line, 10, 10, -10)
-  
+
   _note.selected = WINDOW_MANAGER:CreateControl(nil, _note.list.scrollChild, CT_TEXTURE)
   _note.selected:SetTexture("EsoUI\\Art\\Buttons\\generic_highlight.dds")
   _note.selected:SetHidden(true)
   setDefaultColor(_note.selected)
-  
-  _note.setControlToolTip(SGT_Notebook_NoteTitleText)                                                                                    
-  _note.setControlToolTip(SGT_Notebook_NoteText) 
-  
+
+  _note.setControlToolTip(SGT_Notebook_NoteTitleText)
+  _note.setControlToolTip(SGT_Notebook_NoteText)
+
   _note.fillScrollList()
 end
 
 function _addon.core.autoPost(_, channelType, fromName, text, isCustomerService, fromDisplayName)
   if text == nil then return false end
-  
+
   local currentText = CHAT_SYSTEM.textEntry:GetText()
   local channelInfo = ZO_ChatSystem_GetChannelInfo()[channelType]
-  
+
   if (channelInfo.switches ~= nil) then
     local channelString  = string.sub(channelInfo.switches, 1, string.find(channelInfo.switches, " "))
 
     if string.len(currentText) < 1 then
       local pages = #_note.data
-    
+
       for i = 1, pages do
         local note = _note.data[i]
-        
-        if note.autopost then   
+
+        if note.autopost then
           if (note.autostring ~= nil) then
             if (string.len(note.autostring) > 1) then
               -- Mehrere getrennte Wörter in den jeweiligen Strings
               if string.find (note.autostring, " ") or string.find (text, " ")  then
-                for singleString in string.gmatch(note.autostring, "%a+") do 
-                  for singleString2 in string.gmatch(text, "%a+") do 
+                for singleString in string.gmatch(note.autostring, "%a+") do
+                  for singleString2 in string.gmatch(text, "%a+") do
                     if string.lower(singleString) == string.lower(singleString2) then
                       CHAT_SYSTEM:StartTextEntry(channelString .. "")
                       CHAT_SYSTEM:StartTextEntry(note.text)
@@ -387,17 +387,17 @@ function _addon.core.autoPost(_, channelType, fromName, text, isCustomerService,
                     end
                   end
                 end
-                
+
               else
-                if string.lower(text) == string.lower(note.autostring) then  
+                if string.lower(text) == string.lower(note.autostring) then
                   CHAT_SYSTEM:StartTextEntry(channelString .. "")
                   CHAT_SYSTEM:StartTextEntry(note.text)
                   return true
                 end
-              end              
+              end
             end
           end
-        end 
+        end
       end
     end
   end
@@ -408,10 +408,10 @@ function _addon.core.cmdSlash(cmd)
   if ( _note.data == nil ) then return end
 
   local pages = #_note.data
-                     
+
   for i = 1, pages do
     local note = _note.data[i]
-           
+
     if string.lower(cmd) == string.lower(note.command) then
       if string.len(note.text) > 1 then
         CHAT_SYSTEM:StartTextEntry(note.text)
@@ -419,35 +419,35 @@ function _addon.core.cmdSlash(cmd)
         d(getString(ShissuNotebook_noSlash))
       end
       return true
-    end 
+    end
   end
 end
-                                             
+
 -- Initialisierung
 function _addon.core.initialized()
   shissuGT[_addon.Name] = shissuGT[_addon.Name] or _addon.settings
   _addon.settings = shissuGT[_addon.Name]
-  
+
   shissuGT.Notes = shissuGT.Notes or {}
   _note.data = shissuGT.Notes
-                               
+
   SGT_Notebook_MessagesRecipient:SetHidden(true)
-  
+
   _addon.core.notebook()
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.autoPost)
-  
+
   if (_addon.settings["position"] == nil) then
     _addon.settings["position"] = {}
   end
-  
+
   saveWindowPosition(SGT_Notebook, _addon.settings["position"])
   getWindowPosition(SGT_Notebook, _addon.settings["position"])
-    
-  -- Slash Command                                                                 
-  Shissu_SuiteManager._commands[_addon.Name] = {} 
+
+  -- Slash Command
+  Shissu_SuiteManager._commands[_addon.Name] = {}
   table.insert(Shissu_SuiteManager._commands[_addon.Name], { "note" , _addon.core.cmdSlash })
-  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "no" , _addon.core.cmdSlash })  
-  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "notebook" , function() SGT_Notebook:SetHidden(false) end })            
-end                               
- 
+  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "no" , _addon.core.cmdSlash })
+  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "notebook" , function() SGT_Notebook:SetHidden(false) end })
+end
+
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

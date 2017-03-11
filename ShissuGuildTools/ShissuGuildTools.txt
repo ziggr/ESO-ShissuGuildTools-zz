@@ -5,7 +5,7 @@
 ; You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
 ; Author: @Shissu on EU-Server!
- 
+
 ## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.0.4.14
 ## APIVersion: 100018
 ## Author: |c779cff@Shissu|r [EU]
@@ -22,7 +22,7 @@ lib.lua
 ShissuGuildTools.lua
 SGT.xml
 
-# Module   
+# Module
 module/contextmenu.lua
 module/memberstatus.lua
 module/welcome.lua

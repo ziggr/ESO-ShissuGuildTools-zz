@@ -1,20 +1,20 @@
 <!-- Notizblock -->
 <GuiXml>
-	<Controls> 
+	<Controls>
 		<!-- ChatButton -->
 		<Button name="SGT_ZO_ToogleButton" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
         	<Anchor point="RIGHT" relativeTo="ZO_ChatWindowOptions" relativePoint="RIGHT" offsetX="36" offsetY="0" />
         	<Dimensions x="36" y="36" />
           <Textures normal="/esoui/art/progression/morph_up.dds" mouseOver="//esoui/art/progression/morph_over.dds" />
-		</Button> 	
-    
-    
-    
-    
-    
-    
-    
-    
+		</Button>
+
+
+
+
+
+
+
+
           <TopLevelControl name="SGT_ExtraBackground" allowBringToTop="false" virtual="true">
       <Dimensions x="290" y="750" />
       <Controls>
@@ -28,16 +28,16 @@
         </Texture>
       </Controls>
     </TopLevelControl>
-    
-    
-    
-    
-    
-    
-    
-	</Controls>
-  
 
-    
+
+
+
+
+
+
+	</Controls>
+
+
+
 </GuiXml>
 

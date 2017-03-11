@@ -7,12 +7,12 @@
 
 -- Released under terms in license accompanying this file.
 -- Distribution without license is prohibited!
- 
+
 local _color = {
   blue = "|cAFD3FF",
   white = "|ceeeeee",
-}              
-            
+}
+
 -- General
 ZO_CreateStringId("ShissuGeneral", GetString(SI_HOUSEPERMISSIONOPTIONSCATEGORIES1))
 ZO_CreateStringId("Shissu_friend", GetString(SI_MAIN_MENU_CONTACTS))
@@ -37,8 +37,8 @@ ZO_CreateStringId("ShissuModule_middleMouse", "Mittlere Maustaste")
 
 -- Modules
 ----------
-  
--- Module: ShissuWelcomeInvite                                                                                             
+
+-- Module: ShissuWelcomeInvite
 ZO_CreateStringId("ShissuWelcomeInvite", "Willkommensnachricht")
 ZO_CreateStringId("ShissuWelcomeDesc1", "Zur Gestaltung der Willkommennachrichten können Sie folgende Platzhalter verwenden")
 ZO_CreateStringId("ShissuWelcomeDesc2", "Name des Spielers")
@@ -57,7 +57,7 @@ ZO_CreateStringId("ShissuTeleporter_legends2", "Freunde")
 ZO_CreateStringId("ShissuTeleporter_legends3", "Gruppenmitspieler")
 
 -- Modul: ShissuNotifications
-ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
+ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS))
 ZO_CreateStringId("ShissuNotifications_info", "Hinweis")
 ZO_CreateStringId("ShissuNotifications_mail", "EMail / Nachricht löschen")
 ZO_CreateStringId("ShissuNotifications_inSight", "Gildenmitglied in Sichtfeld?")
@@ -120,7 +120,7 @@ ZO_CreateStringId("ShissuMemberStatus", "Gildenmitglieder Status")
 ZO_CreateStringId("ShissuContextMenu_memberStatus", "Spielerstatus (Online/BRB/AFK/Offline)")
 ZO_CreateStringId("ShissuContextMenu_added", "beigetreten")
 ZO_CreateStringId("ShissuContextMenu_removed", "verlassen / gekickt")
-                                                        
+
 -- Modul: ShissuGuildHome
 ZO_CreateStringId("ShissuGuildHome", "Gilde: " .. GetString(SI_WINDOW_TITLE_GUILD_HOME))
 ZO_CreateStringId("ShissuGuildHome_kiosk", "Zeit bis zum nächsten Gildenhändlergebot")
@@ -176,12 +176,12 @@ ZO_CreateStringId("ShissuNotebookMail_listName", "Listenname?")
 ZO_CreateStringId("ShissuNotebookMail_invite", "Spieler einladen")
 ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Sollen die Spieler in der Liste, bzw. Ihre Auswahl aus der Gilde entfernt werden? Spieler die sie entfernen, erhalten eine E-Mail von Ihnen.")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Betreff")
-ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Fortschritt")       
-ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignoriert")       
-ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postkasten voll")       
-ZO_CreateStringId("ShissuNotebookMail_protocol", "E-Mail Protokoll")       
+ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Fortschritt")
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignoriert")
+ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postkasten voll")
+ZO_CreateStringId("ShissuNotebookMail_protocol", "E-Mail Protokoll")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Fenster schließen" .. _color.white .. "\nDurch das Schließen wird das Versenden/Kicken abgebrochen.")
-ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
+ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Nachricht unvollständig")
 
 -- Modul: ShissuRoster
@@ -198,7 +198,7 @@ ZO_CreateStringId("ShissuRoster_yesterday", "Gestern")
 ZO_CreateStringId("ShissuRoster_sinceKiosk", "seit Gildenhändler")
 ZO_CreateStringId("ShissuRoster_last", "Zuletzt")
 ZO_CreateStringId("ShissuRoster_total", "Gesamt")
-ZO_CreateStringId("ShissuRoster_sum", "Summe")     
+ZO_CreateStringId("ShissuRoster_sum", "Summe")
 ZO_CreateStringId("ShissuRoster_colAdd", "Zusätzliche Spalten einblenden")
 ZO_CreateStringId("ShissuRoster_colAdd2", "Nach einer Änderung müssen Sie das Interface neulanden.")
 ZO_CreateStringId("ShissuRoster_colChar", "Spalte: Charakter")
@@ -219,7 +219,7 @@ ZO_CreateStringId("ShissuChat_time", "Uhrzeit einblenden")
 ZO_CreateStringId("ShissuChat_sound", "Akustischer Signalton (Flüstern)")
 ZO_CreateStringId("ShissuChat_guilds", "Gildenzugehörigkeit")
 ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
-ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                 
+ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))
 ZO_CreateStringId("ShissuChat_lvl", "Level")
 ZO_CreateStringId("ShissuChat_char", "Charakternamen")
 ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
@@ -232,7 +232,7 @@ ZO_CreateStringId("ShissuChat_guildInfo", "Gilden Informationen")
 ZO_CreateStringId("ShissuChat_guildWhich", "Auf welchen Gilden sollen die Informationen basieren?")
 ZO_CreateStringId("ShissuChat_guildNames1", "Gildenbezeichnung")
 ZO_CreateStringId("ShissuChat_guildNames2", "Wie sollen Ihre Gilden im Chat lauten?")
-                                        
+
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Markierungen")
 ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Spieler Markierungen")
@@ -242,7 +242,7 @@ ZO_CreateStringId("ShissuMarks_heal", "Heiler")
 ZO_CreateStringId("ShissuMarks_observe", "Beobachten")
 ZO_CreateStringId("ShissuMarks_all", "All What You See")
 ZO_CreateStringId("ShissuMarks_confirmDel", "Liste löschen?")
-ZO_CreateStringId("ShissuMarks_confirmDel2", "Möchten Sie den Listeninhalt wirklick löschen?")  
+ZO_CreateStringId("ShissuMarks_confirmDel2", "Möchten Sie den Listeninhalt wirklick löschen?")
 ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Spieler")
 ZO_CreateStringId("ShissuMarks_add2", "Wie lautet der Name des Monster bzw. Spielers?")
 ZO_CreateStringId("ShissuMarks_add3", "Monster/Spieler in Gruppe")
@@ -262,4 +262,4 @@ ZO_CreateStringId("ShissuMarks_autoKickInfo3", "- beim eintreten in die Gilde")
 ZO_CreateStringId("ShissuMarks_found", "ist in den Gilden.")
 ZO_CreateStringId("ShissuMarks_found2", "Der Spieler wurde gekickt (falls Rechte vorhanden).")
 ZO_CreateStringId("ShissuMarks_rightItem", "Spieler/Monster entfernen")
-ZO_CreateStringId("ShissuMarks_rightItem2", "Rechte Maustaste auf Name")    
+ZO_CreateStringId("ShissuMarks_rightItem2", "Rechte Maustaste auf Name")
