@@ -1,5 +1,9 @@
 <!-- Notizblock -->
 <GuiXml>
+  <Font name="SGT_LINEFONT" font="$(STONE_TABLET_FONT)|30|soft-shadow-thick" />
+  <Font name="SGT_MINIFONT" font="$(STONE_TABLET_FONT)|12|soft-shadow-thick" />
+  <Font name="SGT_BUTTONFONT" font="$(STONE_TABLET_FONT)|14|soft-shadow-thick" />
+  
 	<Controls> 
 		<!-- ChatButton -->
 		<Button name="SGT_ZO_ToogleButton" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">

@@ -2,7 +2,7 @@
 ---------------------------------
 -- File: DE.lua
 -- Version: v1.3.0
--- Last Update: 05.03.2017
+-- Last Update: 12.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -50,7 +50,7 @@ ZO_CreateStringId("ShissuTeleporter", "Teleporter")
 ZO_CreateStringId("ShissuTeleporter_tele", "Teleport")
 ZO_CreateStringId("ShissuTeleporter_rnd", "Zufall")
 ZO_CreateStringId("ShissuTeleporter_refresh", "Aktualisieren")
-ZO_CreateStringId("ShissuTeleporter_grp", "Gruppenanführer/in")
+ZO_CreateStringId("ShissuTeleporter_grp", "Gruppenführer")
 ZO_CreateStringId("ShissuTeleporter_house", "Hauptwohnsitz")
 ZO_CreateStringId("ShissuTeleporter_legends1", "Legende")
 ZO_CreateStringId("ShissuTeleporter_legends2", "Freunde")
@@ -153,6 +153,7 @@ ZO_CreateStringId("ShissuNotebookMail_all", "- Alle")
 ZO_CreateStringId("ShissuNotebookMail_days", "Tage")
 ZO_CreateStringId("ShissuNotebookMail_send", GetString(SI_MAIL_SEND_SEND))
 ZO_CreateStringId("ShissuNotebookMail_progressKickTitle", "Spieler entfernen")
+ZO_CreateStringId("ShissuNotebookMail_progressDemoteTitle", "Spieler degradieren")
 ZO_CreateStringId("ShissuNotebookMail_progressTitle", "E-Mail senden")
 ZO_CreateStringId("ShissuNotebookMail_progressAbort", "Abgebrochen")
 ZO_CreateStringId("ShissuNotebookMail_mailProgress", "Bitte warten...")
@@ -174,7 +175,8 @@ ZO_CreateStringId("ShissuNotebookMail_protocolTT", "Zeigt die Spieler an, die ei
 ZO_CreateStringId("ShissuNotebookMail_newList", "Neue Liste")
 ZO_CreateStringId("ShissuNotebookMail_listName", "Listenname?")
 ZO_CreateStringId("ShissuNotebookMail_invite", "Spieler einladen")
-ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Sollen die Spieler in der Liste, bzw. Ihre Auswahl aus der Gilde entfernt werden? Spieler die sie entfernen, erhalten eine E-Mail von Ihnen.")
+ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Sollen die Spieler in der Liste, bzw. Ihre Auswahl aus der Gilde entfernt werden?")
+ZO_CreateStringId("ShissuNotebookMail_demoteKick", "Sollen die Spieler in der Liste, bzw. Ihre Auswahl aus der Gilde degradiert werden?")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Betreff")
 ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Fortschritt")       
 ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignoriert")       
@@ -184,6 +186,15 @@ ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Fenster schlie
 ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Nachricht unvollständig")
 
+ZO_CreateStringId("ShissuNotebookMail_Filter", "Filter")
+ZO_CreateStringId("ShissuNotebookMail_Action", "Aktion")
+ZO_CreateStringId("ShissuNotebookMail_Send", "Ausführen")
+ZO_CreateStringId("ShissuNotebookMail_Member", "Mitglied")
+ZO_CreateStringId("ShissuNotebookMail_SinceGold", "vor min. Tage")
+ZO_CreateStringId("ShissuNotebookMail_noMail", "Keine Nachricht")
+
+ZO_CreateStringId("ShissuNotebookMail_countDays", "Anzahl der Tage")
+ 
 -- Modul: ShissuRoster
 ZO_CreateStringId("ShissuRoster", "Gilde: Mitglieder")
 ZO_CreateStringId("ShissuRoster_char", GetString(SI_BINDING_NAME_TOGGLE_CHARACTER))

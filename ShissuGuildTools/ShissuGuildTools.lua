@@ -1,8 +1,8 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.0.4.14
--- Last Update: 08.03.2017
+-- Version: v3.0.5.0b
+-- Last Update: 12.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -16,7 +16,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.0.4.14"
+_addon.Version = "3.0.5.0b"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
@@ -139,8 +139,16 @@ function _addon.core.chatButton(button)
     if (checkSetting("ShissuNotebook")) then
       if (SGT_Notebook:IsHidden()) then
         SGT_Notebook:SetHidden(false)
+        
+        if (SGT_Notebook_MessagesRecipient) then
+          SGT_Notebook_MessagesRecipient:SetHidden(false)
+        end
       else
         SGT_Notebook:SetHidden(true)
+        
+        if (SGT_Notebook_MessagesRecipient) then
+          SGT_Notebook_MessagesRecipient:SetHidden(true)
+        end
       end
     end
    elseif (button == 2) then
@@ -244,6 +252,7 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     
     if checkSetting("ShissuNostebook") then
       _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
+      SGT_Notebook_MessagesRecipient:SetHidden(true)
     end
     
     -- Button für Notizbuch, Teleporter, Blockliste
@@ -311,8 +320,15 @@ Shissu_SuiteManager._bindings[_addon.Name].notes = function()
   if (checkSetting("ShissuNotebook")) then
     if (SGT_Notebook:IsHidden()) then
       SGT_Notebook:SetHidden(false)
+      
+      if (SGT_Notebook_MessagesRecipient) then
+        SGT_Notebook_MessagesRecipient:SetHidden(false)
+      end
     else
       SGT_Notebook:SetHidden(true)
+      if (SGT_Notebook_MessagesRecipient) then
+        SGT_Notebook_MessagesRecipient:SetHidden(true)
+      end
     end
   end   
 end
@@ -329,15 +345,14 @@ Shissu_SuiteManager._bindings[_addon.Name].teleport = function()
   end
 end    
 
+-- /script checkGoldDeposits("Tamrilando", 2000)
+
 -- Not offical, testing
 function checkGoldDeposits(guildName, goldDeposit)
-  local lastKiosk = _SGT.getKioskTime(0, -1, true)
+  local lastKiosk = _SGT.getKioskTime() - 604800
   local _history = shissuGT["History"]
 
   d("1: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
-
-  local daySeconds = 60 * 60 *24
-  local weekSeconds = 7 * daySeconds + daySeconds  
 
   -- GuildId?
   local numGuild = GetNumGuilds()
@@ -352,20 +367,30 @@ function checkGoldDeposits(guildName, goldDeposit)
   end
   
   if (guildId ~= nil) then
-    local reminderText = guildName .. " Reminder\n" .. gold .. " Gold"
+    local reminderText = guildName .. " Reminder\n" .. goldDeposit .. " Gold"
     local numMember = GetNumGuildMembers(guildId)
     local numCount = 1
     local notPayed = 0
     local waitOnEdit = 0 
+    local waitOnEdit2 = 0
+    
+    
+    local countOK = 0
+    
+    d("BIN DRIN")
     
     EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT", 1300, function()  
-      local memberData = { GetGuildMemberInfo(guildId, numMember) }
+      local memberData = { GetGuildMemberInfo(guildId, numCount) }
       local note = memberData[2]
       local displayName = memberData[1]                
     
       d(numCount .. " CHECK NAME: " .. displayName)  
 
-      if (waitOnEdit == 1) then
+      if (waitOnEdit2 == 1) then
+        if not (string.find(note, reminderText)) then
+          waitOnEdit2 = 0
+        end      
+      elseif (waitOnEdit == 1) then
         if (string.find(note, reminderText)) then
           waitOnEdit = 0
         end
@@ -378,28 +403,45 @@ function checkGoldDeposits(guildName, goldDeposit)
                 
               if (lastTime) then
                 if (lastTime > lastKiosk) then  
+                  countOK = countOK + 1
                   -- Zeit ist korrekt
                   d("--> OK")
                 else
+                  local goldThisWeek = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].currentNPC
+                  
                   if (string.find(note, reminderText)) then
                     d("--> REMINDER EXISTS")
-  
-                    --note = string.gsub(note, reminderText, "")
-                    --note = string.gsub(note, "\n", "")
-                    --SetGuildMemberNote(1, count, note)   
-                  else                
+                    
+                    if (goldThisWeek > 0 ) then
+                      note = string.gsub(note, reminderText, "")
+                      note = string.gsub(note, "\n", "")  
+                      SetGuildMemberNote(guildId, count, note)  
+                      countOK = countOK + 1
+                      waitOnEdit2 = 1
+                    end
+                  else         
+                    d("NICHT 1")       
                     local gold = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
                     local goldWeek = gold / goldDeposit 
                     local addTime = goldWeek * weekSeconds
-                    local newLastTime = lastTime + addTime
-                    
-                    if (newLastTime < lastKiosk or gold == 0) then
-                      d(count .. " NAME (NICHT GEZAHLT): " .. displayName)  
-                                                                                     
-                      local newNote = note .. "\n" .. reminderText
-                      notPayed = notPayed + 1
-                      waitOnEdit = 1
-                      SetGuildMemberNote(guildId, count, newNote)              
+
+                    if (goldThisWeek > 0 ) then
+                      note = string.gsub(note, reminderText, "")
+                      note = string.gsub(note, "\n", "")  
+                      SetGuildMemberNote(guildId, count, note)  
+                      countOK = countOK + 1
+                      waitOnEdit2 = 1
+                    elseif (lastTime < lastKiosk or gold == 0) then
+                      if not (string.find(note, reminderText)) then
+                        d(count .. " NAME (NICHT GEZAHLT): " .. displayName)  
+                                                                                       
+                        local newNote = note .. "\n" .. reminderText
+                        
+                        waitOnEdit = 1
+                        SetGuildMemberNote(guildId, count, newNote)         
+                      end  
+                      
+                      notPayed = notPayed + 1   
                     end
                   end
                 end          
@@ -410,15 +452,16 @@ function checkGoldDeposits(guildName, goldDeposit)
       end
           
       if (count == numMember) then
+        d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
+        d("Es haben " .. countOK .. " Spieler bezahlt")
+
         EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT")  
       end
       
-      if (cache == 0) then
+      if (waitOnEdit == 0 and waitOnEdit2 == 0 ) then
         numCount = numCount + 1
       end
     end) 
-  
-    d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
   else
     d("KEINE Gilde gefunden: " .. guildName)
   end

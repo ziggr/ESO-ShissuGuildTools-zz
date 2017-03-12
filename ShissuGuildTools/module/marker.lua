@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: marker.lua
--- Version: v1.0.3
--- Last Update: 06.03.2017
+-- Version: v1.0.8
+-- Last Update: 10.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -204,7 +204,7 @@ function _addon.core.filterScrollList(listName)
     local control = _addon.core[listName .. "IndexPool"]:AcquireObject(i)
     control.unit = sortedData[i]
     control.id = i
-    control:SetText(sortedData[i])
+    control:SetText(white.. sortedData[i])
     control:SetHidden(false)
     
     _addon.core.unit[sortedData[i]] = listName
@@ -349,11 +349,11 @@ end
                                              
 function _addon.core.createDivider(anchor, count)
   local control = WINDOW_MANAGER:CreateControl("SM_Divider" .. count, SGT_Marks, CT_TEXTURE)
-  control:SetAnchor(TOPLEFT, anchor, TOPRIGHT, 15, -55)
-  control:SetAnchor(BOTTOMLEFT, anchor, BOTTOMRIGHT)
-  control:SetWidth(4)
-  control:SetTexture("EsoUI\\Art\\Miscellaneous\\window_edge.dds")
-  control:SetColor(1, 1, 1, 1)  
+  control:SetAnchor(TOPLEFT, anchor, TOPRIGHT, -10, 0)
+  control:SetAnchor(BOTTOMLEFT, anchor, BOTTOMRIGHT, -10, -20)
+  control:SetWidth(1)
+  control:SetTexture("ShissuGuildTools/textures/vertikal.dds")
+  control:SetColor(0.49019607901573, 0.74117648601532, 1, 1)  
   
   return control
 end
@@ -368,7 +368,7 @@ function _addon.core.RETICLE_TARGET_CHANGED (_, Name)
 
   if unitName == nil or unitName == "" then return end
      
-  if _addon.core.unit[unitName] == nil then    
+  if _addon.core.unit[unitName] == nil then                  
     table.insert(_addon.core.listAll, unitName)
     _addon.core.filterScrollList("All")
     return
@@ -441,9 +441,16 @@ function _addon.core.removeIndexButton(control)
 end 
 
 function _addon.core.UI()
-  SGT_Marks_Title:SetText(getString(ShissuMarks_title))
+  _SGT.createFlatWindow(
+    "SGT_Marks",
+    SGT_Marks,  
+    {850, 400}, 
+    function() SGT_Marks:SetHidden(true) end,
+    getString(ShissuMarks_title)
+  ) 
+
   SGT_Marks_Version:SetText(_addon.fN .. " " .. _addon.Version)
-  setDefaultColor(SGT_Marks_Line)
+
   setDefaultColor(SGT_Marks_Line2)
   
   SGT_Marks_Misc:SetText(getString(ShissuMarks_misc))
@@ -452,18 +459,9 @@ function _addon.core.UI()
   SGT_Marks_Heal:SetText(getString(ShissuMarks_heal))
   SGT_Marks_All:SetText(getString(ShissuMarks_all))
     
-  local closeTeleportButton = WINDOW_MANAGER:CreateControl(SGT_Marks_Close, SGT_Marks, CT_TEXTURE)
-  closeTeleportButton:SetAnchor(TOPLEFT, parent, TOPRIGHT, -35, 2)
-  closeTeleportButton:SetDimensions(28, 28)
-  closeTeleportButton:SetTexture("ESOUI/art/buttons/decline_up.dds")
-  closeTeleportButton:SetMouseEnabled(true)
-  closeTeleportButton:SetHandler("OnMouseEnter", function(self) self:SetColor(0.2705882490, 0.5725490451, 1, 1) end)     
-  closeTeleportButton:SetHandler("OnMouseExit", function(self) self:SetColor(1,1,1,1) end)  
-  closeTeleportButton:SetHandler("OnMouseUp", function(self) SGT_Marks:SetHidden(true) end) 
-    
   SGT_Marks_Info_Label:SetText("|c779cff<---|r")
 
-  SGT_Marks_KickInfo:SetText(blue .. getString(ShissuMarks_rightItem) .. white .. " = " .. getString(ShissuMarks_rightItem2))
+  SGT_Marks_KickInfo:SetText(red .. getString(ShissuMarks_rightItem) .. white .. " = " .. getString(ShissuMarks_rightItem2))
   
   _addon.ui["Heal"] = createScrollContainer("SM_HealList", 150, SGT_Marks, SGT_Marks_Line2, 10, 10, -10)
   _addon.core["HealIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)  
@@ -578,8 +576,6 @@ function checkObserver(kick)
 
       -- Array > 0 = Gefunden
       if ( found == 1) then
-        d("GEFUNDEN!!!!!")
-        
         if (kick) then
           foundGuilds = foundGuilds .. " " .. getString(ShissuMarks_found2)
         end

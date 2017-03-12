@@ -28,34 +28,24 @@
 			<Dimensions x="850" y="400" />
         <Anchor point="CENTER" offsetX="100" offsetY="100" />      
         <Controls>
-          <Backdrop name="$(parent)_Background" inherits="ZO_DefaultBackdrop" />
-          
-          <Label name="$(parent)_Title" font="$(ANTIQUE_FONT)|25" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="|cff7d77Shissu's|r Monster/Player Marks (|cff7d77SMM|r)">
-					 <Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="0" />
-				  </Label>
 
   				<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" text="Shissu's Monster/Player Marks">
-  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-66" offsetY="12" />
+  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-70" offsetY="0" />
   				</Label>
           
   				<Label name="$(parent)_KickInfo" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="LEFT" text="Spieler/Monster entfernen = Rechte Maustaste auf Name">
-  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="120" offsetY="12" />
+  					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="130" offsetY="0" />     
   				</Label>
-
-				  <Texture name="$(parent)_Line" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
-            <Dimensions x="800" y="3" />
-					  <Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="-30" offsetY="35" />
-			  	</Texture>		 
 				
 				  <!-- List Button -->
   				<Button name="$(parent)_HealButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
             <Dimensions x="48" y="48" />
-  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="TOPLEFT" offsetX="50" offsetY="40" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="50" offsetY="40" />
             <Textures normal="ESOUI/art/lfg/lfg_healer_down_64.dds" mouseOver="ESOUI/art/lfg/lfg_healer_down_over_64.dds" />
           </Button>		
   				<Label name="$(parent)_Heal" font="$(ANTIQUE_FONT)|14" wrapMode="ELLIPSIS" verticalAlignment="CENTER" horizontalAlignment="CENTER" text="Heiler">
   					<Dimensions x="150" />
-  					<Anchor point="TOPLEFT" relativeTo="$(parent)_Title" relativePoint="BOTTOMLEFT" offsetX="-2" offsetY="45" />
+  					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="-2" offsetY="75" />
   				</Label>		
 
 				  <Button name="$(parent)_MiscButton" mouseEnabled="true" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
@@ -107,7 +97,7 @@
   				</Label>	
   				
   				<Button name="$(parent)_ButtonHeal" inherits="ZO_DefaultButton">
-  					<Anchor point="RIGHT" relativeTo="$(parent)_Line" relativePoint="RIGHT" offsetX="-90" offsetY="130" />
+  					<Anchor point="RIGHT" relativeTo="$(parent)_Info_Label" relativePoint="RIGHT" offsetX="10" offsetY="-15" />
   					<Dimensions x="40" y="32" />
   					<MouseButton enabled="true" />
             <Textures normal="ESOUI/art/lfg/lfg_healer_down_64.dds" mouseOver="ESOUI/art/lfg/lfg_healer_down_over_64.dds" />

@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File                   
 --------------------------------
 -- File: teleport.lua
--- Version: v1.3.9
--- Last Update: 08.03.2017
+-- Version: v1.3.11
+-- Last Update: 10.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -51,18 +51,6 @@ _list.zoneSelected = nil
 _list.idSelected = nil
 _list.gidSelected = nil
 _list.what = nil
-
-function _addon.core.createDivider(anchor, count)
-  local control = WINDOW_MANAGER:CreateControl("SGT_Tele_Divider" .. count, SGT_Teleport, CT_TEXTURE)
-  control:SetAnchor(TOPLEFT, anchor, TOPRIGHT, 15, -55)
-  control:SetAnchor(BOTTOMLEFT, anchor, BOTTOMRIGHT)
-  control:SetWidth(4)
-  control:SetTexture("EsoUI\\Art\\Miscellaneous\\window_edge.dds")
-  control:SetColor(1, 1, 1, 1)  
-  setDefaultColor(control)
-  
-  return control
-end
 
 -- TELEPORTER CORE FUNCTIONS
 function _addon.core.getGuildsZones()
@@ -354,86 +342,6 @@ function _addon.core.toPlayer()
     
 end
 
-function _addon.core.buildWindow(mainParent, mainParent2, dimensions, closeFunc)
-  -- Ausprobieren GetName...
-
- 	local background = CreateControl(mainParent .. "_Background", mainParent2, CT_TEXTURE)
-	background:SetTexture("ShissuGuildTools/textures/background.dds")
-	background:SetDimensions(dimensions[1], dimensions[2])
-	background:SetAnchor(TOPLEFT, nil, TOPLEFT, -10, -10)
-	background:SetDrawLayer(DL_BACKGROUND)
-	background:SetExcludeFromResizeToFitExtents(true)                      
-  
-  local lineWidth = dimensions[2] - 170
-  
-  local topLine = WINDOW_MANAGER:CreateControl(mainParent .. "_TopLine", mainParent2, CT_TEXTURE)
-  topLine:SetAnchor(TOPLEFT, mainParent2, TOPLEFT, -10, -10)
-  topLine:SetDimensions(lineWidth, 1)
-  topLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  topLine:SetHidden(false)
-  
-  local closeButton = WINDOW_MANAGER:CreateControl(mainParent .. "_Close", mainParent2, CT_TEXTURE)
-  closeButton:SetAnchor(TOPLEFT, background, TOPRIGHT, -35, 10)
-  closeButton:SetDimensions(28, 28)
-  closeButton:SetTexture("ShissuGuildTools/textures/close.dds")
-  closeButton:SetMouseEnabled(true)
-  closeButton:SetHandler("OnMouseEnter", function(self) 
-    self:SetTexture("ShissuGuildTools/textures/close2.dds")
-  end)     
-  closeButton:SetHandler("OnMouseExit", function(self) 
-    self:SetTexture("ShissuGuildTools/textures/close.dds")
-  end)  
-  
-  closeButton:SetHandler("OnMouseUp", closeFunc)  
- 
-  local bottomLine = WINDOW_MANAGER:CreateControl(mainParent .. "_BottomLine", mainParent2, CT_TEXTURE)
-  bottomLine:SetAnchor(BOTTOMLEFT, mainParent2, BOTTOMLEFT, -10, 10)
-  bottomLine:SetDimensions(lineWidth, 1)
-  bottomLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  bottomLine:SetHidden(false) 
-  
-  -- left
-  
-  -- title
-  
-  -- right
-end
-
-function _addon.core.createFlatButton(name, parent, parentPos, dimensions, text, parentAnchor, color)
-  if parentAnchor == nil then parentAnchor = BOTTOMLEFT end 
-  if color == nil then color = {0.49019607901573, 0.74117648601532, 1, 1} end
-  
-  -- SGT_Teleport_ButtonTeleport:SetColor(0.49019607901573, 0.74117648601532, 1, 1)
-  
-  local control = WINDOW_MANAGER:CreateControl(name, parent, CT_TEXTURE)
-  control:SetAnchor(parentAnchor, parent, parentAnchor, parentPos[1], parentPos[2])
-  control:SetDimensions(dimensions[1], dimensions[2])
-  control:SetTexture("ShissuGuildTools/textures/button.dds")
-  control:SetHidden(false)
-  control:SetMouseEnabled(true)
-  control:SetDrawLayer(1)
-  
-  control:SetHandler("OnMouseEnter", function(self) 
-    self:SetColor(color[1], color[2], color[3], color[4] or 1)   
-  end) 
-  
-  control:SetHandler("OnMouseExit", function(self) 
-    self:SetColor(1, 1, 1, 1)   
-  end) 
-  
-  control.label = WINDOW_MANAGER:CreateControl(name .. "_LABEL", parent, CT_LABEL)
-  local label = control.label
-  label:SetAnchor(parentAnchor, parent, parentAnchor, parentPos[1], parentPos[2]+3)
-  label:SetDimensions(dimensions[1], dimensions[2])
-  label:SetHidden(false)
-  label:SetFont('ZoFontGame')
-  label:SetHorizontalAlignment(TEXT_ALIGN_CENTER) 
-  label:SetText(text)
-  label:SetColor(color[1], color[2], color[3], 1) 
-  
-  return control 
-end
-
 -- * Initialisierung
 function _addon.core.initialized()
   shissuGT = shissuGT or {}
@@ -442,8 +350,7 @@ function _addon.core.initialized()
   _addon.settings = shissuGT[_addon.Name]
   
   Shissu_SuiteManager._commands[_addon.Name] = {} 
-  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "rndteleport" , _addon.core.rnd })
-  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "rnd" , _addon.core.rnd })
+  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "rndteleport" , _addon.core.rndTeleport })
   table.insert(Shissu_SuiteManager._commands[_addon.Name], { "teleport" , function() SGT_Teleport:SetHidden(false) end })
   
   _addon.cache.ImperialCity = cutStringAtLetter(GetMapInfo(26), "^")
@@ -451,23 +358,17 @@ function _addon.core.initialized()
   _addon.cache.ColdHarbour = cutStringAtLetter(GetMapInfo(23), "^")
   _addon.cache.Craglore = cutStringAtLetter(GetMapInfo(25), "^")
 
- -- SGT_Teleport_Title:SetText("Teleporter") 
   SGT_Teleport_Version:SetText(_addon.fN .. " " .. _addon.Version)
-  --setDefaultColor(SGT_Teleport_Line)
 
-  SGT_Teleport_ButtonTeleport = _addon.core.createFlatButton("SGT_Teleport_ButtonTeleport", SGT_Teleport, {160, 60}, {160, 30}, white .. getString(ShissuTeleporter_tele), TOPLEFT)   
-  SGT_Teleport_ButtonRandom = _addon.core.createFlatButton("SGT_Teleport_ButtonRandom", SGT_Teleport_ButtonTeleport, {0, 40}, {160, 30}, white .. getString(ShissuTeleporter_rnd))    
-  SGT_Teleport_ButtonGrp = _addon.core.createFlatButton("SGT_Teleport_ButtonGrp", SGT_Teleport_ButtonRandom, {0, 50}, {160, 30}, getString(ShissuTeleporter_grp), nil, {1, 0.48627451062202, 0.56078433990479})    
-  SGT_Teleport_ButtonHouse = _addon.core.createFlatButton("SGT_Teleport_ButtonHouse", SGT_Teleport_ButtonGrp, {0, 50}, {160, 30}, getString(ShissuTeleporter_house), nil, {1, 0.96078431606293, 0.50196081399918})     
-  SGT_Teleport_ButtonRefresh = _addon.core.createFlatButton("SGT_Teleport_ButtonRefresh", SGT_Teleport_ButtonHouse, {0, 50}, {160, 30}, getString(ShissuTeleporter_refresh))    
-  
-  SGT_Teleport_ButtonRefresh:SetHandler("OnMouseUp", function() _list.FillScrollList() end)
-  SGT_Teleport_ButtonRandom:SetHandler("OnMouseUp", _addon.core.rnd)
-  SGT_Teleport_ButtonTeleport:SetHandler("OnMouseUp", _addon.core.toPlayer)
-  
+  SGT_Teleport_ButtonTeleport = _SGT.createFlatButton("SGT_Teleport_ButtonTeleport", SGT_Teleport, {160, 60}, {160, 30}, white .. getString(ShissuTeleporter_tele), TOPLEFT)   
+  SGT_Teleport_ButtonRandom = _SGT.createFlatButton("SGT_Teleport_ButtonRandom", SGT_Teleport_ButtonTeleport, {0, 40}, {160, 30}, white .. getString(ShissuTeleporter_rnd))    
+  SGT_Teleport_ButtonGrp = _SGT.createFlatButton("SGT_Teleport_ButtonGrp", SGT_Teleport_ButtonRandom, {0, 50}, {160, 30}, getString(ShissuTeleporter_grp), nil, {1, 0.48627451062202, 0.56078433990479})    
+  SGT_Teleport_ButtonHouse = _SGT.createFlatButton("SGT_Teleport_ButtonHouse", SGT_Teleport_ButtonGrp, {0, 50}, {160, 30}, getString(ShissuTeleporter_house), nil, {1, 0.96078431606293, 0.50196081399918})     
+  SGT_Teleport_ButtonRefresh = _SGT.createFlatButton("SGT_Teleport_ButtonRefresh", SGT_Teleport_ButtonHouse, {0, 50}, {160, 30}, getString(ShissuTeleporter_refresh))    
+
   SGT_Teleport_Legends:ClearAnchors()
-  SGT_Teleport_Legends:SetAnchor(BOTTOMLEFT, SGT_Teleport_ButtonRefresh, BOTTOMLEFT, 90, 300)
-                            
+  SGT_Teleport_Legends:SetAnchor(BOTTOMLEFT, SGT_Teleport, BOTTOMLEFT, 170, -100)
+
   -- Scrollcontainer + UI
   _list.indexPool = ZO_ObjectPool:New(_list.createIndexButton, _list.removeIndexButton)  
   _list.list = createScrollContainer("SGT_Teleport_List", 140, SGT_Teleport, SGT_Teleport_Filter, 10, 10, -10)
@@ -475,55 +376,22 @@ function _addon.core.initialized()
   _list.selected = WINDOW_MANAGER:CreateControl(nil, _list.list.scrollChild, CT_TEXTURE)
   _list.selected:SetTexture("EsoUI\\Art\\Buttons\\generic_highlight.dds")
   _list.selected:SetHidden(true)
-  
-  --_addon.divider = _addon.core.createDivider(SGT_Teleport_List, "H")
-  
+
   SGT_Teleport_FilterText:SetHandler("OnTextChanged", function()  _list.FillScrollList() end) 
   SGT_Teleport_FilterText:SetDrawLayer(1)
   
-  _addon.core.buildWindow(
+  _SGT.createFlatWindow(
     "SGT_Teleport",
     SGT_Teleport,  
-    {350, 520}, 
-    function() SGT_Teleport:SetHidden(true) end
+    {330, 500}, 
+    function() SGT_Teleport:SetHidden(true) end,
+    "Teleporter"
   ) 
-
-  
-  local titleLine = WINDOW_MANAGER:CreateControl("SGT_Teleport_Line", SGT_Teleport, CT_TEXTURE)
-  titleLine:SetAnchor(TOPLEFT, SGT_Teleport, TOPLEFT, 8, 35)
-  titleLine:SetDimensions(320, 1)
-  titleLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  titleLine:SetColor(0.49019607901573, 0.74117648601532, 1, 1) 
-  titleLine:SetHidden(false)
-
-  local dividerLine = WINDOW_MANAGER:CreateControl("SGT_Teleport_LineDiv", SGT_Teleport, CT_TEXTURE)
-  dividerLine:SetAnchor(TOPLEFT, SGT_Teleport, TOPRIGHT, 150, 50)
-  dividerLine:SetAnchor(BOTTOMLEFT, SGT_Teleport, BOTTOMLEFT, 150, 200)
-  dividerLine:SetWidth(1)
-  dividerLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  dividerLine:SetColor(0.49019607901573, 0.74117648601532, 1, 1)   
-  dividerLine:SetHidden(false)
   
   SGT_Teleport_Position:ClearAnchors()
-  SGT_Teleport_Position:SetAnchor(TOPLEFT, SGT_Teleport_Line, TOPLEFT, 2, 5)
-  SGT_Teleport_FilterText:SetDrawLayer(DL_FOREGROUND)
-  
-  local leftLine = WINDOW_MANAGER:CreateControl("SGT_TESTLINE", SGT_Teleport, CT_TEXTURE)
-  leftLine:SetAnchor(TOPLEFT, SGT_Teleport, TOPLEFT, -10, -10)
-  leftLine:SetAnchor(BOTTOMLEFT, SGT_Teleport, BOTTOMLEFT, -10, 200)
-  leftLine:SetWidth(1)
-  leftLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  leftLine:SetHidden(false)
+  SGT_Teleport_Position:SetAnchor(TOPLEFT, SGT_Teleport_TitleLine, TOPLEFT, 2, 5)
+  SGT_Teleport_FilterText:SetDrawLayer(1)
 
-  local rightLine = WINDOW_MANAGER:CreateControl("SGT_TESTLINE1", SGT_Teleport, CT_TEXTURE)
-  rightLine:SetAnchor(TOPRIGHT, SGT_Teleport, TOPRIGHT, 10, -10)
-  rightLine:SetAnchor(BOTTOMRIGHT, SGT_Teleport, BOTTOMRIGHT, 10, 200)
-  rightLine:SetWidth(1)
-  rightLine:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds")
-  rightLine:SetHidden(false)
-
-        --/script d( SGT_TESTLINE:SetTexture("ShissuGuildTools/textures/horizontaldivider.dds"))
-        
   SGT_Teleport_Legends:SetText(
     white .. getString(ShissuTeleporter_legends1) .. "\n" ..
     "- " .. yellow .. getString(ShissuTeleporter_legends2) .. white .. "\n" ..
@@ -549,15 +417,10 @@ function _addon.core.initialized()
   saveWindowPosition(SGT_Teleport, _addon.settings["position"])
   getWindowPosition(SGT_Teleport, _addon.settings["position"])
 
-  -- Teleport Zufall
+  SGT_Teleport_ButtonRefresh:SetHandler("OnMouseUp", function() _list.FillScrollList() end)
+  SGT_Teleport_ButtonTeleport:SetHandler("OnMouseUp", _addon.core.toPlayer)
   SGT_Teleport_ButtonRandom:SetHandler("OnMouseUp", function(self) _addon.core.rndTeleport() end) 
-
-  -- Teleport zum Gruppenanführer/in
   SGT_Teleport_ButtonGrp:SetHandler("OnMouseUp", function(self) JumpToGroupLeader() end) 
- 
- 
-
-  -- Teleport zum Hauptwohnsitz 
   SGT_Teleport_ButtonHouse:SetHandler("OnMouseUp", function(self) 
     local houseId = GetHousingPrimaryHouse()
     

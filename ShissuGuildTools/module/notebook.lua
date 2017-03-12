@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notebook.lua
--- Version: v2.0.1
--- Last Update: 04.03.2017
+-- Version: v2.1.5
+-- Last Update: 10.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -28,7 +28,7 @@ local saveWindowPosition = _SGT.saveWindowPosition
 
 local _addon = {}
 _addon.Name	= "ShissuNotebook"
-_addon.Version = "2.0.1"
+_addon.Version = "2.1.5"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuNotebook))
 _addon.hexColorPicker = nil
@@ -273,6 +273,17 @@ function _note.undo()
   end
 end
 
+function _addon.core.createBackdropBackground(mainParent, mainParent2, dimensions, tex)
+  if (tex == nil) then tex = "" end
+  
+  local control = CreateControl(mainParent .. "_BG", mainParent2, CT_TEXTURE)
+	control:SetTexture("ShissuGuildTools/textures/backdrop" .. tex .. ".dds")
+	control:SetDimensions(dimensions[1], dimensions[2])  
+	control:SetAnchor(TOPLEFT, mainParent2, TOPLEFT, 0, 0)
+	control:SetDrawLayer(1)
+	--control:SetExcludeFromResizeToFitExtents(true)        
+end
+
 function _addon.core.getColor()
   if (shissuGT["ShissuColor"] ~= nil) then
     for i = 1, 5 do
@@ -281,36 +292,73 @@ function _addon.core.getColor()
       end
     end
   end
-  
-  SGT_Notebook_Color1:SetText(_color[1] .. "1")
-  SGT_Notebook_Color2:SetText(_color[2] .. "2")
-  SGT_Notebook_Color3:SetText(_color[3] .. "3")
-  SGT_Notebook_Color4:SetText(_color[4] .. "4")
-  SGT_Notebook_Color5:SetText(_color[5] .. "5")
-  SGT_Notebook_ColorW:SetText(white .. "W")
-  SGT_Notebook_ColorANY:SetText(white .. "ANY")  
 end
 
 -- Notebook UI
 function _addon.core.notebook()
+  _SGT.createFlatWindow(
+    "SGT_Notebook",
+    SGT_Notebook,  
+    {640, 480}, 
+    function() 
+      SGT_Notebook:SetHidden(true) 
+      
+      if (SGT_Notebook_MessagesRecipient) then
+        SGT_Notebook_MessagesRecipient:SetHidden(true)
+     end
+    end,
+    
+    getString(ShissuNotebook)
+  ) 
+  
+  _ui.divider = _SGT.createLine("Divider", {400, 1}, "SGT_Notebook", SGT_Notebook,  TOPLEFT, 200, 50, {BOTTOMLEFT, 200, -20}, {0.49019607901573, 0.74117648601532, 1}, true)
+  _ui.background1 = _addon.core.createBackdropBackground("SGT_Notebook_NoteTitle", SGT_Notebook_NoteTitle, {290, 30})
+  _ui.background2 = _addon.core.createBackdropBackground("SGT_Notebook_Note", SGT_Notebook_Note, {420, 230}, 2)
+  _ui.background3 = _addon.core.createBackdropBackground("SGT_Notebook_AutoString", SGT_Notebook_AutoString, {290, 30})
+  _ui.background4 = _addon.core.createBackdropBackground("SGT_Notebook_Slash", SGT_Notebook_Slash, {290, 30})
+
+  -- ScrollContainer + UI
+  _note.indexPool = ZO_ObjectPool:New(_note.createIndexButton, _note.removeIndexButton) 
+  _note.list = createScrollContainer("SGT_Notebook_List", 185, SGT_Notebook, SGT_Notebook_Line2, 10, 10, -10)
+
+  _note.selected = WINDOW_MANAGER:CreateControl(nil, _note.list.scrollChild, CT_TEXTURE)
+  _note.selected:SetTexture("EsoUI\\Art\\Buttons\\generic_highlight.dds")
+  _note.selected:SetHidden(true)
+  setDefaultColor(_note.selected)
+  
   -- Allgemeine Formatierungen
-  SGT_Notebook_NoteText:SetMaxInputChars(1024)
+  SGT_Notebook_NoteText:SetMaxInputChars(30000)
   SGT_Notebook_SlashText:SetMaxInputChars(24)
   SGT_Notebook_SlashInfo:SetText(getString(ShissuNotebook_slash))
-  --SGT_Notebook_UserSlash:SetText(_g["command"])  
-  SGT_Notebook_Title:SetText(getString(ShissuNotebook))
   SGT_Notebook_Version:SetText(_addon.fN .. " " .. _addon.Version)
-  setDefaultColor(SGT_Notebook_Line)
   
   _addon.core.getColor()
 
-  SGT_Notebook_Color1:SetHandler("OnMouseUp", function() _addon.core.selectColor(1) end) 
-  SGT_Notebook_Color2:SetHandler("OnMouseUp", function() _addon.core.selectColor(2) end)
-  SGT_Notebook_Color3:SetHandler("OnMouseUp", function() _addon.core.selectColor(3) end)
-  SGT_Notebook_Color4:SetHandler("OnMouseUp", function() _addon.core.selectColor(4) end)
-  SGT_Notebook_Color5:SetHandler("OnMouseUp", function() _addon.core.selectColor(5) end)
-  SGT_Notebook_ColorW:SetHandler("OnMouseUp", function() _addon.core.selectColor("W") end)
-  SGT_Notebook_ColorANY:SetHandler("OnMouseUp", function() _addon.core.selectColor("ANY") end)
+  local color = {}
+  
+  if (shissuGT["ShissuColor"] ~= nil) then
+    for i = 1, 5 do
+      if (shissuGT["ShissuColor"]["c" .. i] ~= nil) then
+        color[i] = {shissuGT["ShissuColor"]["c" .. i][1], shissuGT["ShissuColor"]["c" .. i][2], shissuGT["ShissuColor"]["c" .. i][3]} 
+      end
+    end
+  end
+
+  _ui.button1 = _SGT.createFlatButton("SGT_Notebook_NewColorButton1", SGT_Notebook_NoteTitle, {0, 40}, {20, 30}, "1", BOTTOMLEFT, color[1])    
+  _ui.button2 = _SGT.createFlatButton("SGT_Notebook_NewColorButton2", SGT_Notebook_NewColorButton1, {30, 0}, {20, 30}, "2", TOPRIGHT, color[2])   
+  _ui.button3 = _SGT.createFlatButton("SGT_Notebook_NewColorButton3", SGT_Notebook_NewColorButton2, {30, 0}, {20, 30}, "3", TOPRIGHT, color[3])   
+  _ui.button4 = _SGT.createFlatButton("SGT_Notebook_NewColorButton4", SGT_Notebook_NewColorButton3, {30, 0}, {20, 30}, "4", TOPRIGHT, color[4])   
+  _ui.button5 = _SGT.createFlatButton("SGT_Notebook_NewColorButton5", SGT_Notebook_NewColorButton4, {30, 0}, {20, 30}, "5", TOPRIGHT, color[5])   
+  _ui.button6 = _SGT.createFlatButton("SGT_Notebook_NewColorButton6", SGT_Notebook_NewColorButton5, {30, 0}, {20, 30}, white .. "W", TOPRIGHT)  
+  _ui.button7 = _SGT.createFlatButton("SGT_Notebook_NewColorButton7", SGT_Notebook_NewColorButton6, {50, 0}, {40, 30}, white .. "ANY", TOPRIGHT)   
+  
+  _ui.button1:SetHandler("OnMouseUp", function() _addon.core.selectColor(1) end) 
+  _ui.button2:SetHandler("OnMouseUp", function() _addon.core.selectColor(2) end)
+  _ui.button3:SetHandler("OnMouseUp", function() _addon.core.selectColor(3) end)
+  _ui.button4:SetHandler("OnMouseUp", function() _addon.core.selectColor(4) end)
+  _ui.button5:SetHandler("OnMouseUp", function() _addon.core.selectColor(5) end)
+  _ui.button6:SetHandler("OnMouseUp", function() _addon.core.selectColor("W") end)
+  _ui.button7:SetHandler("OnMouseUp", function() _addon.core.selectColor("ANY") end)
     
   SGT_Notebook_NoteText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
   SGT_Notebook_NoteTitleText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
@@ -336,21 +384,10 @@ function _addon.core.notebook()
     
     _note.onTextChanged()
   end) 
-     
-  _ui.divider = createBlueLine("SGT_Notebook_Divider", SGT_Notebook, SGT_Notebook_Line, 200)
-  _ui.closeButton = createCloseButton("SGT_Notebook_Close", SGT_Notebook, function() SGT_Notebook:SetHidden(true) end)
-  
+
   ZO_CheckButton_SetLabelText(SGT_Notebook_AutoStringEnabled, white .. "Auto Post")
   ZO_CheckButton_SetToggleFunction(SGT_Notebook_AutoStringEnabled, function(control, checked) _note.autoPost = checked end)
   
-    -- ScrollContainer + UI
-  _note.indexPool = ZO_ObjectPool:New(_note.createIndexButton, _note.removeIndexButton) 
-  _note.list = createScrollContainer("SGT_Notebook_List", 185, SGT_Notebook, SGT_Notebook_Line, 10, 10, -10)
-  
-  _note.selected = WINDOW_MANAGER:CreateControl(nil, _note.list.scrollChild, CT_TEXTURE)
-  _note.selected:SetTexture("EsoUI\\Art\\Buttons\\generic_highlight.dds")
-  _note.selected:SetHidden(true)
-  setDefaultColor(_note.selected)
   
   _note.setControlToolTip(SGT_Notebook_NoteTitleText)                                                                                    
   _note.setControlToolTip(SGT_Notebook_NoteText) 
@@ -431,8 +468,6 @@ function _addon.core.initialized()
   shissuGT.Notes = shissuGT.Notes or {}
   _note.data = shissuGT.Notes
                                
-  SGT_Notebook_MessagesRecipient:SetHidden(true)
-  
   _addon.core.notebook()
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.autoPost)
   
@@ -447,7 +482,13 @@ function _addon.core.initialized()
   Shissu_SuiteManager._commands[_addon.Name] = {} 
   table.insert(Shissu_SuiteManager._commands[_addon.Name], { "note" , _addon.core.cmdSlash })
   table.insert(Shissu_SuiteManager._commands[_addon.Name], { "no" , _addon.core.cmdSlash })  
-  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "notebook" , function() SGT_Notebook:SetHidden(false) end })            
+  table.insert(Shissu_SuiteManager._commands[_addon.Name], { "notebook" , function() 
+   -- SGT_Notebook:SetHidden(false) 
+    
+  --  if SGT_Notebook_MessagesRecipient then
+   --   SGT_Notebook_MessagesRecipient:SetHidden(false)
+  --  end
+  end })            
 end                               
  
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

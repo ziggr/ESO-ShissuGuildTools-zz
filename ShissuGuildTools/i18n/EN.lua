@@ -2,7 +2,7 @@
 ---------------------------------
 -- File: EN.lua
 -- Version: v1.3.0
--- Last Update: 05.03.2017
+-- Last Update: 12.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -153,6 +153,7 @@ ZO_CreateStringId("ShissuNotebookMail_all", "- All")
 ZO_CreateStringId("ShissuNotebookMail_days", "Days")
 ZO_CreateStringId("ShissuNotebookMail_send", GetString(SI_MAIL_SEND_SEND))
 ZO_CreateStringId("ShissuNotebookMail_progressKickTitle", "Remove player")
+ZO_CreateStringId("ShissuNotebookMail_progressDemoteTitle", "Demote player")
 ZO_CreateStringId("ShissuNotebookMail_progressTitle", "Send e-mail")
 ZO_CreateStringId("ShissuNotebookMail_progressAbort", "Canceled")
 ZO_CreateStringId("ShissuNotebookMail_mailProgress", "Please wait...")
@@ -175,6 +176,7 @@ ZO_CreateStringId("ShissuNotebookMail_newList", "New list")
 ZO_CreateStringId("ShissuNotebookMail_listName", "Listname?")
 ZO_CreateStringId("ShissuNotebookMail_invite", "Invite players")
 ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Do you want to remove the players in the list, or your selection from the guild? Players who remove them will receive an email from you.")
+ZO_CreateStringId("ShissuNotebookMail_demoteKick", "Do you want to degrade the players in the list, or your selection from the guild?")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Subject")
 ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")       
 ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")       
@@ -183,6 +185,15 @@ ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Close the window" .. _color.white .. "\nClosing completes sending / kicking.")
 ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Message incomplete")
+
+ZO_CreateStringId("ShissuNotebookMail_Filter", "Filter")
+ZO_CreateStringId("ShissuNotebookMail_Action", "Action")
+ZO_CreateStringId("ShissuNotebookMail_Send", "Run")
+ZO_CreateStringId("ShissuNotebookMail_Member", "Member")
+ZO_CreateStringId("ShissuNotebookMail_SinceGold", "before min. Days")
+ZO_CreateStringId("ShissuNotebookMail_noMail", "No Mail")
+
+ZO_CreateStringId("ShissuNotebookMail_countDays", "Number of days")
 
 -- Modul: ShissuRoster
 ZO_CreateStringId("ShissuRoster", "Guild: Members")

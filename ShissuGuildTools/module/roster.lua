@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: roster.lua
--- Version: v1.3.13
--- Last Update: 09.03.2017
+-- Version: v1.3.14
+-- Last Update: 12.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -25,7 +25,7 @@ local round = _SGT.round
 
 local _addon = {}
 _addon.Name	= "ShissuRoster"
-_addon.Version = "1.3.13"
+_addon.Version = "1.3.14"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuRoster))
 

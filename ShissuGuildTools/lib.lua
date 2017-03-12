@@ -1,8 +1,8 @@
 -- Shissu GuildTools Misc Functions
 -----------------------------------
 -- File: lib.lua
--- Version: v2.2.1
--- Last Update: 08.03.2017
+-- Version: v2.3.0
+-- Last Update: 10.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -251,5 +251,126 @@ function _lib.getWindowPosition(control, settings)
   control:SetAnchor(settings.point, parent, settings.relativePoint, settings.offsetX, settings.offsetY)
 end
 
+-- NEUES FENSTER DESIGN: FLAT
+function _lib.createLine(name, dimensions, mainParent, mainParent2, anchorPos, anchorX, anchorY, anchor2, color, vert)
+  local control = CreateControl(mainParent .. "_" .. name, mainParent2, CT_TEXTURE) 
+  control:SetTexture("ShissuGuildTools/textures/horizontal.dds")
+  control:SetAnchor(anchorPos, mainParent2, anchorPos, anchorX, anchorY)
+  control:SetHidden(false) 
+  
+  if (anchor2 == nil) then
+    control:SetDimensions(dimensions[1], dimensions[2])
+  end
+  
+  if (anchor2) then
+    control:SetAnchor(anchor2[1], mainParent2, anchor2[1], anchor2[2], anchor2[3])
+    control:SetWidth(dimensions[2])
+  end
+  
+  if (vert) then
+    control:SetTexture("ShissuGuildTools/textures/vertikal.dds")
+  end
+  
+  if (color) then
+    control:SetColor(color[1], color[2], color[3], 1) 
+  end
+                                                                    
+  return control
+end
+
+function _lib.createFlatWindow(mainParent, mainParent2, dimensions, closeFunc, title)
+  dimensions[1] = dimensions[1] + 10
+  
+ 	local background = CreateControl(mainParent .. "_Background", mainParent2, CT_TEXTURE)
+	background:SetTexture("ShissuGuildTools/textures/background.dds")
+	background:SetDimensions(dimensions[1], dimensions[2] + 10)  
+	background:SetAnchor(TOPLEFT, nil, TOPLEFT, -10, -10)
+	background:SetDrawLayer(DL_BACKGROUND)
+	background:SetExcludeFromResizeToFitExtents(true)                  
+  
+  local blueTitle = CreateControl(mainParent .. "_TopLine", mainParent2, CT_TEXTURE)
+	blueTitle:SetTexture("ShissuGuildTools/textures/blue.dds")
+	blueTitle:SetDimensions(dimensions[1], 5)
+	blueTitle:SetAnchor(TOPLEFT, nil, TOPLEFT, -10, -10)
+	blueTitle:SetDrawLayer(DL_BACKGROUND)
+	blueTitle:SetExcludeFromResizeToFitExtents(true)      
+
+  if (closeFunc) then
+    local closeButton = WINDOW_MANAGER:CreateControl(mainParent .. "_Close", mainParent2, CT_TEXTURE)
+    closeButton:SetAnchor(TOPLEFT, background, TOPRIGHT, -45, 10)
+    closeButton:SetDimensions(28, 28)
+    closeButton:SetTexture("ShissuGuildTools/textures/close.dds")
+    closeButton:SetMouseEnabled(true)
+    closeButton:SetHandler("OnMouseEnter", function(self) 
+      self:SetTexture("ShissuGuildTools/textures/close2.dds")
+    end)     
+    closeButton:SetHandler("OnMouseExit", function(self) 
+      self:SetTexture("ShissuGuildTools/textures/close.dds")
+    end)  
+    
+    closeButton:SetHandler("OnMouseUp", closeFunc)  
+  end
+  
+  -- Rahmen
+  local topLine = _lib.createLine("TopBorder", {dimensions[1], 1}, mainParent, mainParent2, TOPLEFT, -10, -10)
+  local bottomLine = _lib.createLine("BottomBorder", {dimensions[1], 1}, mainParent, mainParent2, BOTTOMLEFT, -10, 0)
+  local leftLine = _lib.createLine("LeftBorder", {dimensions[2], 1}, mainParent, mainParent2, TOPLEFT, -10, -10, {BOTTOMLEFT, -10, 0}, nil, true)
+  local rightLine = _lib.createLine("RightBottom", {dimensions[2], 1}, mainParent, mainParent2, TOPRIGHT, -10, -10, {BOTTOMRIGHT, 0, 0}, nil, true)
+  
+  -- Titel
+  local titleLine = _lib.createLine("TitleLine", {dimensions[1] - 40, 1}, mainParent, mainParent2, TOPLEFT, 8, 35, nil, {0.49019607901573, 0.74117648601532, 1})
+  
+  local titleLabel = WINDOW_MANAGER:CreateControl(mainParent .. "_Title", mainParent2, CT_LABEL)
+  titleLabel:SetAnchor(TOPLEFT, mainParent2, TOPLEFT, 5, 0)
+  titleLabel:SetDimensions(dimensions[1] - 40, 32)
+  titleLabel:SetHidden(false)
+  titleLabel:SetFont('SGT_LINEFONT')
+  titleLabel:SetHorizontalAlignment(TEXT_ALIGN_LEFT) 
+  titleLabel:SetText(title)
+end
+
+function _lib.createFlatButton(name, parent, parentPos, dimensions, text, parentAnchor, color)
+  if parentAnchor == nil then parentAnchor = BOTTOMLEFT end 
+  if color == nil then color = {0.49019607901573, 0.74117648601532, 1, 1} end
+  
+  local control = WINDOW_MANAGER:CreateControl(name, parent, CT_TEXTURE)
+  control:SetAnchor(parentAnchor, parent, parentAnchor, parentPos[1], parentPos[2])
+  control:SetDimensions(dimensions[1], dimensions[2])
+  control:SetTexture("ShissuGuildTools/textures/button.dds")
+  control:SetHidden(false)
+  control:SetMouseEnabled(true)
+  control:SetDrawLayer(1)
+  
+  control:SetHandler("OnMouseEnter", function(self) 
+    self:SetColor(color[1], color[2], color[3], color[4] or 1)   
+  end) 
+  
+  control:SetHandler("OnMouseExit", function(self) 
+    self:SetColor(1, 1, 1, 1)   
+  end) 
+  
+  control.label = WINDOW_MANAGER:CreateControl(name .. "_LABEL", parent, CT_LABEL)
+  local label = control.label
+  label:SetAnchor(parentAnchor, parent, parentAnchor, parentPos[1], parentPos[2]+4)
+  label:SetDimensions(dimensions[1], dimensions[2])
+  label:SetHidden(false)
+  label:SetFont('SGT_BUTTONFONT')
+  label:SetHorizontalAlignment(TEXT_ALIGN_CENTER) 
+  label:SetText(text)
+  label:SetColor(color[1], color[2], color[3], 1) 
+  
+  return control 
+end
+
+function _lib.createBackdropBackground(mainParent, mainParent2, dimensions, tex)
+  if (tex == nil) then tex = "" end
+  
+  local control = CreateControl(mainParent .. "_BG", mainParent2, CT_TEXTURE)
+	control:SetTexture("ShissuGuildTools/textures/backdrop" .. tex .. ".dds")
+	control:SetDimensions(dimensions[1], dimensions[2])  
+	control:SetAnchor(TOPLEFT, mainParent2, TOPLEFT, 0, 0)
+	control:SetDrawLayer(1)
+	--control:SetExcludeFromResizeToFitExtents(true)        
+end
 
 Shissu_SuiteManager._lib[_lib.name] = _lib

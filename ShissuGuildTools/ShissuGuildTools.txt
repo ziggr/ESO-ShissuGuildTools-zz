@@ -6,7 +6,7 @@
 
 ; Author: @Shissu on EU-Server!
  
-## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.0.4.14
+## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.0.5.0b
 ## APIVersion: 100018
 ## Author: |c779cff@Shissu|r [EU]
 ## SavedVariables: shissuGT

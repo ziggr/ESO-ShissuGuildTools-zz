@@ -1,0 +1,7 @@
+-- Shissu GuildTools Module File
+--------------------------------
+-- File: mailbox.lua
+-- Version: v1.0.0
+-- Last Update: 09.03.2017
+-- Written by Christian Flory (@Shissu) - esoui@flory.one
+-- Distribution without license is prohibited!
