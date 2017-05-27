@@ -1,5 +1,5 @@
-## Title: |cAFD3FFShissu's|r|ceeeeee Suite Manager|r v1.4.0
-## APIVersion: 100018
+## Title: |cAFD3FFShissu's|r|ceeeeee Suite Manager|r v1.5.0
+## APIVersion: 100019
 ## Author: |c779cff@Shissu|r [EU]
 
 # Main

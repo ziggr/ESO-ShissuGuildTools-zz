@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File                   
 --------------------------------
 -- File: teleport.lua
--- Version: v1.3.11
--- Last Update: 10.03.2017
+-- Version: v1.3.13
+-- Last Update: 20.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -24,7 +24,7 @@ local yellow = _globals["color"]["yellow"]
 
 local _addon = {}
 _addon.Name	= "ShissuTeleporter"
-_addon.Version = "1.3.5"
+_addon.Version = "1.3.13"
 _addon.core = {}
 _addon.fN = _SGT["title"]("Teleporter")
 
@@ -64,6 +64,8 @@ function _addon.core.getGuildsZones()
   --end
   
   -- Gilde
+  local ownName = GetDisplayName()   
+  
   for guildId = 1, GetNumGuilds() do
     if #availableZones == GetNumMaps() - 2 then break end
     
@@ -82,7 +84,8 @@ function _addon.core.getGuildsZones()
           memberZone = cutStringAtLetter(memberZone, "^")
           
           if playerZone == zoneName then playerInZone = 1 end
-          
+          if ownName == memberName then playerInZone = 1 end
+           
           -- Auch entfernen, da man nicht hin joinen kann per Teleport
           if zoneName == _addon.cache["ImperialCity"] then playerInZone = 1 end
           if zoneName == _addon.cache["Cyrodiil"] then playerInZone = 1 end

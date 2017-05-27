@@ -2,7 +2,7 @@
 --------------------------------
 -- File: color.lua
 -- Version: v1.0.5
--- Last Update: 08.03.2017
+-- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 

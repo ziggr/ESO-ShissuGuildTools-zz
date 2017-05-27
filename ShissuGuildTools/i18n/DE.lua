@@ -1,8 +1,8 @@
 -- Shissu GuildTools LanguageFile
 ---------------------------------
 -- File: DE.lua
--- Version: v1.3.0
--- Last Update: 12.03.2017
+-- Version: v1.6.5
+-- Last Update: 06.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -30,7 +30,6 @@ ZO_CreateStringId("Shissu_addInfo", "Zusätzliche Informationen")
 ZO_CreateStringId("ShissuModule_module", "Module / Funktionen")
 ZO_CreateStringId("ShissuModule_moduleInfo", "Möchten Sie SGT beschleunigen, können Sie je nach ihrem Belieben einzelne Module & Funktionen deaktivieren.")
 ZO_CreateStringId("ShissuModule_moduleInfo2", "Das Aus- und Einschalten einzelner Module erfordert ein Neuladen des Interfaces (/reloadui).")
-
 ZO_CreateStringId("ShissuModule_rightMouse", "Rechte Maustaste")
 ZO_CreateStringId("ShissuModule_leftMouse", "Linke Maustaste")
 ZO_CreateStringId("ShissuModule_middleMouse", "Mittlere Maustaste")
@@ -64,10 +63,18 @@ ZO_CreateStringId("ShissuNotifications_inSight", "Gildenmitglied in Sichtfeld?")
 ZO_CreateStringId("ShissuNotifications_friend", "Freund Status [online, afk, brb/dnd, offline]")
 ZO_CreateStringId("ShissuNotifications_motD", GetString(SI_GUILD_MOTD_HEADER))
 ZO_CreateStringId("ShissuNotifications_background", GetString(SI_GUILD_BACKGROUND_INFO_HEADER))
-ZO_CreateStringId("ShissuNotifications_rank", "Ranklisten")
+ZO_CreateStringId("ShissuNotifications_rank", "Ranglisten")
 ZO_CreateStringId("ShissuNotifications_guild", GetString(SI_GAMEPAD_CAMPAIGN_BROWSER_TOOLTIP_GUILD_MEMBERS))
-ZO_CreateStringId("ShissuNotifications_background2", "von")
-ZO_CreateStringId("ShissuNotifications_background3", "wurde geändert")
+ZO_CreateStringId("ShissuNotifications_background2", "Hintergrundinformation der Gilde <<X:1>>|cffffff<<2>>|r wurde geändert.")
+ZO_CreateStringId("ShissuNotifications_rankChange", "Rangänderung in der Gilde <<X:1>>|cffffff<<2>>|r: <<3>><<4>>.")
+ZO_CreateStringId("ShissuNotifications_joinGuild", "<<X:1>>|cffffff<<2>>|r: beigetreten")
+ZO_CreateStringId("ShissuNotifications_leftGuild", "<<X:1>>|cffffff<<2>>|r: verlassen / gekickt")
+ZO_CreateStringId("ShissuNotifications_own", "Eigener Account")
+ZO_CreateStringId("ShissuNotifications_rankChange2", "Änderung: Rang")
+ZO_CreateStringId("ShissuNotifications_joinGuild2", "Gilde beigetreten")
+ZO_CreateStringId("ShissuNotifications_leftGuild2", "Gilde verlassen / gekickt")
+ZO_CreateStringId("ShissuNotifications_noteChange", "Mitgliedsnotiz geändert: |ceeeeee<<X:1>>.")
+ZO_CreateStringId("ShissuNotifications_noteChange2", "Änderung: Mitgliedsnotiz")
 
 -- Modul: ShissuHistory
 ZO_CreateStringId("ShissuHistory", "Gilde: " .. GetString(SI_WINDOW_TITLE_GUILD_HISTORY))
@@ -114,6 +121,8 @@ ZO_CreateStringId("ShissuContextMenu_forward", "Weiterleiten")
 ZO_CreateStringId("ShissuContextMenu_answer2", "Antworten")
 ZO_CreateStringId("ShissuContextMenu_del", "Löschen")
 ZO_CreateStringId("ShissuContextmenu_note", "Persönliche Notizen")
+ZO_CreateStringId("ShissuContextMenu_forward_prefix", "WG")
+ZO_CreateStringId("ShissuContextMenu_answer_prefix", "AW")
 
 -- Modul: ShissuMemberStatus
 ZO_CreateStringId("ShissuMemberStatus", "Gildenmitglieder Status")
@@ -185,14 +194,12 @@ ZO_CreateStringId("ShissuNotebookMail_protocol", "E-Mail Protokoll")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Fenster schließen" .. _color.white .. "\nDurch das Schließen wird das Versenden/Kicken abgebrochen.")
 ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Nachricht unvollständig")
-
 ZO_CreateStringId("ShissuNotebookMail_Filter", "Filter")
 ZO_CreateStringId("ShissuNotebookMail_Action", "Aktion")
 ZO_CreateStringId("ShissuNotebookMail_Send", "Ausführen")
 ZO_CreateStringId("ShissuNotebookMail_Member", "Mitglied")
 ZO_CreateStringId("ShissuNotebookMail_SinceGold", "vor min. Tage")
 ZO_CreateStringId("ShissuNotebookMail_noMail", "Keine Nachricht")
-
 ZO_CreateStringId("ShissuNotebookMail_countDays", "Anzahl der Tage")
  
 -- Modul: ShissuRoster
@@ -225,33 +232,57 @@ ZO_CreateStringId("ShissuScanner_scan2", "werden gerade eingelesen. Bitte warten
 -- Modul: Chat
 ZO_CreateStringId("ShissuChat", "Chat")
 ZO_CreateStringId("ShissuChat_auto", "Automatischer Wechsel")
-ZO_CreateStringId("ShissuChat_date", "Datum einblenden")
-ZO_CreateStringId("ShissuChat_time", "Uhrzeit einblenden")
-ZO_CreateStringId("ShissuChat_sound", "Akustischer Signalton (Flüstern)")
+ZO_CreateStringId("ShissuChat_sound", "Akustischer Signalton")    
 ZO_CreateStringId("ShissuChat_guilds", "Gildenzugehörigkeit")
 ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
 ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                 
 ZO_CreateStringId("ShissuChat_lvl", "Level")
-ZO_CreateStringId("ShissuChat_char", "Charakternamen")
 ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
 ZO_CreateStringId("ShissuChat_party", GetString(SI_CHAT_CHANNEL_NAME_PARTY))
 ZO_CreateStringId("ShissuChat_guildchan", GetString(SI_CHAT_OPTIONS_GUILD_CHANNELS))
-ZO_CreateStringId("ShissuChat_charAcc1", "Account")
-ZO_CreateStringId("ShissuChat_charAcc2", "Charakter")
-ZO_CreateStringId("ShissuChat_charAcc3", "Account + Charakter")
 ZO_CreateStringId("ShissuChat_guildInfo", "Gilden Informationen")
 ZO_CreateStringId("ShissuChat_guildWhich", "Auf welchen Gilden sollen die Informationen basieren?")
 ZO_CreateStringId("ShissuChat_guildNames1", "Gildenbezeichnung")
 ZO_CreateStringId("ShissuChat_guildNames2", "Wie sollen Ihre Gilden im Chat lauten?")
-                                        
+ZO_CreateStringId("ShissuChat_brackets" , "Klammern um Namen entfernen")
+ZO_CreateStringId("ShissuChat_bracketsTT" , "Entfernt Klammern [] um die Namen der Spieler")
+ZO_CreateStringId("ShissuChat_char", "Anzeigename")
+ZO_CreateStringId("ShissuChat_charAcc1", "Accountname")
+ZO_CreateStringId("ShissuChat_charAcc2", "Charaktername")
+ZO_CreateStringId("ShissuChat_charAcc3", "Charaktername@Accountname")
+ZO_CreateStringId("ShissuChat_window", "Chatfenster")
+ZO_CreateStringId("ShissuChat_hideText", "Text ausblenden")
+ZO_CreateStringId("ShissuChat_hideTextTT", "Chat-Text automatisch ausblenden lassen")
+ZO_CreateStringId("ShissuChat_register", "Standard Register/Tab")
+ZO_CreateStringId("ShissuChat_registerTT", "Auswahl des geöffneten Tab nach dem Einloggen/Reloadui")
+ZO_CreateStringId("ShissuChat_channel", "Standardkanal")
+ZO_CreateStringId("ShissuChat_channelTT", "Bestimmt welcher Chat-Kanal nach der Anmeldung/Reloadui automatisch zuerst verwendet wird.")
+ZO_CreateStringId("ShissuChat_url", "URLs/Links anklickbar machen")
+ZO_CreateStringId("ShissuChat_urlTT", "http(s) / www")
+ZO_CreateStringId("ShissuChat_partySwitch", "Automatischer Wechsel: Gruppe")
+ZO_CreateStringId("ShissuChat_partySwitchTT", "Wechselt in den Chatkanal: Gruppe, sobald eine Gruppe gebildet.")
+ZO_CreateStringId("ShissuChat_partyLead", GetString(SI_GROUP_LEADER_TOOLTIP) .. " farbig hervorheben.")
+ZO_CreateStringId("ShissuChat_soundTT", "Akustischer Signalton, der abgespielt wird, wenn man angeflüstert wird")
+ZO_CreateStringId("ShissuChat_warningColor", "Optische Hervorhebung")
+ZO_CreateStringId("ShissuChat_warningColor", "Texthervorhebungfarbe für (neue) Flüster-Chats")
+ZO_CreateStringId("ShissuChat_timeStamp", "Zeitstempel")
+ZO_CreateStringId("ShissuChat_timeStampTT", "Fügt Chat-Nachrichten einen Zeitstempel hinzu.")
+ZO_CreateStringId("ShissuChat_date", "Datum")
+ZO_CreateStringId("ShissuChat_time", "Uhrzeit")
+ZO_CreateStringId("ShissuChat_timeStampFormat", "Zeitstempelformat")
+ZO_CreateStringId("ShissuChat_timeStampFormatTT", "|ceeeeeeFORMAT|r:\n" ..
+  "|cAFD3FFDDDatum|r\n" ..
+  "|cAFD3FFDD|rTag\n|cAFD3FFD|r: Tag(keine vorangestellte 0)\n\|cAFD3FFMM|r: Monat\n|cAFD3FFM|r: Monat (keine vorangestellte 0)\n|cAFD3FFY|r: Jahr\n\n" ..
+  "|cAFD3FFDDUhrzeit\n" ..
+  "|cAFD3FFHH|rStunden (24)\n|cAFD3FFhh|r: Stunden (12)\n|cAFD3FFH|r: Stunde (24, keine vorangestellte 0)\n|cAFD3FFh|r: Stunde (12, keine vorangestellte 0)\n" ..
+  "|cAFD3FFA|r: AM/PM\n|cAFD3FFa|r: am/pm\n|cAFD3FFm|r: Minuten\n|cAFD3FFs|r: Sekunden")
+
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Markierungen")
-ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Spieler Markierungen")
-ZO_CreateStringId("ShissuMarks_misc", "Misc")
-ZO_CreateStringId("ShissuMarks_kick", "Auto Kick")
+ZO_CreateStringId("ShissuMarks_title", "NPC/Spieler Markierungen")
+ZO_CreateStringId("ShissuMarks_misc1", "Misc 1")
 ZO_CreateStringId("ShissuMarks_heal", "Heiler")
-ZO_CreateStringId("ShissuMarks_observe", "Beobachten")
-ZO_CreateStringId("ShissuMarks_all", "All What You See")
+ZO_CreateStringId("ShissuMarks_misc2", "Misc 2")
 ZO_CreateStringId("ShissuMarks_confirmDel", "Liste löschen?")
 ZO_CreateStringId("ShissuMarks_confirmDel2", "Möchten Sie den Listeninhalt wirklick löschen?")  
 ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Spieler")

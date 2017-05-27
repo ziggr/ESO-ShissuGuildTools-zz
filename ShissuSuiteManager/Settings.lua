@@ -172,7 +172,7 @@ function ShissuCreateControl.colorpicker(parent, colorData)
   local function ColorPickerCallback(r, g, b, a)
     control.thumb:SetColor(r, g, b, a or 1)
 
-    d(r .. " - " .. g.. " - ".. b)
+    --d(r .. " - " .. g.. " - ".. b)
 
     if colorData.setFunc then
       colorData.setFunc(r, g, b, a or 1)
@@ -344,6 +344,70 @@ function ShissuCreateControl.editbox(parent, editboxData)
 	return control
 end
 
+-- Guild Checkbox Settings
+function ShissuCreateControl.guildCheckbox(parent, checkboxData)
+  local control = _settings.CreateBaseControl(parent, checkboxData, nil)
+  local width = control:GetWidth()
+  control:SetDimensions(width, 90)
+
+  if (checkboxData.name) then
+    control.label = CreateControl(nil, control, CT_LABEL)
+    control.label:SetFont("ZoFontGame")
+    control.label:SetText(Shissu_SuiteManager._lib.ReplaceCharacter(checkboxData.name))
+  	control.label:SetWidth(width-100)
+    control.label:SetAnchor(TOPLEFT)
+  end
+
+  local numGuild = GetNumGuilds()
+  control.guildLabel = {}
+  control.checkbox = {}
+  
+  for guildId = 1, numGuild do
+    guildId = GetGuildId(guildId)
+    local guildName = GetGuildName(guildId)
+
+    control.guildLabel[guildId] = CreateControl(nil, control, CT_LABEL)
+    control.guildLabel[guildId]:SetFont("ZoFontGame")
+    control.guildLabel[guildId]:SetText(guildName)
+    control.guildLabel[guildId]:SetWidth(100)
+    control.guildLabel[guildId]:SetHeight(30)
+    
+    if (guildId == 1) then
+      control.guildLabel[guildId]:SetAnchor(TOPLEFT, control, TOPLEFT, 0, 30)   
+    else
+      control.guildLabel[guildId]:SetAnchor(TOPRIGHT, control.guildLabel[guildId-1], TOPRIGHT, 120, 0)   
+    end        
+    
+    control.checkbox[guildId] = CreateControlFromVirtual(nil, control, "ZO_CheckButton")
+    control.checkbox[guildId]:SetAnchor(TOPLEFT, control.guildLabel[guildId], TOPLEFT, 35, 30)
+    control.checkbox[guildId]:SetDimensions(20, 20)
+    
+    control.checkbox[guildId]:SetHandler("OnMouseEnter", function(self)
+      ZO_Tooltips_ShowTextTooltip(control.checkbox[guildId], TOPRIGHT, guildName)
+    end)
+    
+    control.checkbox[guildId]:SetHandler("OnMouseExit", function(self)
+      ZO_Tooltips_HideTextTooltip()
+    end) 
+    
+    if checkboxData.saveVar then 
+      if checkboxData.saveVar[guildName] == true then   
+        ZO_CheckButton_SetChecked(control.checkbox[guildId])
+      end
+      
+      ZO_CheckButton_SetToggleFunction(control.checkbox[guildId], function(_, value) 
+        checkboxData.saveVar[guildName] = value
+          
+        if (checkboxData.setFunc) then
+          checkboxData.setFunc(value, guildName)  
+        end
+      end)
+    end       
+  end
+  
+	return control
+end  
+
 -- Textbox Klein
 function ShissuCreateControl.textbox(parent, textBoxData)
   local control = _settings.CreateBaseControl(parent, textBoxData, nil)
@@ -373,6 +437,16 @@ function ShissuCreateControl.textbox(parent, textBoxData)
 
   control.textbox:SetHandler("OnEscape", function(self) self:LoseFocus() end)
   control.textbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)	
+
+  if textBoxData.tooltip then 
+    control.textbox:SetHandler("OnMouseEnter", function(self)
+      ZO_Tooltips_ShowTextTooltip(control.textbox, TOPRIGHT, Shissu_SuiteManager._lib.ReplaceCharacter(textBoxData.tooltip))
+    end)
+    
+    control.textbox:SetHandler("OnMouseExit", function(self)
+      ZO_Tooltips_HideTextTooltip()
+    end)   
+  end
   
 	local width = control.container:GetWidth()
 	local height = 30

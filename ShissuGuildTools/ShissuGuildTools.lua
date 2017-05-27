@@ -1,10 +1,39 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.0.5.0b
--- Last Update: 12.03.2017
+-- Version: v3.1.2.0
+-- Last Update: 25.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
+
+--[[
+  v3.1.1.9
+  ********
+  * Chat
+  - StandardChannel lässt sich auf Wunsch deaktivieren
+  
+  * Notifications
+  - Notizen Benachrichtigungen sind standard deaktiviert    
+  
+  * Scanner History
+  - Überarbeitung
+  - 5 Gilde wird erfasst
+  - Reduzierung der SaveVars pro Gilde um min. 32% 
+  
+  * Roster
+  - Überarbeitung aufgrund der Änderungen des HistoryScanner und der neuen SaveVars
+  - Fehlerbehebungen
+  
+  * Teleport
+  - Berücksichtigt nicht mich den eigenen Account
+  
+  * Misc
+  - div. kleine Optimierungen
+  
+  * Marks
+  - currently disabled! next version, split in 2 modules: guildblock + marks
+  
+]]
 
 local _globals = Shissu_SuiteManager._globals
 local white = _globals["color"]["white"]
@@ -16,13 +45,14 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.0.5.0b"
+_addon.Version = "3.1.2.0"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
 _addon.lib = {}
 
 _addon.active = {}
+
 
 local _lib = Shissu_SuiteManager._lib
 
@@ -44,7 +74,8 @@ _addon.controls = {
 
 local _module = {}
 
---_memberList = {}
+activeNotifications = {}
+
 _SGTcharacterList = {}
 _SGTaccountList = {}
 
@@ -55,7 +86,7 @@ function _addon.core.initialized()
 
   zo_callLater(function()              
     _addon.core.createCharacterList()  
-    _addon.core.createAccountList()      
+    _addon.core.createAccountList()   
   end, 1500); 
 end
 
@@ -159,14 +190,14 @@ function _addon.core.chatButton(button)
         SGT_Teleport:SetHidden(true)
       end
     end
-   elseif (button == 3) then
-    if (checkSetting("ShissuMarks")) then
-      if (SGT_Marks:IsHidden()) then
-        SGT_Marks:SetHidden(false)
-      else
-        SGT_Marks:SetHidden(true)
-      end
-    end   
+ --  elseif (button == 3) then
+ --   if (checkSetting("ShissuMarks")) then
+  --    if (SGT_Marks:IsHidden()) then
+ --       SGT_Marks:SetHidden(false)
+  --    else
+  --      SGT_Marks:SetHidden(true)
+  --    end
+--    end   
   end  
 end
 
@@ -230,18 +261,18 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     -- Variable Module
     _addon.loadModule(ShissuAutoAFK, "ShissuAutoAFK")
     _addon.loadModule(ShissuNotifications, "ShissuNotifications")
-    _addon.loadModule(ShissuChat, "ShissuChat") 
+    _addon.loadModule(ShissuChat, "ShissuChat2") 
     _addon.loadModule(ShissuHistory, "ShissuHistory")  
     _addon.loadModule(ShissuRoster, "ShissuRoster")   
     _addon.loadModule(ShissuGuildHome, "ShissuGuildHome")
     _addon.loadModule(ShissuMemberStatus, "ShissuMemberStatus")
     _addon.loadModule(ShissuContextMenu, "ShissuContextMenu")
-    _addon.loadModule(ShissuMarks, "ShissuMarks") 
+ --   _addon.loadModule(ShissuMarks, "ShissuMarks") 
     _addon.loadModule(ShissuTeleporter, "ShissuTeleporter")
     _addon.loadModule(ShissuWelcomeInvite, "ShissuWelcomeInvite")
     _addon.loadModule(ShissuNotebook, "ShissuNotebook") 
     _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
-    
+
     --_addon.loadModule(ShissuRoster, "ShissuCollectedData")  
                                   
     local checkSetting = _addon.checkSetting
@@ -250,7 +281,9 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
       _addon.loadModule(ShissuScanner, "ShissuScanner")
     end
     
-    if checkSetting("ShissuNostebook") then
+    _addon.loadModule(ShissuScanner2, "ShissuScanner2")
+    
+    if checkSetting("ShissuNotebook") then
       _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
       SGT_Notebook_MessagesRecipient:SetHidden(true)
     end
@@ -266,13 +299,13 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
         buttonText = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuNotebook)
       end
       
-      if (checkSetting("ShissuMarks")) then
-        if (string.len(buttonText) > 2) then
-          buttonText = buttonText .. "\n"
-        end
+--      if (checkSetting("ShissuMarks")) then
+ --       if (string.len(buttonText) > 2) then
+ --         buttonText = buttonText .. "\n"
+  --      end
         
-        buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
-      end    
+  --      buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
+  --   end    
             
       if (checkSetting("ShissuTeleporter")) then                                                                  
         if (string.len(buttonText) > 2) then
@@ -286,6 +319,14 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
       SGT_ZO_ToogleButton:SetHandler("OnMouseExit", ZO_Tooltips_HideTextTooltip)
       SGT_ZO_ToogleButton:SetHandler("OnMouseUp", function(_, button) _addon.core.chatButton(button) end)
     end
+
+  --_roster.rank:SetSortsItems(false) 
+  --roster.setRank(_roster.rank)
+  --
+  --_roster.rank:SetSelectedItem(blue .. "-- " .. white .. getString(ShissuNotebookMail_all2))
+
+    
+    
   end, 500); 
   
   EVENT_MANAGER:UnregisterForEvent(_addon.Name, EVENT_ADD_ON_LOADED)
@@ -297,22 +338,22 @@ Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
 Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized     
 
-ZO_CreateStringId("SI_BINDING_NAME_SGT_Marks", "Markierungen")
+--ZO_CreateStringId("SI_BINDING_NAME_SGT_Marks", "Markierungen")
 ZO_CreateStringId("SI_BINDING_NAME_SGT_Notes", "Notizbuch")      
 ZO_CreateStringId("SI_BINDING_NAME_SGT_Teleporter", "Teleporter")  
     
 Shissu_SuiteManager._bindings[_addon.Name] = {}
-Shissu_SuiteManager._bindings[_addon.Name].marks = function() 
-  checkSetting = _addon.checkSetting
+--Shissu_SuiteManager._bindings[_addon.Name].marks = function() 
+--  checkSetting = _addon.checkSetting
   
-  if (checkSetting("ShissuMarks")) then
-    if (SGT_Marks:IsHidden()) then
-      SGT_Marks:SetHidden(false)
-    else
-      SGT_Marks:SetHidden(true)
-    end
-  end
-end  
+--  if (checkSetting("ShissuMarks")) then
+--    if (SGT_Marks:IsHidden()) then
+--      SGT_Marks:SetHidden(false)
+--    else
+ --     SGT_Marks:SetHidden(true)
+ --   end
+ -- end
+--end  
 
 Shissu_SuiteManager._bindings[_addon.Name].notes = function() 
   checkSetting = _addon.checkSetting
@@ -343,16 +384,22 @@ Shissu_SuiteManager._bindings[_addon.Name].teleport = function()
       SGT_Teleport:SetHidden(true)
     end
   end
-end    
+end                                  
 
--- /script checkGoldDeposits("Tamrilando", 2000)
+-- /script checkGoldDeposits("Tamrilando", 2000, true)
+-- /script checkGoldDeposits("Tamrilando", 2500)
+-- /script checkGoldDeposits("Tamrizon", 2000)
+                             
+--  local currentTime = _SGT.currentTime()
+--  local nextKiosk = currentTime + _SGT.getKioskTime()
+--  local lastKiosk = nextKiosk - 604800
 
 -- Not offical, testing
-function checkGoldDeposits(guildName, goldDeposit)
-  local lastKiosk = _SGT.getKioskTime() - 604800
+function checkGoldDeposits(guildName, goldDeposit, removeReminder)
+  local lastKiosk = _SGT.currentTime() + _SGT.getKioskTime() - 604800
   local _history = shissuGT["History"]
 
-  d("1: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
+  d("Letzter Gildenhändler: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
 
   -- GuildId?
   local numGuild = GetNumGuilds()
@@ -369,102 +416,183 @@ function checkGoldDeposits(guildName, goldDeposit)
   if (guildId ~= nil) then
     local reminderText = guildName .. " Reminder\n" .. goldDeposit .. " Gold"
     local numMember = GetNumGuildMembers(guildId)
-    local numCount = 1
+    local numCount = 0
+    local waitOnEdit = "0" 
+    local found = 0
+    local payed = 0
     local notPayed = 0
-    local waitOnEdit = 0 
-    local waitOnEdit2 = 0
+    local noteExist = 0
     
-    
-    local countOK = 0
-    
-    d("BIN DRIN")
-    
-    EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT", 1300, function()  
+    local waiting = 0
+      
+    EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT", 50, function()  
+      if (waitOnEdit == "0") then
+        numCount = numCount + 1
+      end
+      
       local memberData = { GetGuildMemberInfo(guildId, numCount) }
       local note = memberData[2]
       local displayName = memberData[1]                
-    
-      d(numCount .. " CHECK NAME: " .. displayName)  
 
-      if (waitOnEdit2 == 1) then
+      if (waitOnEdit == "1") then
         if not (string.find(note, reminderText)) then
-          waitOnEdit2 = 0
-        end      
-      elseif (waitOnEdit == 1) then
-        if (string.find(note, reminderText)) then
-          waitOnEdit = 0
+          local newCount = 1
+          EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT", 5000, function()  
+            
+            if newCount == 2 then
+              waitOnEdit = "0"
+              waiting = 0
+              EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT")   
+            end
+            
+            newCount = newCount + 1  
+          
+          end)
         end
-      else
+      end    
+
+      if (waitOnEdit == "2") then
+        if waiting == 0 then
+          d("WARTEN")
+          waiting = 1
+        end
+
+        if string.find(note, reminderText) then  
+          local newCount = 1
+          EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT", 5000, function()  
+            
+            if newCount == 2 then
+              waitOnEdit = "0"
+              waiting = 0
+              EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT")   
+            end
+            
+            newCount = newCount + 1  
+          
+          end)
+        end
+      end      
+      
+      if waitOnEdit == "0" then 
+        d(waitOnEdit .. " - " .. numCount .. " CHECK NAME: " .. displayName) 
+      end
+      
+      -- Reminder an allen Namen entfernen
+      if removeReminder == true then
+        --reminderText = ", Thanks"
+      
+        if (string.find(note, reminderText) and waitOnEdit == "0") then
+          note = string.gsub(note, reminderText, "")
+          note = string.gsub(note, "\n", "")  
+          SetGuildMemberNote(guildId, numCount, note)  
+          
+          found = found + 1
+          
+          waitOnEdit = "1"           
+        end
+      end 
+      -- ________________
+      
+      -- Goldbeträge überprüfen und Reminder setzen
+      if removeReminder == nil and waitOnEdit == "0" then
         if _history[guildName] then
           if _history[guildName][displayName]  then 
             if _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED] then
               local lastTime = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast
-              --d("1: " .. GetDateStringFromTimestamp(lastTime) .. " - " .. ZO_FormatTime((lastTime) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))  
-                
+          
               if (lastTime) then
                 if (lastTime > lastKiosk) then  
-                  countOK = countOK + 1
                   -- Zeit ist korrekt
-                  d("--> OK")
+                  payed = payed + 1 
+                  --d("--> OK")
                 else
+                  -- Letzte Einzahlung ist älter als letzter NPC
                   local goldThisWeek = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].currentNPC
                   
                   if (string.find(note, reminderText)) then
-                    d("--> REMINDER EXISTS")
-                    
-                    if (goldThisWeek > 0 ) then
-                      note = string.gsub(note, reminderText, "")
-                      note = string.gsub(note, "\n", "")  
-                      SetGuildMemberNote(guildId, count, note)  
-                      countOK = countOK + 1
-                      waitOnEdit2 = 1
-                    end
-                  else         
-                    d("NICHT 1")       
+                    -- Reminder existiert schon = -> Spieler hat schon die Woche davor nicht bezahlt.
+                    noteExist = noteExist + 1
+                    notPayed = notPayed + 1 
+                  else
                     local gold = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
                     local goldWeek = gold / goldDeposit 
-                    local addTime = goldWeek * weekSeconds
-
-                    if (goldThisWeek > 0 ) then
-                      note = string.gsub(note, reminderText, "")
-                      note = string.gsub(note, "\n", "")  
-                      SetGuildMemberNote(guildId, count, note)  
-                      countOK = countOK + 1
-                      waitOnEdit2 = 1
-                    elseif (lastTime < lastKiosk or gold == 0) then
-                      if not (string.find(note, reminderText)) then
-                        d(count .. " NAME (NICHT GEZAHLT): " .. displayName)  
-                                                                                       
-                        local newNote = note .. "\n" .. reminderText
+                    local addTime = goldWeek * 604800
+                    
+                    d(goldWeek)
+                    
+                    if (goldWeek > 0 ) then               
+                      if lastTime + addTime > lastKiosk then 
+                        d("--> NAME (VORRAUSGEZAHLT): " .. displayName)  
                         
-                        waitOnEdit = 1
-                        SetGuildMemberNote(guildId, count, newNote)         
-                      end  
+                        payed = payed + 1 
+                      else
+                        d("--> NAME (NICHT VORRAUSGEZAHLT): " .. displayName)  
+                                                
+                        if (string.len(note) > 0) then
+                          note = note .. "\n" .. reminderText
+                          SetGuildMemberNote(guildId, numCount, note)    
+                        else
+                          SetGuildMemberNote(guildId, numCount, reminderText)  
+                        end
+
+                        notPayed = notPayed + 1 
+                        waitOnEdit = "2"    
+                      end 
                       
-                      notPayed = notPayed + 1   
+                    elseif (lastTime < lastKiosk or gold == 0) then
+                      d("--> NAME (NICHT GEZAHLT): " .. displayName)                                                                    
+                      
+                      if (string.len(note) > 0) then
+                        note = note .. "\n" .. reminderText
+                        SetGuildMemberNote(guildId, numCount, note)    
+                      else
+                        SetGuildMemberNote(guildId, numCount, reminderText)  
+                      end
+                      
+                      notPayed = notPayed + 1  
+                      waitOnEdit = "2"     
                     end
-                  end
-                end          
+                  end   
+                  
+                end
               end
             end
           end
-        end
+        end 
       end
-          
-      if (count == numMember) then
-        d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
-        d("Es haben " .. countOK .. " Spieler bezahlt")
-
-        EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT")  
-      end
+      -- ________________
       
-      if (waitOnEdit == 0 and waitOnEdit2 == 0 ) then
-        numCount = numCount + 1
+      -- Anzahl der Spieler erreicht
+      if numMember == numCount then
+        d("Es wurden " .. found .. " Notizen bearbeitet")
+        d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
+        d("Es haben " .. noteExist .. " Spieler letzte woche nicht bezahlt")
+        d("Es haben " .. payed .. " Spieler bezahlt")
+             
+        EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT")       
       end
-    end) 
-  else
-    d("KEINE Gilde gefunden: " .. guildName)
+    end)
   end
+end
+
+function ZO_PlayerToPlayer:TryShowingStandardInteractLabel()
+  local function GetPlatformIgnoredString()
+    return IsConsoleUI() and SI_PLAYER_TO_PLAYER_TARGET_BLOCKED or SI_PLAYER_TO_PLAYER_TARGET_IGNORED
+  end
+
+  self.resurrectable = false
+  self:SetTargetIdentification()
+
+  local isIgnored = IsUnitIgnored(P2P_UNIT_TAG)
+  local interactLabel = isIgnored and GetPlatformIgnoredString() or SI_PLAYER_TO_PLAYER_TARGET
+
+  self.actionKeybindButton:SetHidden(false)
+  self.targetLabel:SetText(zo_strformat(interactLabel, ZO_GetPrimaryPlayerNameWithSecondary(self.currentTargetDisplayName, self.currentTargetCharacterName)))
+  self.actionKeybindButton:SetText(GetString(SI_PLAYER_TO_PLAYER_ACTION_MENU))
+   
+  self.targetLabel:SetColor(0.50196081399918, 0.80000001192093, 1, 1)
+
+  return true
 end
 
 EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_ADD_ON_LOADED, _addon.EVENT_ADD_ON_LOADED)  

@@ -1,90 +1,113 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: scanner.lua
--- Version: v1.2.7
--- Last Update: 09.03.2017
+-- Version: v1.3.6
+-- Last Update: 25.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
+
 
 local _globals = Shissu_SuiteManager._globals
 local white = _globals["color"]["white"]
 local blue = _globals["color"]["blue"]
-local zos = _globals["ZOS"]
 
-local _lib = Shissu_SuiteManager._lib
 local _SGT = Shissu_SuiteManager._lib["SGT"]
 local getString = _SGT.getString
+                                    
+_addon = {}
+_addon.Name = "ShissuScanner"
 
-local _addon = {}
-_addon.Name	= "ShissuScanner"
+_addon.scanGuild = 5 * 60 * 1000
+_addon.scanInterval = 3000
+_addon.guildId = nil
+_addon.firstGuildScan = false
+_addon.firstScan = true
+_addon.scanCategory = GUILD_HISTORY_GENERAL
 _addon.core = {}
-     
-local _scanner = {}
 
-_scanner.guildId = nil
-_scanner.scanInterval = 3000
-_scanner.checkGuildTimer = 5 * 60 * 1000
-_scanner.firstGuildScan = false
-_scanner.scanCategory = zos["History"]
-
-local _history = {}
-
--- SaveVariable Funktion: Anlegen Grundstruktur Gilde
-function _scanner.createGuild(guildName) 
-  if (_history[guildName] == nil) then 
-    _history[guildName] = {
-      ["oldestEvent"] = {
-        [zos["History"]] = 0,
-        [zos["Bank"]] = 0,
-      },
-      
-      ["lastScan"] = {
-        [zos["History"]] = 0,
-        [zos["Bank"]] = 0,     
-      },
-    } 
+function _addon.core.getData(eventType, displayName, guildName)
+  local timeFirst = 0  
+  local timeLast = 0                        
+  local totalGold = 0
+  local currentNPC = 0
+  local previousNPC = 0
+  
+  if _history[guildName] then                        
+    if _history[guildName][displayName] then
+      if _history[guildName][displayName][eventType] then
+        timeFirst = _history[guildName][displayName][eventType].timeFirst or 0
+        timeLast = _history[guildName][displayName][eventType].timeLast or 0                        
+        totalGold = _history[guildName][displayName][eventType].total or 0
+        currentNPC = _history[guildName][displayName][eventType].currentNPC or 0
+        previousNPC = _history[guildName][displayName][eventType].previousNPC or 0
+      end
+    end
   end
-end 
 
--- SaveVariable Funktion: Anlegen Grundstruktur Accountname
-function _scanner.createAccount(guildName, displayName)
-  _scanner.createGuild(guildName)  
-  if _history[guildName][displayName] ~= nil then return end
-  
-  function _scanner.createVars(guildName, displayName, event)
-    _history[guildName][displayName][event] = {}
-    _history[guildName][displayName][event].timeFirst = 0
-    _history[guildName][displayName][event].timeLast = 0
-    _history[guildName][displayName][event].last = 0
-    _history[guildName][displayName][event].total = 0
-    _history[guildName][displayName][event].currentNPC = 0
-    _history[guildName][displayName][event].previousNPC = 0
-  end       
-  
-  _history[guildName][displayName] = {}
-  _scanner.createVars(guildName, displayName, zos["GoldAdded"])
-  _scanner.createVars(guildName, displayName, zos["GoldRemoved"])
-  _scanner.createVars(guildName, displayName, zos["ItemAdded"])
-  _scanner.createVars(guildName, displayName, zos["ItemRemoved"])
+  return {timeFirst, timeLast, totalGold, currentNPC, previousNPC}
 end
 
-function _scanner.previousTime(guildName, category)
+function _addon.core.createDisplayNameData(guildName, displayName)
+  if (_history[guildName][displayName] == nil) then
+    _history[guildName][displayName] = {}
+  end    
+end
+
+function _addon.core.copyCurrentToPrev(guildName, displayName, eventType)
+  if (_history[guildName][displayName] ~= nil) then
+    if _history[guildName][displayName][eventType] ~= nil then  
+      if _history[guildName][displayName][eventType].currentNPC ~= nil then
+        _history[guildName][displayName][eventType].previousNPC = _history[guildName][displayName][eventType].currentNPC
+        _history[guildName][displayName][eventType].currentNPC = nil
+      end
+    end
+  end
+end
+
+function _addon.core.copyCurrentDateToLast() 
+  for guildId=1, GetNumGuilds() do
+    guildId = GetGuildId(guildId)
+    local guildName = GetGuildName(guildId)
+    
+    for displayName, _ in pairs(_history[guildName]) do
+      if (_history[guildName][displayName] ~= nil) then
+      
+        _addon.core.copyCurrentToPrev(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
+        _addon.core.copyCurrentToPrev(guildName, displayName, GUILD_EVENT_BANKGOLD_REMOVED)
+        _addon.core.copyCurrentToPrev(guildName, displayName, GUILD_EVENT_BANKITEM_ADDED)
+        _addon.core.copyCurrentToPrev(guildName, displayName, GUILD_EVENT_BANKITEM_REMOVED)
+      end
+    end
+  end
+end
+
+function _addon.core.previousTime(guildName, category)
+  if _history[guildName] ~= nil then
+    return 1500000000
+  end
+  
+  if _history[guildName]["oldestEvent"] ~= nil then
+    return 1500000000
+  end
+  
   local oldestEvent = _history[guildName]["oldestEvent"][category]
   
-  if oldestEvent > 0 then return oldestEvent end
-  
+  if oldestEvent ~= nil then 
+    if oldestEvent > 0 then return oldestEvent end
+  end  
+
   local t = 1500000000
       
   for _, displayName in pairs(_history[guildName]) do
     if (displayName["timeJoined"] ~= nil) then
       
-      if (category == zos["History"]) then
+      if (category == GUILD_HISTORY_GENERAL) then
         if (displayName["timeJoined"] > 0) and (displayName["timeJoined"] < t) then
           t = displayName["timeJoined"]
         end
       else
-        if (displayName[zos["GoldAdded"]].timeFirst > 0) and (displayName[zos["GoldAdded"]].timeFirst < t) then
-          t = displayName[zos["GoldAdded"]].timeFirst
+        if (displayName[GUILD_EVENT_BANKGOLD_ADDED].timeFirst > 0) and (displayName[GUILD_EVENT_BANKGOLD_ADDED].timeFirst < t) then
+          t = displayName[GUILD_EVENT_BANKGOLD_ADDED].timeFirst
         end
       end
     end
@@ -93,249 +116,287 @@ function _scanner.previousTime(guildName, category)
   return t
 end
 
-function _scanner.copyCurrentDateToLast() 
-  for guildId=1, GetNumGuilds() do
-    local guildName = GetGuildName(guildId)
-    
-    for displayName, _ in pairs(_history[guildName]) do
-      if (_history[guildName][displayName] ~= nil) then
-      
-        if _history[guildName][displayName][zos["GoldAdded"]] ~= nil then  
-          if _history[guildName][displayName][zos["GoldAdded"]].currentNPC ~= nil then
-            _history[guildName][displayName][zos["GoldAdded"]].previousNPC = _history[guildName][displayName][zos["GoldAdded"]].currentNPC
-            _history[guildName][displayName][zos["GoldAdded"]].currentNPC = 0
-          end
-        end
-        
-        if _history[guildName][displayName][zos["GoldRemoved"]] ~= nil then 
-          if _history[guildName][displayName][zos["GoldRemoved"]].currentNPC ~= nil then
-            _history[guildName][displayName][zos["GoldRemoved"]].previousNPC = _history[guildName][displayName][zos["GoldRemoved"]].currentNPC
-            _history[guildName][displayName][zos["GoldRemoved"]].currentNPC = 0
-          end
-        end
-        
-        if _history[guildName][displayName][zos["ItemAdded"]] ~= nil then 
-          if _history[guildName][displayName][zos["ItemAdded"]].currentNPC ~= nil then
-            _history[guildName][displayName][zos["ItemAdded"]].previousNPC = _history[guildName][displayName][zos["ItemAdded"]].currentNPC
-            _history[guildName][displayName][zos["ItemAdded"]].currentNPC = 0
-          end
-        end
-
-        if _history[guildName][displayName][zos["ItemRemoved"]] ~= nil then 
-          if _history[guildName][displayName][zos["ItemRemoved"]].currentNPC ~= nil then
-            _history[guildName][displayName][zos["ItemRemoved"]].previousNPC = _history[guildName][displayName][zos["ItemRemoved"]].currentNPC
-            _history[guildName][displayName][zos["ItemRemoved"]].currentNPC = 0 
-          end
-        end
-      end
-    end
-  end
-end
-
--- Events auslesen und Änderungen speichern / hinzufügen
-function _scanner.processEvents(guildId, category)
+function _addon.core.processEvents(guildId, category)
+  local guildName = GetGuildName(guildId)
   local numEvents = GetNumGuildEvents(guildId, category)
 
   if (numEvents == 0) then return end
-  
-  local guildName = GetGuildName(guildId)
-  local _, firstTime = GetGuildEventInfo(guildId, category, 1)
-  local _, lastTime = GetGuildEventInfo(guildId, category, numEvents)
-  local lastScan = _history[GetGuildName(guildId)]["lastScan"][category]
+
+  local _, firstEventTime = GetGuildEventInfo(guildId, category, 1)
+  local _, lastEventTime = GetGuildEventInfo(guildId, category, numEvents)
+  local lastScan = _history[GetGuildName(guildId)]["lastScans"][category] or 0
   local first = numEvents
   local last = 1
   local inc = -1
-
-  if lastScan == nil then lastScan = 0 end
 
   local nextKiosk = _SGT.currentTime() + _SGT.getKioskTime()
   local lastKiosk = nextKiosk - 604800
   local previousKiosk = lastKiosk - 604800
   
+  --d("process: " .. guildId .. guildName)
+  
   --d("NÄCHSTER: " .. GetDateStringFromTimestamp(nextKiosk) .. " - " .. ZO_FormatTime((previousKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))    
   --d("LETZTER: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
   ---d("VORLETZTER: " .. GetDateStringFromTimestamp(previousKiosk) .. " - " .. ZO_FormatTime((previousKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))  
-   
-  -- Aktuelle Woche -> Letzte Woche
-  -- Letzte Woche  -> Vorletzte Woche
+     
+  -- Kopieren der "aktuellen Woche" zu "letzte Woche", Neustart "aktuelle Woche"
   if (_history["Kiosk"] ~= nil) then
     if (lastKiosk > _history["Kiosk"] ) then
       _history["Kiosk"] = lastKiosk
-      --d("Händler hat sich geänder: ---> Current -> Privious")
-      
-      _scanner.copyCurrentDateToLast() 
+      _addon.core.copyCurrentDateToLast() 
     end
   else
     _history["Kiosk"] = lastKiosk
-  end  
-
-  if (firstTime > lastTime) then
+  end    
+  
+  if (firstEventTime > lastEventTime) then
     first = 1
     last = numEvents
     inc = 1
   end
-
-  -- Event abarbeiten
+  
+  -- Event abarbeiten  
   for eventId = first, last, inc do
     local eventType, eventTime, displayName, eventGold = GetGuildEventInfo(guildId, category, eventId)
-
-    -- Existiert der Account in der Datenbank? Wenn nein, erstellen!
-    if displayName ~= nil then
-      _scanner.createAccount(guildName, displayName)
-       
-      local timeStamp = GetTimeStamp() - eventTime
-      local oldestEvent = _scanner.previousTime(guildName, category)
-  
-      if timeStamp > 0 then
-        -- TimeStamp vom ältesten Event speichern                         
-        if (oldestEvent == 0) or (oldestEvent > timeStamp) then
-          _history[guildName]["oldestEvent"][category] = timeStamp
+    local timeStamp = GetTimeStamp() - eventTime
+    local oldestEvent = _addon.core.previousTime(guildName, category)
+    
+    -- TimeStamp vom ältesten Event speichern 
+    if timeStamp > 0 then               
+      if (oldestEvent == 0) or (oldestEvent > timeStamp) then
+        if _history[guildName] ~= nil then
+          if _history[guildName]["oldestEvent"] ~= nil then
+            _history[guildName]["oldestEvent"][category] = timeStamp
+          else
+            _history[guildName]["oldestEvent"] = {}
+            _history[guildName]["oldestEvent"][category] = timeStamp
+          end
         end
       end
-  
-      if (timeStamp > lastScan) or (lastScan == 0) then
-      -- Mitglied - Wann eingeladen?
-        if (category == zos["History"]) then
-          if (eventType == zos["Joined"]) then
-            _history[guildName][displayName].timeJoined = timeStamp
-          end
-            
-          _history[guildName]["lastScan"][category] = timeStamp
-        end
-          
-        -- Mitglied - Bankaktivitäten
-        if (category == zos["Bank"]) then
-          if (eventType == zos["GoldAdded"]) or (eventType == zos["GoldRemoved"]) or (eventType == zos["ItemAdded"]) or (eventType == zos["ItemRemoved"]) then
-            if (_history[guildName][displayName][eventType].timeLast < timeStamp) and (math.abs(_history[guildName][displayName][eventType].timeLast - timeStamp) > 2) then   
-              _history[guildName][displayName][eventType].total = _history[guildName][displayName][eventType].total + eventGold
-              _history[guildName][displayName][eventType].last = eventGold 
-              _history[guildName][displayName][eventType].timeLast = timeStamp
-    
-              -- seit NPC
-              if timeStamp > lastKiosk then
-                _history[guildName][displayName][eventType].currentNPC = _history[guildName][displayName][eventType].currentNPC + eventGold 
-              end
+    end
+
+    if (timeStamp > lastScan) or (lastScan == 0) then  
+      -- Wann eingeladen / beigetreten in die Gilde?       
+      if (category == GUILD_HISTORY_GENERAL) then
+        if (eventType == GUILD_EVENT_GUILD_JOIN) then
+          local timeJoined = 0 
+                          
+          if _history[guildName][displayName] ~= nil then
+            timeJoined = _history[guildName][displayName].timeJoined or 0 
               
-              if timeStamp > previousKiosk and timeStamp < lastKiosk then
-                _history[guildName][displayName][eventType].previousNPC = _history[guildName][displayName][eventType].previousNPC + eventGold 
-              end
-   
-              if (_history[guildName][displayName][eventType].timeFirst == 0) then
-                _history[guildName][displayName][eventType].timeFirst = timeStamp
-              end
+            if (timeJoined < timeStamp) then
+              _history[guildName][displayName].timeJoined = timeStamp
+            end
+              
+          else
+            _addon.core.createDisplayNameData(guildName, displayName)
+            _history[guildName][displayName].timeJoined = timeStamp  
+          end
+        end
+
+        _history[guildName]["lastScans"][category] = timeStamp
+      end
+      
+      -- Bankaktivitäten  
+      if (category == GUILD_HISTORY_BANK) then
+        if (eventType == GUILD_EVENT_BANKGOLD_ADDED) or (eventType == GUILD_EVENT_BANKGOLD_REMOVED) or (eventType == GUILD_EVENT_BANKITEM_ADDED) or (eventType == GUILD_EVENT_BANKITEM_REMOVED) then
+          local getData =  _addon.core.getData(eventType, displayName, guildName)
+                        
+          local timeFirst = getData[1]
+          local timeLast = getData[2]
+          local totalGold = getData[3]
+          local currentNPC = getData[4]
+          local previousNPC = getData[5]
+          
+    --      if (displayName == "@Shissu" or displayName == "Shissu" or displayName == "shissu" or displayName == "@shissu") then
+    --        d(displayName .. " " .. timeFirst .. " " .. timeLast .. " " .. totalGold)
+    --      end
+          
+          
+          if (timeLast < timeStamp) and (math.abs(timeLast - timeStamp) > 2) then
+            _addon.core.createDisplayNameData(guildName, displayName)
             
+            if _history[guildName][displayName][eventType] == nil then
+              _history[guildName][displayName][eventType] = {}
+            end                                             
+              
+            _history[guildName][displayName][eventType].total = totalGold + eventGold
+            _history[guildName][displayName][eventType].last = eventGold
+            _history[guildName][displayName][eventType].timeLast = timeStamp
+
+            -- seit NPC
+            if timeStamp > lastKiosk then
+              _history[guildName][displayName][eventType].currentNPC = currentNPC + eventGold 
+            end
+            
+          -- d(timeStamp)
+           -- d(previousKiosk)
+           -- d(lastKiosk)
+              
+            if timeStamp > previousKiosk and timeStamp < lastKiosk then
+              _history[guildName][displayName][eventType].previousNPC = previousNPC + eventGold 
+            end
+     
+            if (timeFirst == 0) then
+              _history[guildName][displayName][eventType].timeFirst = _history[guildName]["oldestEvents"] --timeStamp      
             end
           end
-  
-          _history[guildName]["lastScan"][category] = timeStamp
         end
-      end  
-    end
-  end
-end
-
-function _scanner.requestData()
-  local guildId = GetGuildId(_scanner.guildId)
-  local newPage
-
-  if (firstGuildScan) then
-    firstGuildScan = false
-    _scanner.createGuild(guildName)
-    _scanner.firstGuildScan = true
-    _scanner.openHistoryPages()
-  end
-
-  if (not newPage) then
-    _scanner.processEvents(guildId, category)
-    _scanner.scanNext()
-  end
-end
-
-function _scanner.HistoryResponseReceived(eventCode, guildId, category)
-  if (category ~= zos["History"]) and (category ~= zos["Bank"]) then return end
-  
-  _scanner.createGuild(GetGuildName(guildId))
-  
-  local lastScan = _history[GetGuildName(guildId)]["lastScan"][category]
-  if lastScan == nil then  
-    zo_callLater(_scanner.requestData, _scanner.scanInterval)   
-    --zo_callLater(_scanner.openHistoryPages, _scanner.scanInterval)
-    return
-  end
- 
-  local numEvents = GetNumGuildEvents(guildId, category)
-  local _, firstTime = GetGuildEventInfo(guildId, category, 1)
-  local _, lastTime = GetGuildEventInfo(guildId, category, numEvents)  
-  local timeStamp = GetTimeStamp()
-
-  if ((timeStamp - firstTime) > lastScan and (timeStamp  - lastTime) > lastScan) or (lastScan == 0) then
-    zo_callLater(_scanner.openHistoryPages, _scanner.scanInterval)
-  else
-    _scanner.processEvents(guildId, category)
-    _scanner.scanNext()
-  end
-end
-
-function _scanner.openHistoryPages() 
-  local historyPage = RequestGuildHistoryCategoryOlder(_scanner.guildId, _scanner.scanCategory)
-   
-  -- Keine weiteren Seiten, bzw. Daten vorhanden
-  if (not historyPage) then
-    if (GetNumGuilds() == _scanner.guildId) then
-      if GetNumGuilds() > 1 then
-        _scanner.guildId = 1  
+          
+        _history[guildName]["lastScans"][category] = timeStamp
       end
     end
-    
-    _scanner.processEvents(_scanner.guildId, _scanner.scanCategory)
-    _scanner.scanNext()
   end
 end
 
-function _scanner.scanNext()
-  if (_scanner.scanCategory == zos["History"]) then
-    _scanner.scan(_scanner.guildId, zos["Bank"])
+function _addon.core.historyResponseReceived(eventCode, guildId, category)
+  if (category ~= GUILD_HISTORY_GENERAL) and (category ~= GUILD_HISTORY_BANK) and guildId ~= nil then return end
+
+  local numEvents = GetNumGuildEvents(guildId, category)
+  local _, firstEventTime = GetGuildEventInfo(guildId, category, 1)
+  local _, lastEventTime = GetGuildEventInfo(guildId, category, numEvents)
+  local lastScan = _history[GetGuildName(guildId)]["lastScans"][category] or 0
+  local timeStamp = GetTimeStamp()
+
+  if ((timeStamp - firstEventTime) > lastScan and (timeStamp  - lastEventTime) > lastScan) or (lastScan == 0) then
+    zo_callLater(_addon.core.openHistoryPages, _addon.scanInterval)
   else
-    if _scanner.guildId == GetNumGuilds() and _scanner.firstGuildScan == true then
-      _scanner.firstGuildScan = false
-        d(blue .. "Shissu's " .. white  "Guild Tools: DONE")
-    end
+    _addon.core.processEvents(guildId, category)
+    _addon.core.scanNext()
+  end
+end
+
+function _addon.core.openHistoryPages()
+  local guildId = GetGuildId(_addon.guildId)
+
+  --local historyPage = RequestGuildHistoryCategoryNewest(guildId, _addon.scanCategory)
+  local historyPage = RequestGuildHistoryCategoryOlder(guildId, _addon.scanCategory)
+ -- local historyPage
+    
+  if (_addon.firstScan) then
+    _addon.firstScan = false
+    local guildName = GetGuildName(guildId)
       
-    if (_scanner.guildId < GetNumGuilds()) then
-      _scanner.scan(_scanner.guildId + 1, zos["History"])
+    _history[guildName] = _history[guildName] or {}
+    _history[guildName]["oldestEvents"] = _history[guildName]["oldestEvents"] or {}
+    _history[guildName]["lastScans"] = _history[guildName]["lastScans"] or {}    
+    
+    --local historyPage = RequestGuildHistoryCategoryOlder(guildId, _addon.scanCategory)
+  else
+   -- local historyPage = RequestGuildHistoryCategoryNewest(guildId, _addon.scanCategory) 
+  end
+
+  if (not historyPage) then          
+    --if (GetNumGuilds() > 0) then
+    --  if (GetNumGuilds() == _addon.guildId) then
+     --   _addon.guildId = 1
+     --   guildId = GetGuildId(_addon.guildId) 
+     -- end
+    --end
+    
+    _addon.core.processEvents(guildId, _addon.scanCategory)
+    _addon.core.scanNext()
+  end
+end
+
+function _addon.core.scanNext()
+  if (_addon.scanCategory == GUILD_HISTORY_GENERAL) then
+    _addon.core.scan(_addon.guildId, GUILD_HISTORY_BANK)
+  else               
+    if (_addon.firstGuildScan == true) then
+      local guildId = GetGuildId(_addon.guildId)
+      local guildName = GetGuildName(guildId)
+      
+      _addon.firstGuildScan = false
+      
+      d(blue.. "Shissu's" .. white .. "Guild Tools: " .. guildName .. " DONE")  
+    end
+
+    local numGuilds = GetNumGuilds() 
+    
+    if (_addon.guildId < numGuilds) then
+      _addon.core.scan(_addon.guildId + 1, GUILD_HISTORY_GENERAL)
     else
       EVENT_MANAGER:UnregisterForEvent(_addon.Name, EVENT_GUILD_HISTORY_RESPONSE_RECEIVED)
-      zo_callLater(_scanner.availableGuild, _scanner.checkGuildTimer)
+      zo_callLater(_addon.scanAvailableGuilds, _addon.scanGuild)
     end
   end
 end
 
-function _scanner.scan(guildId, category)
-  _scanner.guildId = GetGuildId(guildId)
-  _scanner.scanCategory = category        
+function _addon.core.scan(guildId, category)                                                    
+  _addon.guildId = GetGuildId(guildId)
+  _addon.scanCategory = category
+
+  local guildName = GetGuildName(guildId)  
   
-  local guildName = GetGuildName(guildId)
+  _addon.firstScan = true
 
   if (_history[guildName] == nil) then
-    d(blue.. "Shissu's" .. white .. "Guild Tools: " .. getString(ShissuScanner_scan1) .. ": " .. guildName .. " " .. getString(ShissuScanner_scan2))
-                              
-    _scanner.createGuild(guildName)
-    _scanner.firstGuildScan = true
+    d(blue.. "Shissu's " .. white .. "Guild Tools: " .. getString(ShissuScanner_scan1) .. ": " .. guildName .. " " .. getString(ShissuScanner_scan2))
+
+    _addon.firstGuildScan = true   
   end
 
-  zo_callLater(_scanner.openHistoryPages, _scanner.scanInterval)
-end 
-
+  zo_callLater(_addon.core.openHistoryPages, _addon.scanInterval)
+end
 
 -- Gilden vorhanden?
-function _scanner.availableGuild()            
-  if GetNumGuilds() > 0 then  
-    EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_HISTORY_RESPONSE_RECEIVED, _scanner.HistoryResponseReceived)
-    _scanner.scan(1, zos["History"])
+function _addon.core.scanAvailableGuilds()
+  local numGuilds = GetNumGuilds() 
+  
+  if (numGuilds > 0) then
+    EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_HISTORY_RESPONSE_RECEIVED, _addon.core.historyResponseReceived)
+    _addon.core.scan(1, GUILD_HISTORY_GENERAL)
   else
-
-    zo_callLater(_scanner.availableGuild, _scanner.checkGuildTimer)
+    zo_callLater(_addon.core.scanAvailableGuilds, _addon.scanGuild)
   end
+end
+
+function _addon.core.removeOldData2(guildName, displayName, eventType)
+  if _history[guildName] ~= nil then
+    if _history[guildName][displayName] ~= nil then
+      local newTable = _history[guildName][displayName][eventType]
+      
+      if (type(newTable) == "table") then
+        if (_history[guildName][displayName][eventType].timeFirst == 0) then _history[guildName][displayName][eventType].timeFirst = nil end
+        if (_history[guildName][displayName][eventType].timeLast == 0) then _history[guildName][displayName][eventType].timeLast= nil end
+        if (_history[guildName][displayName][eventType].total == 0) then _history[guildName][displayName][eventType].total = nil end  
+        if (_history[guildName][displayName][eventType].last == 0) then _history[guildName][displayName][eventType].last = nil end  
+        if (_history[guildName][displayName][eventType].currentNPC == 0) then _history[guildName][displayName][eventType].currentNPC = nil end  
+        if (_history[guildName][displayName][eventType].previousNPC == 0) then _history[guildName][displayName][eventType].previousNPC = nil end   
+        
+        local count = 0
+        for _ in pairs(_history[guildName][displayName][eventType]) do count = count + 1 end
+          
+        if count == 0 then
+          _history[guildName][displayName][eventType] = nil
+        end      
+      end
+    end
+  end  
+end
+
+function _addon.core.removeOldData()
+  if (_history.reduce == nil) then
+    for guildName, members in pairs(_history) do
+      local guildData = _history[guildName]
+        
+      d(blue.. "Shissu's " .. white .. "Guild Tools: SAVEVAR REDUCING " .. guildName)
+        
+      if (type(guildData) == "table") then
+        for displayName, memberData in pairs(guildData) do
+          if (type(memberData) == "table") then
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_REMOVED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_ADDED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_REMOVED)
+          end
+        end  
+      end
+    end
+      
+    _history.reduce = true
+  end 
 end
 
 -- * Initialisierung
@@ -343,7 +404,8 @@ function _addon.core.initialized()
   shissuGT.History = shissuGT.History or {}
   _history = shissuGT.History
   
-  zo_callLater(_scanner.availableGuild, 1000)
+  zo_callLater(_addon.core.removeOldData, 10000) 
+  zo_callLater(_addon.core.scanAvailableGuilds, _addon.scanInterval)
 end                               
   
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized

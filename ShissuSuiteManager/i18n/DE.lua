@@ -1,7 +1,7 @@
 -- Shissu Suite Manager
 -----------------------
 -- File: DE.lua
--- Last Update: 27.10.2016
+-- Last Update: 19.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -29,9 +29,15 @@ ZO_CreateStringId("SGT_Language3", "Ändert die Sprache von Elder Scrolls Online
 ZO_CreateStringId("SGT_Standard1", "Standard Befehle")
 
 ZO_CreateStringId("SGT_Standard2", "|cAFD3FF/rl|r - RELOADUI\n\n" .. 
-    "|cAFD3FF/helm|r - Helm ein-/ausblenden \n\n" .. 
+    "|cAFD3FF/helm|r - Helm ein-/ausblenden \n\n" ..
     "|cAFD3FF/on|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS1] .. "\n\n" .. 
     "|cAFD3FF/off|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS4] .. "\n\n" ..
     "|cAFD3FF/brb|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
     "|cAFD3FF/dnd|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
-    "|cAFD3FF/afk|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS2])
+    "|cAFD3FF/afk|r - Spielerstatus " .. EsoStrings[SI_PLAYERSTATUS2] .. "\n\n" ..
+    
+    "|cAFD3FFZufallszahl würfeln|r\n" ..
+    "Würfelt eine zufällige Zahl zwischen 1 und deiner Wunschzahl. Zusätzlich lässt sich die Sprachausgabe manipulieren." .. "\n\n" .. 
+    
+    "|cAFD3FF/dice|r [ZAHL] [de,en,fr,ru]" .. "\n\n" .. 
+    "|cAFD3FF/roll|r [ZAHL] [de,en,fr,ru]" .. "\n\n")

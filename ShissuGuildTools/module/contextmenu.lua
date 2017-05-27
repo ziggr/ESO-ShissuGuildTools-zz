@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: contextmenu.lua
--- Version: v1.0.6
--- Last Update: 06.03.2017
+-- Version: v1.0.8
+-- Last Update: 18.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -20,7 +20,7 @@ local blue = _globals["color"]["blue"]
 
 local _addon = {}
 _addon.Name	= "ShissuContextMenu"
-_addon.Version = "1.0.7"
+_addon.Version = "1.0.8"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuContextMenu))
 
@@ -183,12 +183,12 @@ function _addon.core.MailOnMouseUp(control, button)
     AddMenuItem(white .. getString(ShissuContextMenu_answer2), function() 
       SCENE_MANAGER:Show('mailSend') 
       ZO_MailSendToField:SetText(GetMailSender(control.dataEntry.data.mailId)) 
-      ZO_MailSendSubjectField:SetText("AW: " .. control.dataEntry.data.subject) 
+      ZO_MailSendSubjectField:SetText(getString(ShissuContextMenu_answer_prefix) .. ": " .. control.dataEntry.data.subject) 
     end) 
         
     AddMenuItem(white .. getString(ShissuContextMenu_forward), function() 
       SCENE_MANAGER:Show('mailSend') 
-      ZO_MailSendSubjectField:SetText("WG: " .. control.dataEntry.data.subject) 
+      ZO_MailSendSubjectField:SetText(getString(ShissuContextMenu_forward_prefix) .. ": " .. control.dataEntry.data.subject) 
       ZO_MailSendBodyField:SetText(ZO_MailInboxMessageBody:GetText()) 
     end)    
     

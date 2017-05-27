@@ -1,7 +1,7 @@
 -- Shissu Suite Manager
 -----------------------
--- File: FR.lua
--- Last Update: 27.10.2016
+-- File: EN.lua
+-- Last Update: 19.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -33,4 +33,10 @@ ZO_CreateStringId("SGT_Standard2", "|cAFD3FF/rl|r - RELOADUI\n\n" ..
     "|cAFD3FF/off|r - Player status " .. EsoStrings[SI_PLAYERSTATUS4] .. "\n\n" ..
     "|cAFD3FF/brb|r - Player status " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
     "|cAFD3FF/dnd|r - Player status " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
-    "|cAFD3FF/afk|r - Player status " .. EsoStrings[SI_PLAYERSTATUS2])
+    "|cAFD3FF/afk|r - Player status " .. EsoStrings[SI_PLAYERSTATUS2] ..
+    
+    "|cAFD3FFNumber dice|r\n" ..
+    "Dices a random number between 1 and your desired number. In addition, the speech output can be manipulated." .. "\n\n" .. 
+    
+    "|cAFD3FF/dice|r [NUMBER] [de,en,fr,ru]" .. "\n\n" .. 
+    "|cAFD3FF/roll|r [NUMBER] [de,en,fr,ru]" .. "\n\n")

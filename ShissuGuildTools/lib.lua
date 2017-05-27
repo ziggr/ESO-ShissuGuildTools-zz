@@ -39,7 +39,7 @@ function _lib.getKioskTime(which, additional, day)
 
   -- Anzahl der Wochen seit 01.01.1970
   local week = math.floor(currentTime / weekSeconds) + additional
-  local beginnKiosk = firstWeek + (weekSeconds * week)
+  local beginnKiosk = firstWeek + (weekSeconds * week) + 60 * 60
   
   -- Gebots Ende 
   if (which == 1) then
@@ -126,6 +126,32 @@ function _lib.RGBtoHex(r,g,b)
 
   return hexstring
 end
+
+function _lib.RGBtoHex2(colors)
+  local rgb = {colors[1]*255, colors[2]*255, colors[3]*255}
+  local hexstring = ""
+
+  for key, value in pairs(rgb) do
+    local hex = ""
+
+    while (value > 0)do
+      local index = math.fmod(value, 16) + 1
+      value = math.floor(value / 16)
+      hex = string.sub("0123456789ABCDEF", index, index) .. hex     
+    end
+
+    if(string.len(hex) == 0) then
+      hex = "00"
+    elseif(string.len(hex) == 1) then
+      hex = "0" .. hex
+    end
+
+    hexstring = hexstring .. hex
+  end
+
+  return hexstring
+end
+
 
 -- Dialogboxes
 function _lib.showDialog(dialogTitle, dialogText, callbackFunc, vars)

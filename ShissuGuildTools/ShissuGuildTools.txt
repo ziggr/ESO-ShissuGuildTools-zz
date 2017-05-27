@@ -6,8 +6,8 @@
 
 ; Author: @Shissu on EU-Server!
  
-## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.0.5.0b
-## APIVersion: 100018
+## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.1.1.14
+## APIVersion: 100019
 ## Author: |c779cff@Shissu|r [EU]
 ## SavedVariables: shissuGT
 ## DependsOn: ShissuSuiteManager
@@ -41,14 +41,5 @@ module/notifications.xml
 module/roster.lua
 module/scanner.lua
 module/chat.lua
-module/marker.lua
-module/marker.xml
-
-notimplemented/collectedData.xml
-notimplemented/collectedData.lua
 
 bindings.xml
-
-# Ext. Libraries
-libs\LibStub\LibStub.lua
-libs\libChat2\libChat2.lua
