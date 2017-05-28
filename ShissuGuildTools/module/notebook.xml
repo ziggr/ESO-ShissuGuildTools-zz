@@ -69,11 +69,11 @@
       	
     <!-- Mail Protokoll; nachdem Versenden von Massen-Emails -->
     <TopLevelControl name="SGT_MailProtocol" hidden="true" mouseEnabled="true" movable="true" clampedToScreen="true">
-      <Dimensions x="360" y="400" />
+      <Dimensions x="400" y="400" />
     	<Anchor point="CENTER" offsetX="100" offsetY="100"/> 
     	<Controls>
   			<Label name="$(parent)_Version" font="$(ANTIQUE_FONT)|12" wrapMode="ELLIPSIS" verticalAlignment="RIGHT" horizontalAlignment="RIGHT" text="Shissu's Guild Tools">
-          <Dimensions x="350" />
+          <Dimensions x="390" />
   				<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" offsetX="0" offsetY="0" />
   			</Label>
         

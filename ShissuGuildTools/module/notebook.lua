@@ -335,30 +335,6 @@ function _addon.core.notebook()
   _addon.core.getColor()
 
   local color = {}
-  
-  if (shissuGT["ShissuColor"] ~= nil) then
-    for i = 1, 5 do
-      if (shissuGT["ShissuColor"]["c" .. i] ~= nil) then
-        color[i] = {shissuGT["ShissuColor"]["c" .. i][1], shissuGT["ShissuColor"]["c" .. i][2], shissuGT["ShissuColor"]["c" .. i][3]} 
-      end
-    end
-  end
-
-  _ui.button1 = _SGT.createFlatButton("SGT_Notebook_NewColorButton1", SGT_Notebook_NoteTitle, {0, 40}, {20, 30}, "1", BOTTOMLEFT, color[1])    
-  _ui.button2 = _SGT.createFlatButton("SGT_Notebook_NewColorButton2", SGT_Notebook_NewColorButton1, {30, 0}, {20, 30}, "2", TOPRIGHT, color[2])   
-  _ui.button3 = _SGT.createFlatButton("SGT_Notebook_NewColorButton3", SGT_Notebook_NewColorButton2, {30, 0}, {20, 30}, "3", TOPRIGHT, color[3])   
-  _ui.button4 = _SGT.createFlatButton("SGT_Notebook_NewColorButton4", SGT_Notebook_NewColorButton3, {30, 0}, {20, 30}, "4", TOPRIGHT, color[4])   
-  _ui.button5 = _SGT.createFlatButton("SGT_Notebook_NewColorButton5", SGT_Notebook_NewColorButton4, {30, 0}, {20, 30}, "5", TOPRIGHT, color[5])   
-  _ui.button6 = _SGT.createFlatButton("SGT_Notebook_NewColorButton6", SGT_Notebook_NewColorButton5, {30, 0}, {20, 30}, white .. "W", TOPRIGHT)  
-  _ui.button7 = _SGT.createFlatButton("SGT_Notebook_NewColorButton7", SGT_Notebook_NewColorButton6, {50, 0}, {40, 30}, white .. "ANY", TOPRIGHT)   
-  
-  _ui.button1:SetHandler("OnMouseUp", function() _addon.core.selectColor(1) end) 
-  _ui.button2:SetHandler("OnMouseUp", function() _addon.core.selectColor(2) end)
-  _ui.button3:SetHandler("OnMouseUp", function() _addon.core.selectColor(3) end)
-  _ui.button4:SetHandler("OnMouseUp", function() _addon.core.selectColor(4) end)
-  _ui.button5:SetHandler("OnMouseUp", function() _addon.core.selectColor(5) end)
-  _ui.button6:SetHandler("OnMouseUp", function() _addon.core.selectColor("W") end)
-  _ui.button7:SetHandler("OnMouseUp", function() _addon.core.selectColor("ANY") end)
     
   SGT_Notebook_NoteText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
   SGT_Notebook_NoteTitleText:SetHandler("OnFocusGained", function(self) _note.lastFocus = self end)
