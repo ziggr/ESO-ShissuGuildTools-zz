@@ -8,12 +8,12 @@
 
 -- Released under terms in license accompanying this file.
 -- Distribution without license is prohibited!
- 
+
 local _color = {
   blue = "|cAFD3FF",
   white = "|ceeeeee",
-}              
-            
+}
+
 -- General
 ZO_CreateStringId("ShissuGeneral", GetString(SI_HOUSEPERMISSIONOPTIONSCATEGORIES1))
 ZO_CreateStringId("Shissu_friend", GetString(SI_MAIN_MENU_CONTACTS))
@@ -38,8 +38,8 @@ ZO_CreateStringId("ShissuModule_middleMouse", "СКМ")
 
 -- Modules
 ----------
-  
--- Module: ShissuWelcomeInvite                                                                                             
+
+-- Module: ShissuWelcomeInvite
 ZO_CreateStringId("ShissuWelcomeInvite", "Приветственное сообщение")
 ZO_CreateStringId("ShissuWelcomeDesc1", "Вы можете использовать эти заготовки, чтобы создать приветственное сообщение для новых участников")
 ZO_CreateStringId("ShissuWelcomeDesc2", "Имя игрока")
@@ -58,7 +58,7 @@ ZO_CreateStringId("ShissuTeleporter_legends2", "Друзья")
 ZO_CreateStringId("ShissuTeleporter_legends3", "Члены группы")
 
 -- Modul: ShissuNotifications
-ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
+ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS))
 ZO_CreateStringId("ShissuNotifications_info", "Заметка")
 ZO_CreateStringId("ShissuNotifications_mail", "Удалить письмо/сообщение")
 ZO_CreateStringId("ShissuNotifications_inSight", "Согильдейцы в поле зрения?")
@@ -121,7 +121,7 @@ ZO_CreateStringId("ShissuMemberStatus", "Статус членов гильди�
 ZO_CreateStringId("ShissuContextMenu_memberStatus", "Статусы игроков (В сети/Не бесп./АФК/Не в сети)")
 ZO_CreateStringId("ShissuContextMenu_added", "Присоединиться")
 ZO_CreateStringId("ShissuContextMenu_removed", "Покинули / Удалены")
-                                                        
+
 -- Modul: ShissuGuildHome
 ZO_CreateStringId("ShissuGuildHome", "Гильдия: " .. GetString(SI_WINDOW_TITLE_GUILD_HOME))
 ZO_CreateStringId("ShissuGuildHome_kiosk", "Время до следующего найма торговца")
@@ -179,12 +179,12 @@ ZO_CreateStringId("ShissuNotebookMail_invite", "Пригласить игрок�
 ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Вы действительно хотите исключить игроков из списка или выбранных вами игроков из гильдии? Исключённые игроки получат письмо от вас.")
 ZO_CreateStringId("ShissuNotebookMail_demoteKick", "Вы действительно хотите понизить игроков из списка или выбранных вами игроков из гильдии?")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Тема")
-ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Прогресс")       
-ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Игнор")       
-ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Ящик заполнен")       
-ZO_CreateStringId("ShissuNotebookMail_protocol", "Протокол рассылки")       
+ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Прогресс")
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Игнор")
+ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Ящик заполнен")
+ZO_CreateStringId("ShissuNotebookMail_protocol", "Протокол рассылки")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Закрыть окно" .. _color.white .. "\nЗакрытие окна завершит рассылку/исключение.")
-ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
+ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Письмо не отправлено")
 
 ZO_CreateStringId("ShissuNotebookMail_Filter", "Фильтр")
@@ -231,7 +231,7 @@ ZO_CreateStringId("ShissuChat_time", "Время")
 ZO_CreateStringId("ShissuChat_sound", "Сигнал (Личное сообщение)")
 ZO_CreateStringId("ShissuChat_guilds", "Согильдейцы")
 ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
-ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                       
+ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))
 ZO_CreateStringId("ShissuChat_lvl", "Уровень")
 ZO_CreateStringId("ShissuChat_char", "Имя персонажа")
 ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
@@ -244,7 +244,7 @@ ZO_CreateStringId("ShissuChat_guildInfo", "Информация гильдии")
 ZO_CreateStringId("ShissuChat_guildWhich", "Для каких гильдий выводить дополнительную информацию?")
 ZO_CreateStringId("ShissuChat_guildNames1", "Названия")
 ZO_CreateStringId("ShissuChat_guildNames2", "Как гильдии отображаются в чате?")
-     
+
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Отметки")
 ZO_CreateStringId("ShissuMarks_title", "Отметки Монстров (NPC) и Игроков")
@@ -254,7 +254,7 @@ ZO_CreateStringId("ShissuMarks_heal", "Целитель")
 ZO_CreateStringId("ShissuMarks_observe", "Наблюдение")
 ZO_CreateStringId("ShissuMarks_all", "Всё, что вы видите")
 ZO_CreateStringId("ShissuMarks_confirmDel", "Удалить список?")
-ZO_CreateStringId("ShissuMarks_confirmDel2", "Вы уверены, что хотите удалить всё содержимое списка?")  
+ZO_CreateStringId("ShissuMarks_confirmDel2", "Вы уверены, что хотите удалить всё содержимое списка?")
 ZO_CreateStringId("ShissuMarks_add", "Монстр (NPC) / Игрок")
 ZO_CreateStringId("ShissuMarks_add2", "Какое имя у монстра/игрока?")
 ZO_CreateStringId("ShissuMarks_add3", "Монстр / игрок в группе")
@@ -274,4 +274,4 @@ ZO_CreateStringId("ShissuMarks_autoKickInfo3", "- При вступлении в
 ZO_CreateStringId("ShissuMarks_found", "в гильдии.")
 ZO_CreateStringId("ShissuMarks_found2", "Игрок был исключён (если имеются права).")
 ZO_CreateStringId("ShissuMarks_rightItem", "Удалить игрока/монстра")
-ZO_CreateStringId("ShissuMarks_rightItem2", "ПКМ по имени")           
+ZO_CreateStringId("ShissuMarks_rightItem2", "ПКМ по имени")

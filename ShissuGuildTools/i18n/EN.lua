@@ -7,12 +7,12 @@
 
 -- Released under terms in license accompanying this file.
 -- Distribution without license is prohibited!
- 
+
 local _color = {
   blue = "|cAFD3FF",
   white = "|ceeeeee",
-}              
-            
+}
+
 -- General
 ZO_CreateStringId("ShissuGeneral", GetString(SI_HOUSEPERMISSIONOPTIONSCATEGORIES1))
 ZO_CreateStringId("Shissu_friend", GetString(SI_MAIN_MENU_CONTACTS))
@@ -35,8 +35,8 @@ ZO_CreateStringId("ShissuModule_leftMouse", "Left mousekey")
 
 -- Modules
 ----------
-  
--- Module: ShissuWelcomeInvite                                                                                             
+
+-- Module: ShissuWelcomeInvite
 ZO_CreateStringId("ShissuWelcomeInvite", "Welcome message")
 ZO_CreateStringId("ShissuWelcomeDesc1", "You can use the following placeholders to create welcome messages")
 ZO_CreateStringId("ShissuWelcomeDesc2", "Name of the player")
@@ -45,7 +45,7 @@ ZO_CreateStringId("ShissuWelcomeDesc4", "Separation of different greetings (The 
 
 
 -- Modul: ShissuNotifications
-ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
+ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS))
 ZO_CreateStringId("ShissuNotifications_info", "Note")
 ZO_CreateStringId("ShissuNotifications_mail", "Delete email / message")
 ZO_CreateStringId("ShissuNotifications_inSight", "Guild member in sight field?")
@@ -73,7 +73,7 @@ ZO_CreateStringId("ShissuHistory_extern", "External")
 ZO_CreateStringId("ShissuHistory_trader", "since trader")
 ZO_CreateStringId("ShissuHistory_pages", "open all pages")
 ZO_CreateStringId("ShissuHistory_player", GetString(SI_PLAYER_MENU_PLAYER))
-ZO_CreateStringId("ShissuHistory_set1", "Bank: Deposits and withdrawals (Gold + items)")                      
+ZO_CreateStringId("ShissuHistory_set1", "Bank: Deposits and withdrawals (Gold + items)")
 ZO_CreateStringId("ShissuHistory_set2", "Sales: sales, non-guild members (external), 3.5% stake")
 ZO_CreateStringId("ShissuHistory_opt", "OPTIONS")
 ZO_CreateStringId("ShissuHistory_last", "last week")
@@ -97,7 +97,7 @@ ZO_CreateStringId("ShissuContextMenu_answer_prefix", "Re")
 ZO_CreateStringId("ShissuMemberStatus", "Guild: Members Status")
 ZO_CreateStringId("ShissuContextMenu_added", "Joined")
 ZO_CreateStringId("ShissuContextMenu_removed", "left / kicked")
-                                                        
+
 -- Modul: ShissuGuildHome
 ZO_CreateStringId("ShissuGuildHome", "Guild: " .. GetString(SI_WINDOW_TITLE_GUILD_HOME))
 ZO_CreateStringId("ShissuGuildHome_kiosk", "Time to the next trader offer")
@@ -155,12 +155,12 @@ ZO_CreateStringId("ShissuNotebookMail_invite", "Invite players")
 ZO_CreateStringId("ShissuNotebookMail_confirmKick", "Do you want to remove the players in the list, or your selection from the guild? Players who remove them will receive an email from you.")
 ZO_CreateStringId("ShissuNotebookMail_demoteKick", "Do you want to degrade the players in the list, or your selection from the guild?")
 ZO_CreateStringId("ShissuNotebookMail_splashSubject", "Subject")
-ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")       
-ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")       
-ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postbox full")       
-ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")       
+ZO_CreateStringId("ShissuNotebookMail_splashProgress", "Progress")
+ZO_CreateStringId("ShissuNotebookMail_protocolIgnore", "Ignored")
+ZO_CreateStringId("ShissuNotebookMail_protocolFull", "Postbox full")
+ZO_CreateStringId("ShissuNotebookMail_protocol", "Email protocol")
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Close the window" .. _color.white .. "\nClosing completes sending / kicking.")
-ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
+ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Message incomplete")
 
 ZO_CreateStringId("ShissuNotebookMail_Filter", "Filter")
@@ -186,7 +186,7 @@ ZO_CreateStringId("ShissuRoster_yesterday", "yesterday")
 ZO_CreateStringId("ShissuRoster_sinceKiosk", "since trader")
 ZO_CreateStringId("ShissuRoster_last", "last")
 ZO_CreateStringId("ShissuRoster_total", "total")
-ZO_CreateStringId("ShissuRoster_sum", "Total")  
+ZO_CreateStringId("ShissuRoster_sum", "Total")
 ZO_CreateStringId("ShissuRoster_colAdd", "Show additional columns")
 ZO_CreateStringId("ShissuRoster_colAdd2", "After a change you have to reloaded the interface.")
 ZO_CreateStringId("ShissuRoster_colChar", "Column: Character")

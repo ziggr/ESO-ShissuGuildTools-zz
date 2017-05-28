@@ -3,22 +3,22 @@
   <Font name="SGT_LINEFONT" font="$(STONE_TABLET_FONT)|30|soft-shadow-thick" />
   <Font name="SGT_MINIFONT" font="$(STONE_TABLET_FONT)|12|soft-shadow-thick" />
   <Font name="SGT_BUTTONFONT" font="$(STONE_TABLET_FONT)|14|soft-shadow-thick" />
-  
-	<Controls> 
+
+	<Controls>
 		<!-- ChatButton -->
 		<Button name="SGT_ZO_ToogleButton" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
         	<Anchor point="RIGHT" relativeTo="ZO_ChatWindowOptions" relativePoint="RIGHT" offsetX="36" offsetY="0" />
         	<Dimensions x="48" y="48" />
           <Textures normal="/esoui/art/icons/guildranks/guild_indexicon_misc01_up.dds" mouseOver="/esoui/art/icons/guildranks/guild_indexicon_misc01_up.dds" />
-		</Button> 	
-    
-    
-    
-    
-    
-    
-    
-    
+		</Button>
+
+
+
+
+
+
+
+
           <TopLevelControl name="SGT_ExtraBackground" allowBringToTop="false" virtual="true">
       <Dimensions x="290" y="750" />
       <Controls>
@@ -32,16 +32,16 @@
         </Texture>
       </Controls>
     </TopLevelControl>
-    
-    
-    
-    
-    
-    
-    
-	</Controls>
-  
 
-    
+
+
+
+
+
+
+	</Controls>
+
+
+
 </GuiXml>
 
