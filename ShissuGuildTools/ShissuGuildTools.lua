@@ -1,8 +1,8 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.1.1.14
--- Last Update: 21.05.2017
+-- Version: v3.1.2.0
+-- Last Update: 25.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -45,7 +45,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.1.1.14"
+_addon.Version = "3.1.2.0"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}

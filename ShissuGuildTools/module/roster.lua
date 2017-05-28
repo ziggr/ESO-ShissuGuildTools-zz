@@ -2,7 +2,7 @@
 --------------------------------
 -- File: roster.lua
 -- Version: v2.0.0
--- Last Update: 20.05.2017
+-- Last Update: 25.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -143,8 +143,7 @@ function _addon.core.createButton(name, var, offsetX, offsetY, parent)
     
     _roster.refreshFilters()
   end)
-  
-  --ShissuGT.Lib.SetToolTip(button, "Roster", var)
+
   ZO_Tooltips_HideTextTooltip()
    
   return button

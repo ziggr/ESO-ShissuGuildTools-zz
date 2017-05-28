@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: scanner.lua
--- Version: v1.3.3
--- Last Update: 21.05.2017
+-- Version: v1.3.6
+-- Last Update: 25.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -38,8 +38,8 @@ function _addon.core.getData(eventType, displayName, guildName)
         timeFirst = _history[guildName][displayName][eventType].timeFirst or 0
         timeLast = _history[guildName][displayName][eventType].timeLast or 0                        
         totalGold = _history[guildName][displayName][eventType].total or 0
-        totalGold = _history[guildName][displayName][eventType].currentNPC or 0
-        totalGold = _history[guildName][displayName][eventType].previousNPC or 0
+        currentNPC = _history[guildName][displayName][eventType].currentNPC or 0
+        previousNPC = _history[guildName][displayName][eventType].previousNPC or 0
       end
     end
   end
@@ -208,16 +208,17 @@ function _addon.core.processEvents(guildId, category)
           local currentNPC = getData[4]
           local previousNPC = getData[5]
           
+    --      if (displayName == "@Shissu" or displayName == "Shissu" or displayName == "shissu" or displayName == "@shissu") then
+    --        d(displayName .. " " .. timeFirst .. " " .. timeLast .. " " .. totalGold)
+    --      end
+          
+          
           if (timeLast < timeStamp) and (math.abs(timeLast - timeStamp) > 2) then
             _addon.core.createDisplayNameData(guildName, displayName)
             
-            if (diplayName == "@Shissu") then
-              d(_history[guildName][displayName][eventType])
-            end  
-            
             if _history[guildName][displayName][eventType] == nil then
               _history[guildName][displayName][eventType] = {}
-            end
+            end                                             
               
             _history[guildName][displayName][eventType].total = totalGold + eventGold
             _history[guildName][displayName][eventType].last = eventGold
@@ -237,7 +238,7 @@ function _addon.core.processEvents(guildId, category)
             end
      
             if (timeFirst == 0) then
-              _history[guildName][displayName][eventType].timeFirst = timeStamp      
+              _history[guildName][displayName][eventType].timeFirst = _history[guildName]["oldestEvents"] --timeStamp      
             end
           end
         end
