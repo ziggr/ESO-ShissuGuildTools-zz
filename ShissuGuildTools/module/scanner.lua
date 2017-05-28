@@ -25,7 +25,7 @@ _addon.firstScan = true
 _addon.scanCategory = GUILD_HISTORY_GENERAL
 _addon.core = {}
 
-function _addon.core.getData(eventType, displayName)
+function _addon.core.getData(eventType, displayName, guildName)
   local timeFirst = 0  
   local timeLast = 0                        
   local totalGold = 0
@@ -200,7 +200,7 @@ function _addon.core.processEvents(guildId, category)
       -- Bankaktivitäten  
       if (category == GUILD_HISTORY_BANK) then
         if (eventType == GUILD_EVENT_BANKGOLD_ADDED) or (eventType == GUILD_EVENT_BANKGOLD_REMOVED) or (eventType == GUILD_EVENT_BANKITEM_ADDED) or (eventType == GUILD_EVENT_BANKITEM_REMOVED) then
-          local getData =  _addon.core.getData(eventType, displayName)
+          local getData =  _addon.core.getData(eventType, displayName, guildName)
                         
           local timeFirst = getData[1]
           local timeLast = getData[2]
@@ -210,9 +210,16 @@ function _addon.core.processEvents(guildId, category)
           
           if (timeLast < timeStamp) and (math.abs(timeLast - timeStamp) > 2) then
             _addon.core.createDisplayNameData(guildName, displayName)
+            
+            if (diplayName == "@Shissu") then
+              d(_history[guildName][displayName][eventType])
+            end  
+            
+            if _history[guildName][displayName][eventType] == nil then
+              _history[guildName][displayName][eventType] = {}
+            end
               
-            _history[guildName][displayName][eventType] = _history[guildName][displayName][eventType] or {}
-            _history[guildName][displayName][eventType] .total = totalGold + eventGold
+            _history[guildName][displayName][eventType].total = totalGold + eventGold
             _history[guildName][displayName][eventType].last = eventGold
             _history[guildName][displayName][eventType].timeLast = timeStamp
 
@@ -263,7 +270,8 @@ function _addon.core.openHistoryPages()
 
   --local historyPage = RequestGuildHistoryCategoryNewest(guildId, _addon.scanCategory)
   local historyPage = RequestGuildHistoryCategoryOlder(guildId, _addon.scanCategory)
-  
+ -- local historyPage
+    
   if (_addon.firstScan) then
     _addon.firstScan = false
     local guildName = GetGuildName(guildId)
@@ -271,6 +279,10 @@ function _addon.core.openHistoryPages()
     _history[guildName] = _history[guildName] or {}
     _history[guildName]["oldestEvents"] = _history[guildName]["oldestEvents"] or {}
     _history[guildName]["lastScans"] = _history[guildName]["lastScans"] or {}    
+    
+    --local historyPage = RequestGuildHistoryCategoryOlder(guildId, _addon.scanCategory)
+  else
+   -- local historyPage = RequestGuildHistoryCategoryNewest(guildId, _addon.scanCategory) 
   end
 
   if (not historyPage) then          

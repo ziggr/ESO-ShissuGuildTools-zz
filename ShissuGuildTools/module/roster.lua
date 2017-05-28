@@ -379,7 +379,7 @@ function _addon.core.buildTooltip(guildName, displayName, tooltip, eventType, ti
     if (tooltip ~= blue .. displayName .. white .. "\n") then
       tooltip = tooltip .. "\n\n" .. titleText ..  white
     else
-      tooltip = tooltip .. titleText .. white
+      tooltip = tooltip .. "\n" .. titleText .. white
     end
   end  
     
