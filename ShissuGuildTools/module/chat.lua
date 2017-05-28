@@ -1,7 +1,7 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: color.lua
--- Version: v2.0.0
+-- Version: v2.0.1
 -- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
@@ -20,7 +20,7 @@ local RGBtoHex = _SGT.RGBtoHex2
  
 local _addon = {}
 _addon.Name	= "ShissuChat2"
-_addon.Version = "2.0.0"
+_addon.Version = "2.0.1"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuChat))             
 
@@ -151,7 +151,6 @@ function _addon.core.createSettingMenu()
     tooltip = getString(ShissuChat_timeStampFormatTT),
     getFunc = _addon.settings["timeStampFormat"],
     setFunc = function(value)
-      d(value)
       _addon.settings["timeStampFormat"] = value
     end,
   }  
@@ -532,7 +531,9 @@ function _addon.core.fromLink(messageType, fromName, isCS, fromDisplayName)
   
   -- Gruppenanführer???
 	if (messageType == CHAT_CHANNEL_PARTY and _addon.settings["partyLead"]) then
-    newFrom = "|c" .. RGBtoHex(_addon.settings["partyLeadColor"]) .. newFrom .. "|r"
+    if zo_strformat(SI_UNIT_NAME, fromName) == GetUnitName(GetGroupLeaderUnitTag()) then
+      newFrom = "|c" .. RGBtoHex(_addon.settings["partyLeadColor"]) .. newFrom .. "|r"
+    end
   end 
   
 	return newFrom
@@ -607,7 +608,7 @@ function _addon.core.createLinkURL(text)
 end
 
 function createTimestamp()
- d(_addon.core.createTimestamp())
+ --d(_addon.core.createTimestamp())
 end
           
 function _addon.core.createTimestamp()
@@ -755,7 +756,7 @@ function _addon.core.formatMessage(messageType, fromName, text, isFromCustomerSe
 
     if (_addon.settings["alliance"] and guildAlliance ~= nil) then
       additionalInfo = additionalInfo .. guildAlliance
-      d(guildAlliance)
+      --d(guildAlliance)
     end 
     
     if (_addon.settings["rank"] and guildRang ~= nil)  then
@@ -902,7 +903,6 @@ function _addon.core.startModule()
   -- Gruppenwechsel; automatischer Wechsel
 	EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GROUP_MEMBER_JOINED, _addon.core.onGroupMemberJoined)
 	EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GROUP_MEMBER_LEFT, _addon.core.onGroupMemberLeft)
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.chatMessageChannel)
   
   -- Formatierung der Textausgaben
   ZO_ChatSystem_AddEventHandler(EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.formatMessage)
@@ -983,6 +983,7 @@ function _addon.core.initialized()
   --_addon.core.startModule()
   _addon.core.createSettingMenu()
   
+  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.chatMessageChannel)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_PLAYER_ACTIVATED, _addon.core.startModule)
 end                               
 

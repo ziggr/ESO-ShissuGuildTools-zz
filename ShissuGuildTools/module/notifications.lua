@@ -1,14 +1,14 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notifications.lua
--- Version: v2.0.0
+-- Version: v2.0.1
 -- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 local _addon = {}
 _addon.Name	= "ShissuNotifications"
-_addon.Version = "2.0.0"
+_addon.Version = "2.0.1"
 _addon.core = {}
 
 local _globals = Shissu_SuiteManager._globals
@@ -461,9 +461,10 @@ function _addon.core.memberInSight(_, name)
 end    
 
 function _addon.core.memberRankChanged(_, guildId, displayName, rankIndex)
-  local guildId = GetGuildId(guildId)
+  --local guildId = GetGuildId(guildId)
   local guildName = GetGuildName(guildId)
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
+  
   local rankName = GetFinalGuildRankName(guildId, rankIndex)
   local rankIcon = zo_iconFormat(GetGuildRankLargeIcon(GetGuildRankIconIndex(guildId, rankIndex)), 24, 24)  
 
@@ -486,7 +487,7 @@ function _addon.core.memberRankChanged(_, guildId, displayName, rankIndex)
 end
 
 function _addon.core.memberNoteChanged(_, guildId, displayName, note)
-  local guildId = GetGuildId(guildId)
+ -- local guildId = GetGuildId(guildId)
   local guildName = GetGuildName(guildId)
   
   if _addon.settings["memberNote"] == true then  
@@ -501,7 +502,7 @@ end
 function _addon.core.leftGuild(_, guildId, guildName)
   if _addon.settings["guildKicked"] == false then return end
   
-  local guildId = GetGuildId(guildId)
+ -- local guildId = GetGuildId(guildId)
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
     
   _addon.core.createNotif(
@@ -513,7 +514,7 @@ end
 function _addon.core.joinGuild(_, guildId, guildName)
   if _addon.settings["guildJoined"] == false then return end
   
-  local guildId = GetGuildId(guildId)
+--  local guildId = GetGuildId(guildId)
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
     
   _addon.core.createNotif(
