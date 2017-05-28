@@ -917,6 +917,7 @@ function SGT_GuildRosterManager:BuildMasterList()
   _addon.core.originalRosterBuildMasterList(self)
   
   local guildId = GUILD_ROSTER_MANAGER.guildId
+  guildId = GetGuildId(guildId)
       
   for i = 1, #self.masterList do
     local data = self.masterList[i]
@@ -959,11 +960,15 @@ function SGT_GuildRosterManager:BuildMasterList()
     local goldDeposit = 0
     local goldTooltip = ""
 
+    -- ID EXISTIERT
+    -- GILDENNAME EXISTIERT
+
     if _addon.settings["colGold"] then
       if (_history) then
         if (_history[guildName]) then 
-          if (_history[guildName][displayName]) then
-            -- Heute
+  
+          if (_history[guildName][displayName]) then   
+          -- Heute
             if (_addon.settings["gold"] == getString(ShissuRoster_today)) then  
               if ( _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast > _addon.core.getDay()) then
                 goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last

@@ -2,7 +2,7 @@ local _addon = {}
 
 _addon.Name = "ShissuSuiteManager"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee SuiteManager"
-_addon.Version = "1.4.2"
+_addon.Version = "1.5.0"
 
 _addon._lib = {}
 _addon._addons = {}

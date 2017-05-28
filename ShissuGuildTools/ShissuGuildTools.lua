@@ -1,17 +1,16 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.1.0.0
--- Last Update: 04.05.2017
+-- Version: v3.1.0.6
+-- Last Update: 13.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 --[[
-  Chat Update 2.0.0
-  *****************  
-  - EDIT: Entfernung libChat
-  - EDIT: Überarbeitung einzelner Funktionen / Entfernung von nicht mehr benötigte Funktionen
-
+  v3.1.0.3
+  ********
+  - Chat Modul lässt sich deaktiveren
+  - Charakternamen lassen sich richtig anzeigen  
 ]]
 
 local _globals = Shissu_SuiteManager._globals
@@ -24,13 +23,19 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.1.0.0"
+_addon.Version = "3.1.0.6"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
 _addon.lib = {}
 
 _addon.active = {}
+
+-- SuiteManager NEW GUILD CHECKBODY CONTROL
+-- SETTINGS: IMPLEMENTED NEW GUILD CHECKBOXES
+-- CHAT: URL FIX, SMALLER CODE + more as only TLD
+-- CHAT: CORRECT SOUND, +1^^
+-- CHARNAME IN WHISPER, GUILD MODE
 
 local _lib = Shissu_SuiteManager._lib
 
@@ -54,7 +59,6 @@ local _module = {}
 
 activeNotifications = {}
 
---_memberList = {}
 _SGTcharacterList = {}
 _SGTaccountList = {}
 
@@ -240,7 +244,7 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     -- Variable Module
     _addon.loadModule(ShissuAutoAFK, "ShissuAutoAFK")
     _addon.loadModule(ShissuNotifications, "ShissuNotifications")
-    _addon.loadModule(ShissuChat, "ShissuChat") 
+    _addon.loadModule(ShissuChat, "ShissuChat2") 
     _addon.loadModule(ShissuHistory, "ShissuHistory")  
     _addon.loadModule(ShissuRoster, "ShissuRoster")   
     _addon.loadModule(ShissuGuildHome, "ShissuGuildHome")
@@ -251,9 +255,7 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     _addon.loadModule(ShissuWelcomeInvite, "ShissuWelcomeInvite")
     _addon.loadModule(ShissuNotebook, "ShissuNotebook") 
     _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
-    
-    _addon.loadModule(ShissuNotebook, "ShissuChat2") 
-    
+
     --_addon.loadModule(ShissuRoster, "ShissuCollectedData")  
                                   
     local checkSetting = _addon.checkSetting
@@ -261,6 +263,8 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     if checkSetting("ShissuRoster") then
       _addon.loadModule(ShissuScanner, "ShissuScanner")
     end
+    
+    _addon.loadModule(ShissuScanner2, "ShissuScanner2")
     
     if checkSetting("ShissuNotebook") then
       _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
@@ -363,7 +367,7 @@ Shissu_SuiteManager._bindings[_addon.Name].teleport = function()
       SGT_Teleport:SetHidden(true)
     end
   end
-end    
+end                                  
 
 -- /script checkGoldDeposits("Tamrilando", 2000, true)
 -- /script checkGoldDeposits("Tamrilando", 2500)

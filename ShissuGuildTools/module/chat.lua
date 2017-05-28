@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
--- File: color.lua
--- Version: v2.0.1
--- Last Update: 04.05.2017
+-- File: chat.lua
+-- Version: v2.0.11
+-- Last Update: 13.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -20,7 +20,7 @@ local RGBtoHex = _SGT.RGBtoHex2
  
 local _addon = {}
 _addon.Name	= "ShissuChat2"
-_addon.Version = "2.0.1"
+_addon.Version = "2.0.11"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuChat))             
 
@@ -28,9 +28,11 @@ _addon.panel = _setPanel(getString(ShissuChat), _addon.fN, _addon.Version)
 
 _addon.controls = {}
 
+_addon.enabled = false
+
 _addon.settings = {
-  ["hideText"] = true,
-  ["brackets"] = true,
+  ["hideText"] = true,                                                                          
+  ["brackets"] = true,                                  
   ["nameFormat"] = 3,
   ["registerTab"] = 1,
   ["channel"] = "/zone",
@@ -250,7 +252,7 @@ function _addon.core.createSettingMenu()
     items = sounds,
     getFunc = _addon.settings["whisperSound"],
     setFunc = function(_, value)
-      _addon.settings["whisperSound"] = value
+      _addon.settings["whisperSound"] = value + 1
       PlaySound(_sounds[value+1])
     end,
   } 
@@ -338,25 +340,11 @@ function _addon.core.createSettingMenu()
   }                     
   
   controls[#controls+1] = {
-    type = "description",
-    text = blue .. getString(ShissuChat_guildWhich),
-  }  
-   
-  local numGuild = GetNumGuilds()
-  
-  for guildId = 1, numGuild do
-    local guildName = GetGuildName(guildId)
+    type = "guildCheckbox",
+    name = blue .. getString(ShissuChat_guildWhich),
+    saveVar = _addon.settings["info"],
+  }   
 
-    controls[#controls+1] = {
-      type = "checkbox",
-      name = guildName,
-      getFunc = _addon.settings["info"][guildName],
-      setFunc = function(_, value)
-        _addon.settings["info"][guildName] = value 
-      end,
-    }     
-  end
-  
   -- Automatischer Wechsel
   controls[#controls+1] = {
     type = "title",
@@ -386,27 +374,12 @@ function _addon.core.createSettingMenu()
       _addon.settings["autoZone"] = value 
     end,
   }   
-  
-  controls[#controls+1] = {
-    type = "description",
-    text = blue .. getString(ShissuChat_guildchan),
-  }   
-  
-  local numGuild = GetNumGuilds()
-  
-  for guildId = 1, numGuild do
-    guildId = GetGuildId(guildId)
-    local guildName = GetGuildName(guildId)
 
-    controls[#controls+1] = {
-      type = "checkbox",
-      name = guildName,
-      getFunc = _addon.settings["auto"][guildName],
-      setFunc = function(_, value)
-        _addon.settings["auto"][guildName] = value 
-      end,
-    }     
-  end
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    name = blue .. getString(ShissuChat_guildchan),
+    saveVar = _addon.settings["auto"],
+  }     
 
   controls[#controls+1] = {
     type = "title",
@@ -417,6 +390,8 @@ function _addon.core.createSettingMenu()
     type = "description",
     text = blue .. getString(ShissuChat_guildNames2),
   }   
+  
+  local numGuild = GetNumGuilds()
   
   for guildId=1, GetNumGuilds() do
     guildName = GetGuildName(guildId) 
@@ -517,13 +492,13 @@ function _addon.core.fromLink(messageType, fromName, isCS, fromDisplayName)
 				newFrom = _addon.core.displayBrackets(fromDisplayName, fromDisplayName, DISPLAY_NAME_LINK_TYPE)
 			elseif _addon.settings["nameFormat"] == 3 then
         newFrom = newFrom
-				newFrom = _addon.core.displayBrackets(from, fromDisplayName, DISPLAY_NAME_LINK_TYPE)  
+				newFrom = _addon.core.displayBrackets(newFrom, newFrom, CHARACTER_LINK_TYPE)  
         newFrom = newFrom .. _addon.core.displayBrackets(fromDisplayName, fromDisplayName, DISPLAY_NAME_LINK_TYPE) 
 		  else
-				newFrom = _addon.core.displayBrackets(from, newFrom, CHARACTER_LINK_TYPE)
+				newFrom = _addon.core.displayBrackets(newFrom, newFrom, CHARACTER_LINK_TYPE)
 			end	
     end  
-  end
+  end                                             
   
   if isCS then -- ZOS icon
 		newFrom = "|t16:16:EsoUI/Art/ChatWindow/csIcon.dds|t" .. newFrom
@@ -540,77 +515,66 @@ function _addon.core.fromLink(messageType, fromName, isCS, fromDisplayName)
 end
 
 function _addon.core.createLinkURL(text)
-  local startIdentifier = { "https://", "http://", "www.", }       
-  local domains = {
-    "ac","ad","ae","af","ag","ai","al","am","an","ao","aq","ar","as","at","au","aw","ax","az","ba","bb","bd","be","bf","bg","bh","bi","bj","bl","bm","bn","bo","bq",
-    "br","bs","bt","bv","bw","by","bz","ca","cc","cd","cf","cg","ch","ci","ck","cl","cm","cn","co","cr","cu","cv","cw","cx","cy","cz","de","dj","dk","dm","do","dz",
-  	"ec","ee","eg","eh","er","es","et","eu","fi","fj","fk","fm","fo","fr","ga","gb","gd","ge","gf","gg","gh","gi","gl","gm","gn","gp","gq","gr","gs","gt","gu","gw",
-  	"gy","hk","hm","hn","hr","ht","hu","id","ie","il","im","in","io","iq","ir","is","it","je","jm","jo","jp","ke","kg","kh","ki","km","kn","kp","kr","kw","ky","kz",
-  	"la","lb","lc","li","lk","lr","ls","lt","lu","lv","ly","ma","mc","md","me","mf","mg","mh","mk","ml","mm","mn","mo","mp","mq","mr","ms","mt","mu","mv","mw","mx",
-  	"my","mz","na","nc","ne","nf","ng","ni","nl","no","np","nr","nu","nz","om","pa","pe","pf","pg","ph","pk","pl","pm","pn","pr","ps","pt","pw","py","qa","re","ro",
-    "rs","ru","rw","sa","sb","sc","sd","se","sg","sh","si","sj","sk","sl","sm","sn","so","sr","ss","st","su","sv","sx","sy","sz","tc","td","tf","tg","th","tj","tk",
-  	"tl","m","tn","to","tp","tr","tt","tv","tw","tz","ua","ug","uk","um","us","uy","uz","va","vc","ve","vg","vi","vn","vu","wf","ws","ye","yt","za","zm","zw",	
-  }
- 
-  local endPos = -1
-  local startPos = -1
+  if (string.find(text, "www.") or string.find(text, "http://") or string.find(text, "https://")) then
+    local cache = 0  
+    local cache2 = 0
+    local cache3 = 0
+    
+    local onlyWWW = string.find(text, "www.")
+    
+    if (onlyWWW and not string.find(text, "http")) then
+      text = string.gsub(text, "www.", "http://www.")
+    end
+    
+    if (string.sub(text, 1, 4) == "http" or string.sub(text, 1, 3) == "www") then
+      cache2 = 1
+      text = "shissu meow " .. text .. " meow shissu meow"
+    end
+               
+    local preT, url, nextT = text:match( "(.+)%s+(https?%S+)%s+(.*)$" )
+    
+    if (nextT == nil) then
+      cache3 = 1
+      text = text .. " meow shissu meow"
+      
+      preT, url, nextT = text:match( "(.+)%s+(https?%S+)%s+(.*)$" )
+    end
 
-  local foundOnlyWWW = 0
-
-  for i=1, table.getn(startIdentifier) do 
-    local start = { string.find(text, startIdentifier[i]) } 
-
-    if ( start[1] ) then
-      startPos = start[1]
-
-      if i == 3 then
-        foundOnlyWWW = 1
-      end 
+    local stringLen = string.len(url)  
+    local last = string.sub(url, stringLen, stringLen)
         
-      break    
+    if (last== "," or last == ".") then
+      url = string.sub(url, 0, stringLen-1)
+      cache = 1
     end
-  end 
-  
-  if (startPos == -1) then
-    return text
-  end
-  
-  local cache = string.sub(text, startPos)
    
-  for i=1, table.getn(domains) do 
-    local tld = { string.find(cache, "." .. domains[i]) } 
-
-    if ( tld[2] ) then
-      endPos = tld[2] + startPos - 1  
-      break
+    local urlLink = blue .. string.format("|H1:%s:%s:%s|h%s|h", _addon.LINK, 1, _addon.urlLINK, url) .. "|r"
+  
+    if (cache2 == 0) then  	
+      local stringLen2 = string.len(preT)
+      local stringLen3 = string.len(text)
+         
+      local newNextT = string.sub(text, stringLen + stringLen2 + 2, stringLen3)  
+     
+      if (cache3 == 1) then
+        text = preT .. " " .. urlLink 
+      elseif (cache == 1) then
+        text = preT .. " " .. urlLink .. newNextT
+      else
+       text = preT .. " " .. urlLink .. " " .. newNextT
+      end
+    else
+      text = urlLink
     end
   end
-  
-  if (startPos ~= -1 and endPos ~= -1) then
-    local url = string.sub(text, startPos, endPos)
-    local oldUrl = url
     
-    if foundOnlyWWW == 1 then
-      url = "http://" .. url
-    end
-    
-    local link = string.format("|H1:%s:%s:%s|h%s|h", _addon.LINK, 1, _addon.urlLINK, url)
-    -- d(string.format("|H1:%s:%s:%s|h%s|h", _addon.LINK, 1, _addon.urlLINK, url))
-    
-    if foundOnlyWWW == 1 then
-      return text:gsub(oldUrl, "|cAFD3FF" .. link .. "|r")
-    else
-      return text:gsub(url, "|cAFD3FF" ..  link .. "|r")
-    end
-  end       
-  
   return text
 end
 
 function createTimestamp()
  --d(_addon.core.createTimestamp())
 end
-          
+                                                             
 function _addon.core.createTimestamp()
 	local timeString = GetTimeString()
   local dateString = GetDateStringFromTimestamp(GetTimeStamp())
@@ -697,8 +661,8 @@ function _addon.core.getGuildInfo(fromName, displayName)
           local accInfo = {GetGuildMemberInfo(guildId, memberId)}
           local charInfo = {GetGuildMemberCharacterInfo(guildId, memberId)}
           local accName = accInfo[1]
-          local charName = charInfo[2] 
-          
+          local charName = zo_strformat(SI_UNIT_NAME, charInfo[2]) 
+                    
           if accName == fromName or charName == fromName then
             local charLvL = charInfo[6]
             
@@ -707,18 +671,12 @@ function _addon.core.getGuildInfo(fromName, displayName)
             
             local rang = GetGuildRankSmallIcon(GetGuildRankIconIndex(guildId, accInfo[3]))
             rang = "|t24:24:" .. rang .. "|t"
-            
-            if (accName == displayName) then
-              charName = _lib.cutStringAtLetter(charName, '^') 
-            else
-              charName = displayName
-            end 
       
             if charLvL == 50 and charInfo[7] > 0 then charLvL = "[CP" .. charInfo[7] .."]"
             else 
               charLvL = " [" .. charLvL .. "]"
             end            
-          
+             
             -- Liegen abgespeicherte Namen vor?
             if (_addon.settings["names"] ~= nil) then
               if (_addon.settings["names"][guildName] ~= nil) then
@@ -741,14 +699,20 @@ end
 function _addon.core.formatMessage(messageType, fromName, text, isFromCustomerService, fromDisplayName)
   local channelInfo = ChannelInfo[messageType]
   local timeStamp = ""
-   local additionalInfo = ""
+  local additionalInfo = ""
    
   if channelInfo and channelInfo.format then
     local channelLink = CreateChannelLink(channelInfo)
-    local fromLink = _addon.core.fromLink(messageType, fromName, isCS, fromDisplayName)
     
-    -- Gildeninformationen
     local origname, guildName, guildId, guildLvL, guildRang, guildAlliance, guildChar = _addon.core.getGuildInfo(fromName, displayName)
+
+    if ((messageType >= CHAT_CHANNEL_GUILD_1 and messageType <= CHAT_CHANNEL_GUILD_5) or messageType == CHAT_CHANNEL_WHISPER) then
+      if (guildChar ~= nil) then
+        fromName = guildChar
+      end
+    end
+
+    local fromLink = _addon.core.fromLink(messageType, fromName, isCS, fromDisplayName)
     
     if (_addon.settings["guild"] and guildName ~= nil and not (messageType >= CHAT_CHANNEL_GUILD_1 and messageType <= CHAT_CHANNEL_GUILD_5)) then
       additionalInfo = blue .. "[" .. guildName .. "]|r"
@@ -883,6 +847,7 @@ function ZO_TabButton_Text_SetTextColor(self, color)
 end
  
 function _addon.core.startModule()
+  _addon.enabled = true
   -- FENSTER FUNKTIONEN
   -- ******************
   _addon.core.createNewTab()
@@ -982,9 +947,13 @@ function _addon.core.initialized()
   _addon.core.initNewVariables()
   --_addon.core.startModule()
   _addon.core.createSettingMenu()
-  
+    
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_CHAT_MESSAGE_CHANNEL, _addon.core.chatMessageChannel)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_PLAYER_ACTIVATED, _addon.core.startModule)
+
+  if (_addon.enabled == false) then
+    zo_callLater(function() _addon.core.startModule() end, 5000)  
+  end
 end                               
 
 Shissu_SuiteManager._settings[_addon.Name] = {}

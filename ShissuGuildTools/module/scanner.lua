@@ -23,7 +23,7 @@ local _scanner = {}
 
 _scanner.guildId = nil
 _scanner.scanInterval = 3000
-_scanner.checkGuildTimer = 5 * 60 * 1000
+_scanner.checkGuildTimer = 10 * 60 * 1000
 _scanner.firstGuildScan = false
 _scanner.scanCategory = zos["History"]
 
@@ -133,7 +133,7 @@ function _scanner.copyCurrentDateToLast()
 end
 
 -- Events auslesen und Änderungen speichern / hinzufügen
-function _scanner.processEvents(guildId, category)
+function _scanner.processEvents(guildId, category)  
   local numEvents = GetNumGuildEvents(guildId, category)
 
   if (numEvents == 0) then return end
@@ -152,12 +152,16 @@ function _scanner.processEvents(guildId, category)
   local lastKiosk = nextKiosk - 604800
   local previousKiosk = lastKiosk - 604800
   
+  --d("process: " .. guildId .. guildName)
+  
   --d("NÄCHSTER: " .. GetDateStringFromTimestamp(nextKiosk) .. " - " .. ZO_FormatTime((previousKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))    
   --d("LETZTER: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
   ---d("VORLETZTER: " .. GetDateStringFromTimestamp(previousKiosk) .. " - " .. ZO_FormatTime((previousKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))  
    
   -- Aktuelle Woche -> Letzte Woche
   -- Letzte Woche  -> Vorletzte Woche
+  
+  -- Geht in den nächsten Versionen raus, brauch ich nicht mehr!
   if (_history["Kiosk"] ~= nil) then
     if (lastKiosk > _history["Kiosk"] ) then
       _history["Kiosk"] = lastKiosk
@@ -236,6 +240,7 @@ end
 
 function _scanner.requestData()
   local guildId = GetGuildId(_scanner.guildId)
+  --d("requestData " .. guildId)
   local newPage
 
   if (firstGuildScan) then
@@ -278,14 +283,18 @@ end
 
 function _scanner.openHistoryPages() 
   local historyPage = RequestGuildHistoryCategoryOlder(_scanner.guildId, _scanner.scanCategory)
-   
+ 
   -- Keine weiteren Seiten, bzw. Daten vorhanden
-  if (not historyPage) then
+  if (not historyPage)  then
     if (GetNumGuilds() == _scanner.guildId) then
-      if GetNumGuilds() > 1 then
+      --d("openHistory2 " .. _scanner.guildId)
+      
+      if GetNumGuilds() > 0 then
         _scanner.guildId = 1  
       end
     end
+    
+    --d("openHistory1 " .. _scanner.guildId)
     
     _scanner.processEvents(_scanner.guildId, _scanner.scanCategory)
     _scanner.scanNext()
@@ -300,8 +309,8 @@ function _scanner.scanNext()
       _scanner.firstGuildScan = false
         d(blue .. "Shissu's " .. white  "Guild Tools: DONE")
     end
-      
-    if (_scanner.guildId < GetNumGuilds()) then
+    
+    if (_scanner.guildId <= GetNumGuilds()) then
       _scanner.scan(_scanner.guildId + 1, zos["History"])
     else
       EVENT_MANAGER:UnregisterForEvent(_addon.Name, EVENT_GUILD_HISTORY_RESPONSE_RECEIVED)
@@ -315,7 +324,7 @@ function _scanner.scan(guildId, category)
   _scanner.scanCategory = category        
   
   local guildName = GetGuildName(guildId)
-
+             
   if (_history[guildName] == nil) then
     d(blue.. "Shissu's" .. white .. "Guild Tools: " .. getString(ShissuScanner_scan1) .. ": " .. guildName .. " " .. getString(ShissuScanner_scan2))
                               
@@ -333,7 +342,6 @@ function _scanner.availableGuild()
     EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_HISTORY_RESPONSE_RECEIVED, _scanner.HistoryResponseReceived)
     _scanner.scan(1, zos["History"])
   else
-
     zo_callLater(_scanner.availableGuild, _scanner.checkGuildTimer)
   end
 end
@@ -347,3 +355,5 @@ function _addon.core.initialized()
 end                               
   
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized
+
+-- /script shissuGT.History["Just Traders"] = nil

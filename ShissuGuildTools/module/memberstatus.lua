@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: memberstatus.lua
--- Version: v1.1.1
--- Last Update: 09.03.2017
+-- Version: v1.1.5
+-- Last Update: 13.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -101,6 +101,31 @@ function _addon.core.playerStatusChanged(_, guildId, accName, _, newStatus)
   d(text)
 end
 
+function _addon.core.createControls()
+  local controls = _addon.controls 
+
+  controls[#controls+1] = {
+    type = "title",
+    name = "Chat " .. getString(ShissuNotifications),     
+  }
+
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    name = blue .. getString(ShissuContextMenu_memberStatus),
+    saveVar = _addon.settings["memberstatus"],
+  }  
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    name = blue .. GetString(SI_GAMEPAD_WORLD_MAP_TOOLTIP_CATEGORY_PLAYERS) .. ": " .. green .. getString(ShissuContextMenu_added),
+    saveVar = _addon.settings["added"],
+  }      
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    name = blue .. GetString(SI_GAMEPAD_WORLD_MAP_TOOLTIP_CATEGORY_PLAYERS) .. ": " .. red .. getString(ShissuContextMenu_removed),
+    saveVar = _addon.settings["removed"],
+  }            
+end
+
 -- Initialisierung
 function _addon.core.initialized()
   shissuGT = shissuGT or {}  
@@ -118,11 +143,9 @@ function _addon.core.initialized()
     if (_addon.settings["added"][guildName] == nil) then _addon.settings["added"][guildName] = true end
     if (_addon.settings["removed"][guildName] == nil) then _addon.settings["removed"][guildName] = true end
   end
-
-  _addon.core.createGuildSettings(ShissuContextMenu_memberStatus, "memberstatus")
-  _addon.core.createGuildSettings(ShissuContextMenu_added, "added")
-  _addon.core.createGuildSettings(ShissuContextMenu_removed, "removed")
-
+  
+  _addon.core.createControls()
+  
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_REMOVED, _addon.core.playerRemoved)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_ADDED, _addon.core.playerAdded)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED, _addon.core.playerStatusChanged)

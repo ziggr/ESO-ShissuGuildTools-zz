@@ -1,14 +1,14 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notifications.lua
--- Version: v2.0.1
--- Last Update: 04.05.2017
+-- Version: v2.0.2
+-- Last Update: 13.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 local _addon = {}
 _addon.Name	= "ShissuNotifications"
-_addon.Version = "2.0.1"
+_addon.Version = "2.0.2"
 _addon.core = {}
 
 local _globals = Shissu_SuiteManager._globals
@@ -245,31 +245,37 @@ function _addon.core.createControls()
     setFunc = function(_, value)
       _addon.settings["raid"][2] = value
     end,
-  }
-end
+  }    
 
-function _addon.core.createGuildSettings(title)
-  local controls = _addon.controls 
+  controls[#controls+1] = {
+    type = "title",
+    name = fString["inSight"],     
+  }
+
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    saveVar = _addon.settings["inSight"],
+  }     
+
+  controls[#controls+1] = {
+    type = "title",
+    name = fString["motD"],     
+  }
+
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    saveVar = _addon.settings["motD"],
+  }     
   
   controls[#controls+1] = {
     type = "title",
-    name = fString[title],     
+    name = fString["background"],     
   }
-  
-  local numGuild = GetNumGuilds()
-  
-  for guildId = 1, numGuild do
-    local name = GetGuildName(guildId)           
 
-    controls[#controls+1] = {
-      type = "checkbox",
-      name = name,
-      getFunc = _addon.settings[title][name],
-      setFunc = function(_, value)
-        _addon.settings[title][name] = value
-      end,
-    }
-  end
+  controls[#controls+1] = {
+    type = "guildCheckbox",
+    saveVar = _addon.settings["background"],
+  }         
 end
 
 -- Mail Benachrichtigungen
@@ -461,28 +467,31 @@ function _addon.core.memberInSight(_, name)
 end    
 
 function _addon.core.memberRankChanged(_, guildId, displayName, rankIndex)
-  --local guildId = GetGuildId(guildId)
+  local guildId = GetGuildId(guildId)
   local guildName = GetGuildName(guildId)
-  local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
   
-  local rankName = GetFinalGuildRankName(guildId, rankIndex)
-  local rankIcon = zo_iconFormat(GetGuildRankLargeIcon(GetGuildRankIconIndex(guildId, rankIndex)), 24, 24)  
-
-  if _addon.settings["guildRank"] == true then 
-    if displayName == GetUnitDisplayName("player") then
+  if (GetAllianceBannerIcon(guildId) ~= nil) then
+    local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
+    
+    local rankName = GetFinalGuildRankName(guildId, rankIndex)
+    local rankIcon = zo_iconFormat(GetGuildRankLargeIcon(GetGuildRankIconIndex(guildId, rankIndex)), 24, 24)  
+  
+    if _addon.settings["guildRank"] == true then 
+      if displayName == GetUnitDisplayName("player") then
+        _addon.core.createNotif(
+          getString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER),
+          zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
+        )
+        return
+      end
+    end
+    
+    if _addon.settings["memberRank"] == true then
       _addon.core.createNotif(
-        getString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER),
+        displayName,
         zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
       )
-      return
     end
-  end
-  
-  if _addon.settings["memberRank"] == true then
-    _addon.core.createNotif(
-      displayName,
-      zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
-    )
   end
 end
 
@@ -609,10 +618,7 @@ function _addon.core.initialized()
   end
  
   _addon.core.createControls()
-  _addon.core.createGuildSettings("inSight")
-  _addon.core.createGuildSettings("motD")
-  _addon.core.createGuildSettings("background")
-  
+
   activeNotifications = libNotification.CreateProvider()
 
   _addon.core.checkRankSinceOffline()
