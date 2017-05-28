@@ -246,8 +246,7 @@ function _addon.EVENT_ADD_ON_LOADED (eventCode, addOnName)
     -- Feedback Language    
     Shissu_Feedback_Note:SetText(_addon._lib.getString(SGT_Feedback1) .. _addon._lib.getString(SGT_Feedback2)) 
 
-    -- Standard Module
-    Shissu_SuiteManager.InitializedAddon("ShissuLanguageChanger")    
+    -- Standard Module    
     Shissu_SuiteManager.InitializedAddon("ShissuStandardCommands")
     
   end, 1500); 

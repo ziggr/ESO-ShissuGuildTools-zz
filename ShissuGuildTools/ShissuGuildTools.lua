@@ -223,21 +223,13 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
 
   zo_callLater(function()               
     Shissu_SuiteManager.InitializedAddon(_addon.Name)   
-
-    -- fest eingeschaltete Module 
-    Shissu_SuiteManager.InitializedAddon("ShissuColor")
     
     -- Variable Module
-    _addon.loadModule(ShissuAutoAFK, "ShissuAutoAFK")
     _addon.loadModule(ShissuNotifications, "ShissuNotifications")
-    _addon.loadModule(ShissuChat, "ShissuChat") 
     _addon.loadModule(ShissuHistory, "ShissuHistory")  
     _addon.loadModule(ShissuRoster, "ShissuRoster")   
     _addon.loadModule(ShissuGuildHome, "ShissuGuildHome")
     _addon.loadModule(ShissuMemberStatus, "ShissuMemberStatus")
-    _addon.loadModule(ShissuContextMenu, "ShissuContextMenu")
-    _addon.loadModule(ShissuMarks, "ShissuMarks") 
-    _addon.loadModule(ShissuTeleporter, "ShissuTeleporter")
     _addon.loadModule(ShissuWelcomeInvite, "ShissuWelcomeInvite")
     _addon.loadModule(ShissuNotebook, "ShissuNotebook") 
     _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")

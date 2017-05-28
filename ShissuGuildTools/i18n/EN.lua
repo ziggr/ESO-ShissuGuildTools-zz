@@ -28,12 +28,10 @@ ZO_CreateStringId("Shissu_addInfo", "Additional Information")
 
 -- Main
 ZO_CreateStringId("ShissuModule_module", "Modules / Functions")
-ZO_CreateStringId("ShissuModule_moduleInfo", "If you want to accelerate SGT, you can deactivate individual modules and functions according to your needs.")
-ZO_CreateStringId("ShissuModule_moduleInfo2", "Switching the individual modules off and on requires a reloading of the interface (/ reloadui).")
+ZO_CreateStringId("ShissuModule_moduleInfo", "If you want to increase performance, you can deactivate individual modules and functions according to your needs.")
+ZO_CreateStringId("ShissuModule_moduleInfo2", "Switching the individual modules off and on requires (/ reloadui).")
 
-ZO_CreateStringId("ShissuModule_rightMouse", "Right mousekey")
 ZO_CreateStringId("ShissuModule_leftMouse", "Left mousekey")
-ZO_CreateStringId("ShissuModule_middleMouse", "Middle mousekey")
 
 -- Modules
 ----------
@@ -45,16 +43,6 @@ ZO_CreateStringId("ShissuWelcomeDesc2", "Name of the player")
 ZO_CreateStringId("ShissuWelcomeDesc3", "Name of the guild")
 ZO_CreateStringId("ShissuWelcomeDesc4", "Separation of different greetings (The coincidence decides)")
 
--- Modul: ShissuTeleporter
-ZO_CreateStringId("ShissuTeleporter", "Teleporter")
-ZO_CreateStringId("ShissuTeleporter_tele", "Teleport")
-ZO_CreateStringId("ShissuTeleporter_rnd", "Random")
-ZO_CreateStringId("ShissuTeleporter_refresh", "To update")
-ZO_CreateStringId("ShissuTeleporter_grp", "Group leader")
-ZO_CreateStringId("ShissuTeleporter_house", "Home dwelling")
-ZO_CreateStringId("ShissuTeleporter_legends1", "Legend")
-ZO_CreateStringId("ShissuTeleporter_legends2", "Friends")
-ZO_CreateStringId("ShissuTeleporter_legends3", "Group players")
 
 -- Modul: ShissuNotifications
 ZO_CreateStringId("ShissuNotifications", GetString(SI_BINDING_NAME_TOGGLE_NOTIFICATIONS)) 
@@ -90,18 +78,6 @@ ZO_CreateStringId("ShissuHistory_set2", "Sales: sales, non-guild members (extern
 ZO_CreateStringId("ShissuHistory_opt", "OPTIONS")
 ZO_CreateStringId("ShissuHistory_last", "last week")
 
--- Modul: ShissuColor
-ZO_CreateStringId("ShissuColor_title", "To dye")
-ZO_CreateStringId("ShissuColor_std", "Standard color")
-ZO_CreateStringId("ShissuColor_desc1", "The following 5 colors are the standard colors used in various modules & functions")
-
--- Modul: AutoAFK
-ZO_CreateStringId("ShissuAutoAFK", "AutoAFK")
-ZO_CreateStringId("ShissuAFK_reminder", "Reminder")
-ZO_CreateStringId("ShissuAFK_infoOffline", "You are currently offline!")
-ZO_CreateStringId("ShissuAFK_autoOnline", "Automatic switching from offline to online!")
-ZO_CreateStringId("ShissuAFK_reminderOffline", "Reminder: Offline?")
-ZO_CreateStringId("ShissuAFK_minute", "after X minutes")
 
 -- Modul: ShissuContextMenu
 ZO_CreateStringId("ShissuContextMenu", "Context menu")
@@ -223,56 +199,3 @@ ZO_CreateStringId("ShissuRoster_noData", "No Data")
 ZO_CreateStringId("ShissuScanner", "Guild: History Scan")
 ZO_CreateStringId("ShissuScanner_scan1", "The guild records of")
 ZO_CreateStringId("ShissuScanner_scan2", "are currently being read. Please wait...")
-
--- Modul: Chat
-ZO_CreateStringId("ShissuChat", "Chat")
-ZO_CreateStringId("ShissuChat_auto", "Automatic change")
-ZO_CreateStringId("ShissuChat_date", "Show date")
-ZO_CreateStringId("ShissuChat_time", "Show time")
-ZO_CreateStringId("ShissuChat_sound", "Acoustic Sound (Whispers)")
-ZO_CreateStringId("ShissuChat_guilds", "Gildenzugehörigkeit")
-ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
-ZO_CreateStringId("ShissuChat_alliance", GetString(SI_LEADERBOARDS_HEADER_ALLIANCE))                                                       
-ZO_CreateStringId("ShissuChat_lvl", "Level")
-ZO_CreateStringId("ShissuChat_char", "Character names")
-ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
-ZO_CreateStringId("ShissuChat_party", GetString(SI_CHAT_CHANNEL_NAME_PARTY))
-ZO_CreateStringId("ShissuChat_guildchan", GetString(SI_CHAT_OPTIONS_GUILD_CHANNELS))
-ZO_CreateStringId("ShissuChat_charAcc1", "Account")
-ZO_CreateStringId("ShissuChat_charAcc2", "Character")
-ZO_CreateStringId("ShissuChat_charAcc3", "Account + Character")
-ZO_CreateStringId("ShissuChat_guildInfo", "Guild Information")
-ZO_CreateStringId("ShissuChat_guildWhich", "On which guilds should the information be based?")
-ZO_CreateStringId("ShissuChat_guildNames1", "Names")
-ZO_CreateStringId("ShissuChat_guildNames2", "How should your guilds be in chat?")
-     
--- Modul: Marks
-ZO_CreateStringId("ShissuMarks", "Markings")
-ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Player Markers")
-ZO_CreateStringId("ShissuMarks_misc", "Misc")
-ZO_CreateStringId("ShissuMarks_kick", "Auto Kick")
-ZO_CreateStringId("ShissuMarks_heal", "Heal")
-ZO_CreateStringId("ShissuMarks_observe", "Observe")
-ZO_CreateStringId("ShissuMarks_all", "All What You See")
-ZO_CreateStringId("ShissuMarks_confirmDel", "Delete list?")
-ZO_CreateStringId("ShissuMarks_confirmDel2", "Are you sure you want to delete the list content?")  
-ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Player")
-ZO_CreateStringId("ShissuMarks_add2", "What is the name of the monster / player?")
-ZO_CreateStringId("ShissuMarks_add3", "Monster / player in group")
-ZO_CreateStringId("ShissuMarks_add4", "added")
-ZO_CreateStringId("ShissuMarks_add5", "Monster / Player already exists in group")
-ZO_CreateStringId("ShissuMarks_leftMouse", "Add")
-ZO_CreateStringId("ShissuMarks_rightMouse", "Complete list completely")
-ZO_CreateStringId("ShissuMarks_middleMouse", "Guilds check")
-ZO_CreateStringId("ShissuMarks_observeInfo", "Players in the list: Watch are highlighted in the chat")
-ZO_CreateStringId("ShissuMarks_observeInfo2", "- When logging in")
-ZO_CreateStringId("ShissuMarks_observeInfo3", "- When entering the guild")
-ZO_CreateStringId("ShissuMarks_observeInfo4", "- When leaving the guild")
-ZO_CreateStringId("ShissuMarks_autoKick", "Automatic kicks")
-ZO_CreateStringId("ShissuMarks_autoKickInfo", "Players in the list: AutoKick are directly kicked:")
-ZO_CreateStringId("ShissuMarks_autoKickInfo2", "- When logging in")
-ZO_CreateStringId("ShissuMarks_autoKickInfo3", "- When entering the guild")
-ZO_CreateStringId("ShissuMarks_found", "is in the guilds.")
-ZO_CreateStringId("ShissuMarks_found2", "The player was kicked (if rights exist).")
-ZO_CreateStringId("ShissuMarks_rightItem", "Remove player / monster")
-ZO_CreateStringId("ShissuMarks_rightItem2", "Right-click on name")           
