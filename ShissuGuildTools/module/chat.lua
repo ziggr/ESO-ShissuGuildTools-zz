@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: chat.lua
--- Version: v2.0.11
--- Last Update: 13.05.2017
+-- Version: v2.0.12
+-- Last Update: 14.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -20,7 +20,7 @@ local RGBtoHex = _SGT.RGBtoHex2
  
 local _addon = {}
 _addon.Name	= "ShissuChat2"
-_addon.Version = "2.0.11"
+_addon.Version = "2.0.12"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuChat))             
 
@@ -787,8 +787,6 @@ function _addon.core.onGroupMemberLeft()
 end 
 
 function _addon.core.chatMessageChannel(eventId, messageType, fromName, _, _, fromDisplayName)
-  EVENT_MANAGER:UnregisterForEvent(_addon.Name, eventId)
-  
   local currentText = CHAT_SYSTEM.textEntry:GetText()
   local allow = 0
   local channel = ""
@@ -807,12 +805,12 @@ function _addon.core.chatMessageChannel(eventId, messageType, fromName, _, _, fr
     [CHAT_CHANNEL_GUILD_4] = {"/g4 ", 4},
     [CHAT_CHANNEL_GUILD_5] = {"/g5 ", 5},
   }
-  
+
   if string.len(currentText) < 1 then
     if (messageType == CHAT_CHANNEL_WHISPER and _addon.settings["autoWhisper"] == true) 
       or (messageType == CHAT_CHANNEL_PARTY and _addon.settings["autoGroup"] == true)
       or (messageType >= CHAT_CHANNEL_ZONE and messageType <= CHAT_CHANNEL_ZONE_LANGUAGE_4 and _addon.settings["autoZone"] == true) then
-      
+
       allow = 1
       channel = channelString[messageType]
     end   
@@ -910,7 +908,7 @@ function _addon.core.initNewVariables()
   _addon.core.createNewVar("registerTab", 1)
   _addon.core.createNewVar("channel", "/zone")
   _addon.core.createNewVar("url", true)
-  _addon.core.createNewVar("partySwitch",true)
+  _addon.core.createNewVar("partySwitch",true)                                  
   _addon.core.createNewVar("partyLead", true)
   _addon.core.createNewVar("whisperSound", 2)
   _addon.core.createNewVar("partyLeadColor", {1, 1, 1, 1})
@@ -919,7 +917,14 @@ function _addon.core.initNewVariables()
   _addon.core.createNewVar("timeStampFormat", "DD.MM.Y HH:m:s")
   _addon.core.createNewVar("timeColor", {0.50196081399918, 0.80000001192093, 1, 1})
   _addon.core.createNewVar("dateColor", {0.8901960849762, 0.93333333730698, 1, 1})
-
+  _addon.core.createNewVar("autoWhisper", true)
+  _addon.core.createNewVar("autoGroup", true)
+  _addon.core.createNewVar("autoZone", true)
+  _addon.core.createNewVar("level", true)
+  _addon.core.createNewVar("alliance", true)
+  _addon.core.createNewVar("rank", true)
+  _addon.core.createNewVar("guild", true) 
+  
   -- einmaliges Übernehmen der alten Einstellungen
   if shissuGT["ShissuChat"] ~= nil then
     _addon.core.copyFromOldToNew("names")

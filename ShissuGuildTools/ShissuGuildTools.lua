@@ -1,16 +1,15 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.1.0.6
+-- Version: v3.1.0.7
 -- Last Update: 13.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 --[[
-  v3.1.0.3
+  v3.1.0.7
   ********
   - Chat Modul lässt sich deaktiveren
-  - Charakternamen lassen sich richtig anzeigen  
 ]]
 
 local _globals = Shissu_SuiteManager._globals
@@ -23,7 +22,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.1.0.6"
+_addon.Version = "3.1.0.7"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
@@ -31,11 +30,6 @@ _addon.lib = {}
 
 _addon.active = {}
 
--- SuiteManager NEW GUILD CHECKBODY CONTROL
--- SETTINGS: IMPLEMENTED NEW GUILD CHECKBOXES
--- CHAT: URL FIX, SMALLER CODE + more as only TLD
--- CHAT: CORRECT SOUND, +1^^
--- CHARNAME IN WHISPER, GUILD MODE
 
 local _lib = Shissu_SuiteManager._lib
 
