@@ -1,8 +1,8 @@
 -- Shissu GuildTools LanguageFile
 ---------------------------------
 -- File: EN.lua
--- Version: v1.3.0
--- Last Update: 12.03.2017
+-- Version: v1.3.1
+-- Last Update: 18.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 
 -- Released under terms in license accompanying this file.
@@ -114,6 +114,8 @@ ZO_CreateStringId("ShissuContextMenu_forward", "Forward")
 ZO_CreateStringId("ShissuContextMenu_answer2", "Reply")
 ZO_CreateStringId("ShissuContextMenu_del", "Erase")
 ZO_CreateStringId("ShissuContextmenu_note", "Personal notes")
+ZO_CreateStringId("ShissuContextMenu_forward_prefix", "Fwd")
+ZO_CreateStringId("ShissuContextMenu_answer_prefix", "Re")
 
 -- Modul: ShissuMemberStatus
 ZO_CreateStringId("ShissuMemberStatus", "Guild members status")

@@ -1,8 +1,8 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.0.5.0b
--- Last Update: 12.03.2017
+-- Version: v3.0.5.7
+-- Last Update: 19.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -16,7 +16,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.0.5.0b"
+_addon.Version = "3.0.5.7"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
@@ -345,14 +345,15 @@ Shissu_SuiteManager._bindings[_addon.Name].teleport = function()
   end
 end    
 
+-- /script checkGoldDeposits("Tamrilando", 2000, true)
 -- /script checkGoldDeposits("Tamrilando", 2000)
 
 -- Not offical, testing
-function checkGoldDeposits(guildName, goldDeposit)
-  local lastKiosk = _SGT.getKioskTime() - 604800
+function checkGoldDeposits(guildName, goldDeposit, removeReminder)
+  local lastKiosk = GetTimeStamp() - _SGT.getKioskTime() - 604800
   local _history = shissuGT["History"]
 
-  d("1: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
+  d("Letzter Gildenhändler: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
 
   -- GuildId?
   local numGuild = GetNumGuilds()
@@ -369,101 +370,162 @@ function checkGoldDeposits(guildName, goldDeposit)
   if (guildId ~= nil) then
     local reminderText = guildName .. " Reminder\n" .. goldDeposit .. " Gold"
     local numMember = GetNumGuildMembers(guildId)
-    local numCount = 1
+    local numCount = 0
+    local waitOnEdit = "0" 
+    local found = 0
+    local payed = 0
     local notPayed = 0
-    local waitOnEdit = 0 
-    local waitOnEdit2 = 0
+    local noteExist = 0
     
-    
-    local countOK = 0
-    
-    d("BIN DRIN")
-    
-    EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT", 1300, function()  
+    local waiting = 0
+      
+    EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT", 50, function()  
+      if (waitOnEdit == "0") then
+        numCount = numCount + 1
+      end
+      
       local memberData = { GetGuildMemberInfo(guildId, numCount) }
       local note = memberData[2]
       local displayName = memberData[1]                
-    
-      d(numCount .. " CHECK NAME: " .. displayName)  
 
-      if (waitOnEdit2 == 1) then
+      if (waitOnEdit == "1") then
         if not (string.find(note, reminderText)) then
-          waitOnEdit2 = 0
-        end      
-      elseif (waitOnEdit == 1) then
-        if (string.find(note, reminderText)) then
-          waitOnEdit = 0
+          local newCount = 1
+          EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT", 5000, function()  
+            
+            if newCount == 2 then
+              waitOnEdit = "0"
+              waiting = 0
+              EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT")   
+            end
+            
+            newCount = newCount + 1  
+          
+          end)
         end
-      else
+      end    
+
+      if (waitOnEdit == "2") then
+        if waiting == 0 then
+          d("WARTEN")
+          waiting = 1
+        end
+
+        if string.find(note, reminderText) then  
+          local newCount = 1
+          EVENT_MANAGER:RegisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT", 5000, function()  
+            
+            if newCount == 2 then
+              waitOnEdit = "0"
+              waiting = 0
+              EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT_WAIT")   
+            end
+            
+            newCount = newCount + 1  
+          
+          end)
+        end
+      end      
+      
+      if waitOnEdit == "0" then 
+        d(waitOnEdit .. " - " .. numCount .. " CHECK NAME: " .. displayName) 
+      end
+      
+      -- Reminder an allen Namen entfernen
+      if removeReminder == true then
+        --reminderText = ", Thanks"
+      
+        if (string.find(note, reminderText) and waitOnEdit == "0") then
+          note = string.gsub(note, reminderText, "")
+          note = string.gsub(note, "\n", "")  
+          SetGuildMemberNote(guildId, numCount, note)  
+          
+          found = found + 1
+          
+          waitOnEdit = "1"           
+        end
+      end 
+      -- ________________
+      
+      -- Goldbeträge überprüfen und Reminder setzen
+      if removeReminder == nil and waitOnEdit == "0" then
         if _history[guildName] then
           if _history[guildName][displayName]  then 
             if _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED] then
               local lastTime = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast
-              --d("1: " .. GetDateStringFromTimestamp(lastTime) .. " - " .. ZO_FormatTime((lastTime) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))  
-                
+          
               if (lastTime) then
                 if (lastTime > lastKiosk) then  
-                  countOK = countOK + 1
                   -- Zeit ist korrekt
-                  d("--> OK")
+                  payed = payed + 1 
+                  --d("--> OK")
                 else
+                  -- Letzte Einzahlung ist älter als letzter NPC
                   local goldThisWeek = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].currentNPC
                   
                   if (string.find(note, reminderText)) then
-                    d("--> REMINDER EXISTS")
-                    
-                    if (goldThisWeek > 0 ) then
-                      note = string.gsub(note, reminderText, "")
-                      note = string.gsub(note, "\n", "")  
-                      SetGuildMemberNote(guildId, count, note)  
-                      countOK = countOK + 1
-                      waitOnEdit2 = 1
-                    end
-                  else         
-                    d("NICHT 1")       
+                    -- Reminder existiert schon = -> Spieler hat schon die Woche davor nicht bezahlt.
+                    noteExist = noteExist + 1
+                    notPayed = notPayed + 1 
+                  else
                     local gold = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
                     local goldWeek = gold / goldDeposit 
-                    local addTime = goldWeek * weekSeconds
-
-                    if (goldThisWeek > 0 ) then
-                      note = string.gsub(note, reminderText, "")
-                      note = string.gsub(note, "\n", "")  
-                      SetGuildMemberNote(guildId, count, note)  
-                      countOK = countOK + 1
-                      waitOnEdit2 = 1
-                    elseif (lastTime < lastKiosk or gold == 0) then
-                      if not (string.find(note, reminderText)) then
-                        d(count .. " NAME (NICHT GEZAHLT): " .. displayName)  
-                                                                                       
-                        local newNote = note .. "\n" .. reminderText
+                    local addTime = goldWeek * 604800
+                    
+                    d(goldWeek)
+                    
+                    if (goldWeek > 0 ) then               
+                      if lastTime + addTime > lastKiosk then 
+                        d("--> NAME (VORRAUSGEZAHLT): " .. displayName)  
                         
-                        waitOnEdit = 1
-                        SetGuildMemberNote(guildId, count, newNote)         
-                      end  
+                        payed = payed + 1 
+                      else
+                        d("--> NAME (NICHT VORRAUSGEZAHLT): " .. displayName)  
+                                                
+                        if (string.len(note) > 0) then
+                          note = note .. "\n" .. reminderText
+                          SetGuildMemberNote(guildId, numCount, note)    
+                        else
+                          SetGuildMemberNote(guildId, numCount, reminderText)  
+                        end
+
+                        notPayed = notPayed + 1 
+                        waitOnEdit = "2"    
+                      end 
                       
-                      notPayed = notPayed + 1   
+                    elseif (lastTime < lastKiosk or gold == 0) then
+                      d("--> NAME (NICHT GEZAHLT): " .. displayName)                                                                    
+                      
+                      if (string.len(note) > 0) then
+                        note = note .. "\n" .. reminderText
+                        SetGuildMemberNote(guildId, numCount, note)    
+                      else
+                        SetGuildMemberNote(guildId, numCount, reminderText)  
+                      end
+                      
+                      notPayed = notPayed + 1  
+                      waitOnEdit = "2"     
                     end
-                  end
-                end          
+                  end   
+                  
+                end
               end
             end
           end
-        end
+        end 
       end
-          
-      if (count == numMember) then
-        d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
-        d("Es haben " .. countOK .. " Spieler bezahlt")
-
-        EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT")  
-      end
+      -- ________________
       
-      if (waitOnEdit == 0 and waitOnEdit2 == 0 ) then
-        numCount = numCount + 1
+      -- Anzahl der Spieler erreicht
+      if numMember == numCount then
+        d("Es wurden " .. found .. " Notizen bearbeitet")
+        d("Es haben " .. notPayed .. " Spieler nicht bezahlt")
+        d("Es haben " .. noteExist .. " Spieler letzte woche nicht bezahlt")
+        d("Es haben " .. payed .. " Spieler bezahlt")
+             
+        EVENT_MANAGER:UnregisterForUpdate("SGT_NOTE_SALE_EDIT")       
       end
-    end) 
-  else
-    d("KEINE Gilde gefunden: " .. guildName)
+    end)
   end
 end
 

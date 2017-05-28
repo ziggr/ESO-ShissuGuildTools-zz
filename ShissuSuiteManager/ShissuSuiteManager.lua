@@ -2,7 +2,7 @@ local _addon = {}
 
 _addon.Name = "ShissuSuiteManager"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee SuiteManager"
-_addon.Version = "1.4.0"
+_addon.Version = "1.4.1"
 
 _addon._lib = {}
 _addon._addons = {}
@@ -185,6 +185,44 @@ function _addon.reload()
   SLASH_COMMANDS["/reloadui"]()
 end
 
+function _addon.dice(number)     
+  if (number == false) then return false end
+  
+  local variableText = {
+    ["de"] = " hat bei einem Zufallswurf (1-MAX) die Zahl: RND erwürfelt.",
+    ["fr"] = " roule le nombre RND dans un jet aléatoire de 1-MAX.",
+    ["ru"] = " ????? ? ????????? ?????? (1-MAX): RND ?????????? ????????.",
+    ["en"] = " rolls the number RND in a random throw of 1-MAX."  
+  }
+  
+  local text = _addon._lib.ReplaceCharacter(variableText[GetCVar("Language.2")]) 
+   
+  if string.len(text) < 5 then
+    text = " rolls the number RND in a random throw of 1-MAX."
+  end
+   
+  local textLang = string.sub(number, string.len(number)-2, string.len(number))
+  textLang = string.gsub(textLang, " ", "")
+
+  if textLang ~= nil then    
+    if variableText[textLang] then
+      text = _addon._lib.ReplaceCharacter(variableText[textLang])
+      number = string.gsub(number, "" .. textLang, "")
+    end
+  end
+
+  local numMax = tonumber(number)
+
+  if numMax ~= nil then 
+    local numRnd = math.random(numMax)
+    
+    text = string.gsub (text, "MAX" , numMax)
+    text = string.gsub (text , "RND", numRnd)
+           
+    CHAT_SYSTEM:StartTextEntry(GetUnitName("player") .. text)
+  end
+end
+
 -- Initialize Event            
 function _addon.EVENT_ADD_ON_LOADED (eventCode, addOnName)
   if addOnName ~= _addon.Name then return end
@@ -205,6 +243,10 @@ function _addon.EVENT_ADD_ON_LOADED (eventCode, addOnName)
    
     -- Misc Commands
     _addon._lib.registerCommand("helm", _addon.helmToogle)     
+    
+    -- Roll/Dice Commands
+    _addon._lib.registerCommand("roll", _addon.dice)     
+    _addon._lib.registerCommand("dice", _addon.dice)     
         
     -- Bindings
     _addon._bindings.helmToogle = _addon.helmToogle

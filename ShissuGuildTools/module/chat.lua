@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: chat.lua
--- Version: v1.2.12
--- Last Update: 08.03.2017
+-- Version: v1.2.15
+-- Last Update: 18.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -19,7 +19,7 @@ local getString = _SGT.getString
 
 local _addon = {}
 _addon.Name	= "ShissuChat"
-_addon.Version = "1.2.12"
+_addon.Version = "1.2.15"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuChat))             
 
@@ -425,7 +425,7 @@ function _addon.core.formatMessage(chanCode, from, text, isFromCustomerService, 
   local guildChar  = guildInfos[7]
   
   local additionalInfo = ""
-  
+   
   if (chanCode >= CHAT_CHANNEL_GUILD_1 and guildId == 1 and _addon.settings["info"][origname]) 
      or (chanCode >= CHAT_CHANNEL_GUILD_2 and guildId == 2 and _addon.settings["info"][origname]) 
      or (chanCode >= CHAT_CHANNEL_GUILD_3 and guildId == 3 and _addon.settings["info"][origname]) 
@@ -436,17 +436,17 @@ function _addon.core.formatMessage(chanCode, from, text, isFromCustomerService, 
     if (chanCode >= CHAT_CHANNEL_GUILD_1 and chanCode <= CHAT_CHANNEL_GUILD_5) then
       additionalInfo = ""
      -- d("GILDENCHAT")
-    elseif (_addon.settings["guild"]) then
+    elseif (_addon.settings["guild"] and guildName ~= nil) then
      -- d("ALLES ANDERE")
       additionalInfo = blue .. "[" .. guildName .. "]|r"
     end
    
-    if (_addon.settings["alliance"]) then
+    if (_addon.settings["alliance"] and guildAlliance ~= nil) then
       additionalInfo = additionalInfo .. guildAlliance
     end 
     
   
-    if (_addon.settings["rank"]) then
+    if (_addon.settings["rank"] and guildRang ~= nil)  then
       additionalInfo = additionalInfo .. guildRang
     end  
     
@@ -495,8 +495,16 @@ function _addon.core.formatMessage(chanCode, from, text, isFromCustomerService, 
             if channelInfo.playerLinkable then fromLink = ZO_LinkHandler_CreatePlayerLink(fromLink) end
           end
           if channelInfo.playerLinkable then displayName = ZO_LinkHandler_CreatePlayerLink(displayName) end     
-          
-          fromLink = displayName .. fromLink       
+         
+          if displayName ~= nil and fromLink ~= nil then
+            fromLink = displayName .. fromLink    
+          elseif displayName ~= nil then
+             fromLink = displayName
+          elseif fromLink ~= nil then
+             fromLink = fromLink
+          else
+            fromLink = ""
+          end 
         else
           if channelInfo.playerLinkable then fromLink = ZO_LinkHandler_CreatePlayerLink(fromLink) end
         end
@@ -528,12 +536,18 @@ function _addon.core.initialized()
   -- Hat jemand die neue SaveVar schon?  
   if (_addon.settings["info"] == nil) then _addon.settings["info"] = {} end
   if (_addon.settings["auto"] == nil) then _addon.settings["auto"] = {} end
-
+  if (_addon.settings["names"] == nil) then _addon.settings["names"] = {} end
+  if (_addon.settings["guild"] == nil) then _addon.settings["guild"] = true end
+  
   for guildId=1, GetNumGuilds() do
     local guildName = GetGuildName(guildId)  
     if (_addon.settings["info"][guildName] == nil) then _addon.settings["info"][guildName] = true end
     if (_addon.settings["auto"][guildName] == nil) then _addon.settings["auto"][guildName] = true end
+    if (_addon.settings["names"][guildName] == nil) then _addon.settings["names"][guildName] = "" end
+    if (_addon.settings["names"][guildName] == true) then _addon.settings["names"][guildName] = "" end
+    
   end
+
 
   _addon.core.createSettingMenu()  
 

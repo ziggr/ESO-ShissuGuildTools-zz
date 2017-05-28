@@ -1,8 +1,9 @@
 -- Shissu Suite Manager
 -----------------------
 -- File: RU.lua
--- Last Update: 27.10.2016
+-- Last Update: 19.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
+-- Translated by KiriX
 
 -- Released under terms in license accompanying this file.
 -- Distribution without license is prohibited!
@@ -33,4 +34,10 @@ ZO_CreateStringId("SGT_Standard2", "|cAFD3FF/rl|r - ПЕРЕЗАГРУЗКА И�
     "|cAFD3FF/off|r - Статус игрока " .. EsoStrings[SI_PLAYERSTATUS4] .. "\n\n" ..
     "|cAFD3FF/brb|r - Статус игрока " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
     "|cAFD3FF/dnd|r - Статус игрока " .. EsoStrings[SI_PLAYERSTATUS3] .. "\n\n" ..
-    "|cAFD3FF/afk|r - Статус игрока " .. EsoStrings[SI_PLAYERSTATUS2])
+    "|cAFD3FF/afk|r - Статус игрока " .. EsoStrings[SI_PLAYERSTATUS2] ..
+    
+    "|cAFD3FFКоличество костей|r\n" ..
+    "Обманывает случайное число от 1 до желаемого числа. Кроме того, выходной сигнал речи можно манипулировать." .. "\n\n" .. 
+    
+    "|cAFD3FF/dice|r [НОМЕР] [de,en,fr,ru]" .. "\n\n" .. 
+    "|cAFD3FF/roll|r [НОМЕР] [de,en,fr,ru]" .. "\n\n")

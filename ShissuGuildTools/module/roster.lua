@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: roster.lua
--- Version: v1.3.14
--- Last Update: 12.03.2017
+-- Version: v1.3.16
+-- Last Update: 19.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -25,7 +25,7 @@ local round = _SGT.round
 
 local _addon = {}
 _addon.Name	= "ShissuRoster"
-_addon.Version = "1.3.14"
+_addon.Version = "1.3.19"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuRoster))
 
@@ -87,7 +87,7 @@ function _addon.core.createSettingMenu()
     getFunc = _addon.settings["colChar"],
     setFunc = function(_, value)
       _addon.settings["colChar"] = value
-      Shissu_SuiteManager._bindings.reload()
+    --  Shissu_SuiteManager._bindings.reload()
     end,
   } 
   controls[#controls+1] = {
@@ -96,7 +96,7 @@ function _addon.core.createSettingMenu()
     getFunc = _addon.settings["colGold"],
     setFunc = function(_, value)
       _addon.settings["colGold"] = value
-      Shissu_SuiteManager._bindings.reload()
+   --   Shissu_SuiteManager._bindings.reload()
     end,
   } 
   controls[#controls+1] = {
@@ -105,7 +105,7 @@ function _addon.core.createSettingMenu()
     getFunc = _addon.settings["colNote"],
     setFunc = function(_, value)
       _addon.settings["colNote"] = value
-      Shissu_SuiteManager._bindings.reload()
+   --  Shissu_SuiteManager._bindings.reload()
     end,
   } 
 end
@@ -702,6 +702,11 @@ function ZO_KeyboardGuildRosterRowDisplayName_OnMouseExit(control)
   org_ZO_KeyboardGuildRosterRowDisplayName_OnMouseExit(control)
 end
  
+function _addon.core.standardZO()
+  _addon.core.originalRosterBuildMasterList = GUILD_ROSTER_MANAGER.BuildMasterList
+  GUILD_ROSTER_MANAGER.BuildMasterList = SGT_GuildRosterManager.BuildMasterList
+end
+ 
 -- NEW ROSTER
 function _addon.core:InitRosterChanges()   
   GUILD_ROSTER_ENTRY_SORT_KEYS["character"] = { tiebreaker = 'displayName' }
@@ -709,8 +714,21 @@ function _addon.core:InitRosterChanges()
 
   local additionalWidth = 0
 
-  _addon.core.originalRosterBuildMasterList = GUILD_ROSTER_MANAGER.BuildMasterList
-  GUILD_ROSTER_MANAGER.BuildMasterList = SGT_GuildRosterManager.BuildMasterList
+  if (MasterMerchant) then
+    local MM_Save = MasterMerchant:ActiveSettings().diplayGuildInfo
+    
+    if MM_Save == true then
+      _addon.core.originalRosterBuildMasterList = GUILD_ROSTER_KEYBOARD.BuildMasterList
+      GUILD_ROSTER_KEYBOARD.BuildMasterList = SGT_GuildRosterManager.BuildMasterList
+    else
+      _addon.core.standardZO()
+    end
+  else
+    _addon.core.standardZO()
+  end
+
+  --_addon.core.originalRosterBuildMasterList = GUILD_ROSTER_MANAGER.BuildMasterList
+  --GUILD_ROSTER_MANAGER.BuildMasterList = SGT_GuildRosterManager.BuildMasterList
   
   local headers = ZO_GuildRosterHeaders
   local zoneHeader = headers:GetNamedChild('Zone')
@@ -890,16 +908,21 @@ end
 
 SGT_GuildRosterManager = {} 
 
-function SGT_GuildRosterManager:BuildMasterList()      
+function SGT_GuildRosterManager:BuildMasterList() 
+  --MM Bypass
+  if not (self.masterList) then
+    self.masterList = GUILD_ROSTER_MANAGER:GetMasterList()
+  end
+
   _addon.core.originalRosterBuildMasterList(self)
   
   local guildId = GUILD_ROSTER_MANAGER.guildId
-    
+      
   for i = 1, #self.masterList do
     local data = self.masterList[i]
     local displayName = data.displayName
     local memberChars = _memberChars[displayName]
-      
+
     local characterName = data.characterName 
     local characterName2 = string.gsub(characterName, "|ceeeeee", "")
 

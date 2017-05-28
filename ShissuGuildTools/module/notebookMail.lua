@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notebookMail.lua
--- Version: v2.2.0
--- Last Update: 12.03.2017
+-- Version: v2.2.7
+-- Last Update: 18.03.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -27,7 +27,7 @@ local saveWindowPosition = _SGT.saveWindowPosition
 
 local _addon = {}
 _addon.Name	= "ShissuNotebookMail"
-_addon.Version = "2.2.0"
+_addon.Version = "2.2.7"
 _addon.core = {}
 _addon.fN = _SGT["title"]("Notebook Mailer")
 _addon.friends = "--|r " .. white .. getString(Shissu_friend) 
@@ -175,49 +175,51 @@ end
 function _addon.core.getHistoryInfo(guildName, name)
   local history = shissuGT["History"]
   local historyData = {}
-  local member = false
+  local member = true
   local gold = true
   
   if history then
     if history[guildName] then
       if history[guildName][name] then
         local timeJoined = history[guildName][name].timeJoined
+        local day = 0
         
-        if (timeJoined) then
+        if (timeJoined == nil) then
+          -- Was passiert, wenn Spieler schon so lange in der Gilde ist, das keine Aufzeichnungen existieren?
+          -- Aufzeichnungen existieren ~ etwa 10 Monate zurück, max
+          day = 40 * 7 * 86400  
+        else
           timeJoined = GetTimeStamp() - timeJoined 
-          local day = math.floor(timeJoined / 86400) 
-          day = ("%d"):format(day)
-          day = tonumber(day)
-                   
-          if (day) then           
-            if ((day >= _mail.memberSince) == false and _direction["memberSince"]) or ((day <= _mail.memberSince) == false and _direction["memberSince"] == false) then   
-              member = false
-            else
-              member = true
-            end
-          end                   
+          day = math.floor(timeJoined / 86400)             
         end
+            
+        if ((day >= _mail.memberSince) == false and _direction["memberSince"]) or ((day <= _mail.memberSince) == false and _direction["memberSince"] == false) then   
+          member = false
+        else
+          member = true
+        end                
         
         local lastGold = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].last
         local timeLast = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].timeLast
 
+       -- if (name == "@Aerydir") then
+       --   d(name .. " - " .. lastGold .. " - " .. timeLast .. " - " .. _mail.gold)
+        --end
+
         if (lastGold and timeLast) then
-          if (_mail.gold > 0 ) then                   
-            if (lastGold >= _mail.gold == false and _direction["gold"]) 
-              or (lastGold <= _mail.gold == false and _direction["gold"] == false) then               
-                gold = false        
-            else
-              timeLast = GetTimeStamp() - timeLast 
-              timeLast = math.floor(timeLast / 86400) 
-                
-              if timeLast and _mail.goldSince > 0 then
-                if (timeLast >= _mail.goldSince) then
-                  gold = false                   
-                end
-              end
-            end 
+          if (((lastGold >= _mail.gold) == false) and _direction["gold"]) or (((lastGold <= _mail.gold) == false) and (_direction["gold"] == false)) then
+            gold = false
+          end
+          
+          if _mail.goldSince > 0 then
+            timeLast = GetTimeStamp() - timeLast 
+            timeLast = math.floor(timeLast / 86400)  
+             
+            if (timeLast >= _mail.goldSince) then
+              gold = false
+            end
           end        
-        end        
+        end    
       end
     end
   end    
@@ -234,7 +236,7 @@ function _addon.core.getGuildList()
   local sortedMembers = {}
   local sortedData = {}
   local searchTerm = SGT_Notebook_MessagesRecipient_FilterText:GetText()  or ""
-  
+
   for i = 1, numMembers do
     local memberVar = {GetGuildMemberInfo(_mail.currentGuild, i)}
     table.insert(sortedMembers, i, memberVar[1] .. "**shissu" ..i)
@@ -275,7 +277,8 @@ function _addon.core.getGuildList()
           or memberVar[3] == _mail.currentRank and memberOfflineSince >= _mail.offlineSince then  
           if (searchTerm == "" or string.find(sortedData[i].name, searchTerm) or string.find(memberVar[2], searchTerm)) then 
 
-          local historyData = _addon.core.getHistoryInfo(guildName, sortedData[i].name)
+            local historyData = _addon.core.getHistoryInfo(guildName, sortedData[i].name)
+            
             if historyData[1] == true and historyData[2] == true then
               table.insert(availableNames, { sortedData[i].name, false, sortedData[i].id} )
             end
@@ -517,8 +520,12 @@ end
 
 _mail.currentDropText = ""
 
+-- Ränge
 function _mail.rankSelected(_, statusText, choiceNumber)
-    for rankId = 1, GetNumGuildRanks(_mail.currentGuild) do
+  for rankId = 1, GetNumGuildRanks(_mail.currentGuild) do
+      
+    d(string.find(statusText, GetFinalGuildRankName(_mail.currentGuild, rankId)))
+    
     if (string.find(statusText, GetFinalGuildRankName(_mail.currentGuild, rankId))) then 
       SGT_Notebook_MessagesRecipient_Choice2:SetText(orange .. statusText)
       _mail.currentRank = rankId 
@@ -533,7 +540,7 @@ end
 
 function _mail.optionSelected(_, statusText, choiceNumber)
   _mail.currentDropText = statusText
-  
+
   for guildId = 1, GetNumGuilds() do
     if GetGuildName(guildId) == statusText then
       SGT_Notebook_MessagesRecipient_Choice:SetText(red .. statusText)
@@ -549,7 +556,7 @@ function _mail.optionSelected(_, statusText, choiceNumber)
       break
     end   
   end
-  
+
   _mail.fillScrollList()
 end
 
@@ -800,6 +807,8 @@ function _addon.core.setDirection(control, controlText, variable)
         controlText:SetText(blue .. ">")
         _direction[variable] = true
       end
+      
+      _mail.fillScrollList()
     elseif (button == 1) then
       if variable then
         _addon.core.filterEdit(variable)
