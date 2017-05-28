@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: scanner.lua
--- Version: v1.3.0
--- Last Update: 20.05.2017
+-- Version: v1.3.1
+-- Last Update: 21.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -340,9 +340,9 @@ function _addon.core.scanAvailableGuilds()
 end
 
 function _addon.core.removeOldData2(guildName, displayName, eventType)
-  if _history[guildName] then
-    if _history[guildName][displayName] then
-      if _history[guildName][displayName][eventType] then
+  if _history[guildName] ~= nil then
+    if _history[guildName][displayName]  ~= nil then
+      if _history[guildName][displayName][eventType]  ~= nil then
         if (_history[guildName][displayName][eventType].timeFirst == 0) then _history[guildName][displayName][eventType].timeFirst = nil end
         if (_history[guildName][displayName][eventType].timeLast == 0) then _history[guildName][displayName][eventType].timeLast= nil end
         if (_history[guildName][displayName][eventType].total == 0) then _history[guildName][displayName][eventType].total = nil end  

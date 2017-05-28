@@ -1,13 +1,13 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.1.1.9
+-- Version: v3.1.1.10
 -- Last Update: 21.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 --[[
-  v3.1.0.7
+  v3.1.1.9
   ********
   * Chat
   - StandardChannel lässt sich auf Wunsch deaktivieren
@@ -45,7 +45,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.1.0.7"
+_addon.Version = "3.1.1.10"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
