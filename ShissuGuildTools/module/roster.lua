@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: roster.lua
--- Version: v1.3.16
--- Last Update: 19.03.2017
+-- Version: v2.0.0
+-- Last Update: 20.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -23,9 +23,9 @@ local createZOButton = _SGT.createZOButton
 local checkBoxLabel = _SGT.checkBoxLabel
 local round = _SGT.round
 
-local _addon = {}
+local _addon = {}                                                 
 _addon.Name	= "ShissuRoster"
-_addon.Version = "1.3.19"
+_addon.Version = "2.0.0"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuRoster))
 
@@ -308,8 +308,10 @@ function _roster.filterScrollList(self)
         end      
       end   
     end
-  end
+  end                                        
+  
   _roster.setRank(_roster.rank)
+  
   -- Anzeige der prozentuallen Verteilungen
   local Proc = {
     Aldmeri = round (GuildInfo.Aldmeri / GuildInfo.Max *100),
@@ -322,6 +324,8 @@ function _roster.filterScrollList(self)
   SGT_Roster_EbonheartInGuild:SetText(white .. Proc.Ebonheart .. blue .. "%"  )
   SGT_Roster_DaggerfallInGuild:SetText( white .. Proc.Daggerfall .. blue .. "%"  )
   SGT_Roster_Choice:SetText (white .. getString(ShissuNotebookMail_choice) .. ": " .. blue .. GuildInfo.Choice .. "/" .. white .. GuildInfo.Max .. white .. " (" .. blue .. Proc.Choice .. white .. "%)")
+  
+  _roster.GoldDeposit:SetText(white .. getString(ShissuRoster_sum) .. ": " .. blue .. _roster.getTotalGold())
 end
    
 function _roster.setRank(control)
@@ -359,48 +363,44 @@ function _roster.selectGold(_, statusText)
   _roster.GoldDeposit:SetText(white .. getString(ShissuRoster_sum) .. ": " .. blue .. _roster.getTotalGold())
 end
                            
-function _addon.core.buildTooltip(guildName, displayName, tooltip, saveVar, titleText)
+function _addon.core.buildTooltip(guildName, displayName, tooltip, eventType, titleText)
   local gold = "|t24:24:EsoUI/Art/Guild/guild_tradinghouseaccess.dds|t"
   local timeStamp = GetTimeStamp()
   
-  if saveVar == zos["ItemAdded"] or saveVar == zos["ItemRemoved"] then gold = "" end
-  
-  if _history[guildName] ~= nil then
-    if _history[guildName][displayName] ~= nil then
-  
-      if _history[guildName][displayName][saveVar].last ~= 0 or
-        _history[guildName][displayName][saveVar].currentNPC ~= 0 or
-        _history[guildName][displayName][saveVar].previousNPC ~= 0 or
-        _history[guildName][displayName][saveVar].total ~= 0 then
-        
-        if (tooltip ~= blue .. displayName .. white .. "\n") then
-          tooltip = tooltip .. "\n\n" .. titleText .. "\n" .. white
-        else
-          tooltip = tooltip .. titleText .. "\n" .. white
-        end
-      end  
+  local historyData = _addon.core.getHistoryData(guildName, displayName, eventType)
+      
+  local timeLast = historyData[2]
+  local lastGold = historyData[3]
+  local totalGold = historyData[4]
+  local currentNPC = historyData[5]
+  local previousNPC = historyData[6]     
+
+  if lastGold ~= 0 or totalGold ~= 0 or currentNPC ~= 0 or previousNPC ~= 0 then       
+    if (tooltip ~= blue .. displayName .. white .. "\n") then
+      tooltip = tooltip .. "\n\n" .. titleText ..  white
+    else
+      tooltip = tooltip .. titleText .. white
+    end
+  end  
     
-      if _history[guildName][displayName][saveVar].currentNPC ~= 0 then  
-        tooltip = tooltip .. getString(ShissuRoster_thisWeek) .. ": " .. _history[guildName][displayName][saveVar].currentNPC .. gold
-        .. "\n"  
-      end
+  if currentNPC ~= 0 then  
+    tooltip = tooltip .. getString(ShissuRoster_thisWeek) .. ": " .. currentNPC .. gold
+  end
             
-      if _history[guildName][displayName][saveVar].previousNPC ~= 0 then  
-        tooltip = tooltip .. getString(ShissuRoster_lastWeek) .. ": " .. _history[guildName][displayName][saveVar].previousNPC .. gold 
-        .. "\n"  
-      end
+  if previousNPC ~= 0 then  
+    tooltip = tooltip .. "\n"  .. getString(ShissuRoster_lastWeek) .. ": " .. previousNPC .. gold 
+  end
              
-      if _history[guildName][displayName][saveVar].last ~= 0 then  
-        timeData = _history[guildName][displayName][saveVar].timeLast
-        
-        tooltip = tooltip .. getString(ShissuRoster_last) .. ": " .. _history[guildName][displayName][saveVar].last .. gold
-        .. " (" .. getString(ShissuRoster_before) .. " " .. _addon.core.secsToTime(timeStamp - timeData) .. ")" .. "[" .. GetDateStringFromTimestamp(timeData) .. "]"
-        .. "\n"  
-      end
+  if lastGold ~= 0 then  
+    tooltip = tooltip .. "\n" .. getString(ShissuRoster_last) .. ": " .. lastGold .. gold
+              .. " (" .. getString(ShissuRoster_before) .. " " .. _addon.core.secsToTime(timeStamp - timeLast) .. ")" .. "[" .. GetDateStringFromTimestamp(timeLast) .. "]"
+  end
             
-      if _history[guildName][displayName][saveVar].total ~= 0 then    
-        tooltip = tooltip .. getString(ShissuRoster_total) .. ": " .. _history[guildName][displayName][saveVar].total .. gold
-        .. " (in " .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][zos["Bank"]]) .. ")"    
+  if _history[guildName] ~= nil then
+    if _history[guildName]["oldestEvent"] ~= nil then
+      if totalGold ~= 0 then    
+        tooltip = tooltip .. "\n" .. getString(ShissuRoster_total) .. ": " .. totalGold .. gold
+        .. " (in " .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][GUILD_HISTORY_BANK]) .. ")"    
       end
     end
   end
@@ -433,7 +433,6 @@ function _addon.core.getDay()
   return restWeekTime
 end
         
-    
 function _roster.getTotalGold()
   local guildId = GUILD_SELECTOR.guildId
   if guildId == nil then return "" end
@@ -447,37 +446,38 @@ function _roster.getTotalGold()
     local memberData = { GetGuildMemberInfo(guildId, memberId) }
     local displayName = memberData[1]            
 
-    if _history[guildName] ~= nil then
-      if _history[guildName][displayName] ~= nil then
+    local historyData = _addon.core.getHistoryData(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
       
-        -- Heute
-        if (_addon.settings["gold"] == getString(ShissuRoster_today)) then  
-          if ( _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast > _addon.core.getDay()) then
-            goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-          end
-        -- Gestern
-        elseif (_addon.settings["gold"] == getString(ShissuRoster_yesterday)) then
-          if ( _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast > (_addon.core.getDay() - 86400) and 
-               _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast < _addon.core.getDay()) then
-            goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-          end
-        -- Zuletzt            
-        elseif (_addon.settings["gold"] == getString(ShissuRoster_last)) then
-          goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-        -- seit Gildenhändler
-        elseif (_addon.settings["gold"] == getString(ShissuRoster_sinceKiosk)) then     
-          goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].currentNPC       
-        -- Letzte Woche
-        elseif (_addon.settings["gold"] == getString(ShissuRoster_lastWeek)) then
-          goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].previousNPC  
-        -- Gesamt     
-        else
-          goldDeposit = goldDeposit + _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].total      
-        end
+    local timeLast = historyData[2]
+    local lastGold = historyData[3]
+    local totalGold = historyData[4]
+    local currentNPC = historyData[5]
+    local previousNPC = historyData[6]    
+
+    -- Heute
+    if (_addon.settings["gold"] == getString(ShissuRoster_today)) then           
+      if ( timeLast > _addon.core.getDay()) then
+        goldDeposit = goldDeposit + lastGold
       end
+    -- Gestern
+    elseif (_addon.settings["gold"] == getString(ShissuRoster_yesterday)) then
+      if ( timeLast > (_addon.core.getDay() - 86400) and timeLast < _addon.core.getDay()) then
+        goldDeposit = goldDeposit + lastGold
+      end
+    -- Zuletzt            
+    elseif (_addon.settings["gold"] == getString(ShissuRoster_last)) then
+      goldDeposit = goldDeposit + lastGold
+      -- seit Gildenhändler
+    elseif (_addon.settings["gold"] == getString(ShissuRoster_sinceKiosk)) then     
+      goldDeposit = goldDeposit + currentNPC      
+    -- Letzte Woche
+    elseif (_addon.settings["gold"] == getString(ShissuRoster_lastWeek)) then
+      goldDeposit = goldDeposit + previousNPC
+    -- Gesamt     
+    else
+      goldDeposit = goldDeposit + totalGold
     end
   end
-  
   
   goldDeposit = ZO_LocalizeDecimalNumber(goldDeposit or 0)
   
@@ -681,14 +681,17 @@ function ZO_KeyboardGuildRosterRowDisplayName_OnMouseEnter(control)
     tooltip = tooltip .. getString(ShissuRoster_member)
           
     if (_history[guildName][displayName] == nil) then
-      tooltip = tooltip .. " > " .. blue .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][zos["History"]])
+      if (_history[guildName]["oldestEvent"] ~= nil) then
+        tooltip = tooltip .. " > " .. blue .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][GUILD_HISTORY_GENERAL])
+      end
     else
       if (_history[guildName][displayName].timeJoined ~= nil) then
         local timeData = _history[guildName][displayName].timeJoined
-        
         tooltip = tooltip .. " " .. blue .. _addon.core.secsToTime(timeStamp - timeData) .. white .. " (" .. GetDateStringFromTimestamp(timeData) .. ")"
       else
-        tooltip = tooltip .. " > " .. blue .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][zos["History"]])
+        if (_history[guildName]["oldestEvent"] ~= nil) then
+          tooltip = tooltip .. " > " .. blue .. _addon.core.secsToTime(timeStamp - _history[guildName]["oldestEvent"][GUILD_HISTORY_GENERAL])
+        end
       end
     end
   end
@@ -908,6 +911,30 @@ end
 
 SGT_GuildRosterManager = {} 
 
+function _addon.core.getHistoryData(guildName, displayName, eventType)
+  local timeFirst = 0  
+  local timeLast = 0                        
+  local total = 0
+  local last = 0 
+  local currentNPC = 0
+  local previousNPC = 0
+  
+  if _history[guildName] then                        
+    if _history[guildName][displayName] then
+      if _history[guildName][displayName][eventType] then
+        timeFirst = _history[guildName][displayName][eventType].timeFirst or 0
+        timeLast = _history[guildName][displayName][eventType].timeLast or 0                        
+        total = _history[guildName][displayName][eventType].total or 0
+        last = _history[guildName][displayName][eventType].last or 0
+        currentNPC = _history[guildName][displayName][eventType].currentNPC or 0
+        previousNPC = _history[guildName][displayName][eventType].previousNPC or 0
+      end
+    end
+  end
+
+  return {timeFirst, timeLast, last, total, currentNPC, previousNPC}
+end
+
 function SGT_GuildRosterManager:BuildMasterList() 
   --MM Bypass
   if not (self.masterList) then
@@ -964,54 +991,50 @@ function SGT_GuildRosterManager:BuildMasterList()
     -- GILDENNAME EXISTIERT
 
     if _addon.settings["colGold"] then
-      if (_history) then
-        if (_history[guildName]) then 
-  
-          if (_history[guildName][displayName]) then   
-          -- Heute
-            if (_addon.settings["gold"] == getString(ShissuRoster_today)) then  
-              if ( _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast > _addon.core.getDay()) then
-                goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-              end
-            -- Gestern
-            elseif (_addon.settings["gold"] == getString(ShissuRoster_yesterday)) then
-              if ( _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast > (_addon.core.getDay() - 86400) and 
-                   _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].timeLast < _addon.core.getDay()) then
-                goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-              end
-            
-            -- Zuletzt            
-            elseif (_addon.settings["gold"] == getString(ShissuRoster_last)) then
-              goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].last
-            
-            -- seit Gildenhändler
-            elseif (_addon.settings["gold"] == getString(ShissuRoster_sinceKiosk)) then     
-              goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].currentNPC       
+      local historyData = _addon.core.getHistoryData(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
+      
+      local timeLast = historyData[2]
+      local lastGold = historyData[3]
+      local totalGold = historyData[4]
+      local currentNPC = historyData[5]
+      local previousNPC = historyData[6]    
 
-            -- Letzte Woche
-            elseif (_addon.settings["gold"] == getString(ShissuRoster_lastWeek)) then
-              goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].previousNPC  
-            
-            -- Gesamt     
-            else
-              goldDeposit = _history[guildName][displayName][GUILD_EVENT_BANKGOLD_ADDED].total      
-            end
-            
-            goldTooltip = blue .. displayName .. white .. "\n"      
-            goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, zos["GoldAdded"], green .. "Gold " .. getString(ShissuHistory_goldAdded))
-            goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, zos["GoldRemoved"], red .. "Gold " .. getString(ShissuHistory_goldRemoved))
-            goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, zos["ItemAdded"], green .. "Item " .. getString(ShissuHistory_itemAdded))
-            goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, zos["ItemRemoved"], red .. "Item " .. getString(ShissuHistory_itemRemoved))
-  
-            if(goldTooltip == blue .. displayName .. white .. "\n") then
-              goldTooltip = blue .. displayName .. "\n" .. white .. getString(ShissuRoster_noData)  
-            end
-
-            data.goldDeposit = goldDeposit
-            data.goldDepositTT = goldTooltip
-          end                                                                      
+      -- Heute
+      if (_addon.settings["gold"] == getString(ShissuRoster_today)) then  
+        if ( timeLast > _addon.core.getDay()) then
+          goldDeposit = lastGold
         end
-      end     
+      -- Gestern
+      elseif (_addon.settings["gold"] == getString(ShissuRoster_yesterday)) then
+        if (timeLast > (_addon.core.getDay() - 86400) and timeLast < _addon.core.getDay()) then
+          goldDeposit = lastGold
+        end   
+      -- Zuletzt            
+      elseif (_addon.settings["gold"] == getString(ShissuRoster_last)) then
+        goldDeposit = lastGold
+      -- seit Gildenhändler
+      elseif (_addon.settings["gold"] == getString(ShissuRoster_sinceKiosk)) then     
+        goldDeposit = currentNPC    
+      -- Letzte Woche
+      elseif (_addon.settings["gold"] == getString(ShissuRoster_lastWeek)) then
+        goldDeposit = previousNPC 
+      -- Gesamt     
+      else
+        goldDeposit = totalGold      
+      end
+            
+      goldTooltip = blue .. displayName .. white .. "\n"      
+      goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, GUILD_EVENT_BANKGOLD_ADDED, green .. "Gold " .. getString(ShissuHistory_goldAdded))
+      goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, GUILD_EVENT_BANKGOLD_REMOVED, red .. "Gold " .. getString(ShissuHistory_goldRemoved))
+      goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, GUILD_EVENT_BANKITEM_ADDED, green .. "Item " .. getString(ShissuHistory_itemAdded))
+      goldTooltip = _addon.core.buildTooltip(guildName, displayName, goldTooltip, GUILD_EVENT_BANKITEM_REMOVED, red .. "Item " .. getString(ShissuHistory_itemRemoved))
+  
+      if(goldTooltip == blue .. displayName .. white .. "\n") then
+        goldTooltip = blue .. displayName .. "\n" .. white .. getString(ShissuRoster_noData)  
+      end
+
+      data.goldDeposit = goldDeposit
+      data.goldDepositTT = goldTooltip
     end
     
     -- Spalte: Persönliche Notizen  

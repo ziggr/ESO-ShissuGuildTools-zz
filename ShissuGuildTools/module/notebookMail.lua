@@ -199,8 +199,15 @@ function _addon.core.getHistoryInfo(guildName, name)
           member = true
         end                
         
-        local lastGold = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].last
-        local timeLast = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].timeLast
+        
+        -- NEUNEU
+        if history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED] then
+        local lastGold = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].last or 0
+        local timeLast = history[guildName][name][GUILD_EVENT_BANKGOLD_ADDED].timeLast or 0 
+        else
+        local lastGold =  0
+        local timeLast = 0         
+        end
 
        -- if (name == "@Aerydir") then
        --   d(name .. " - " .. lastGold .. " - " .. timeLast .. " - " .. _mail.gold)

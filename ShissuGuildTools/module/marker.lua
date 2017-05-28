@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: marker.lua
--- Version: v1.0.8
--- Last Update: 10.03.2017
+-- Version: v1.2.0
+-- Last Update: 20.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -23,42 +23,31 @@ local createScrollContainer = _SGT.createScrollContainer
  
 local _addon = {}
 _addon.Name	= "ShissuMarks"
-_addon.Version = "1.0.3"
+_addon.Version = "1.1.0"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuMarks))
 
 _addon.settings = {
-  ["Heal"] = { "Heal", "Heiler", "Pfleger" },
-  ["Misc"] = {},
-  ["Observe"] = {},
-  ["Kick"] = {},
-  
-  ["guildObserve"] = {}, 
+  ["heal"] = { "Heal", "Heiler", "Pfleger"},  
+  ["color1"] = {0.50196081399918, 0.80000001192093, 1, 1},
+  ["color2"] = {0.8901960849762, 0.93333333730698, 1, 1},  
   ["position"] = {},
-  ["autoKick"] = {},
 }
 _addon.ui = {}
 _addon.panel = _setPanel(getString(ShissuMarks), _addon.fN, _addon.Version)
 _addon.controls = {}
 
-_addon.core["MiscIndexPool"] = nil
-_addon.core["ObserveIndexPool"] = nil
-_addon.core["KickIndexPool"] = nil
+_addon.core["misc1IndexPool"] = nil
+_addon.core["misc2IndexPool"] = nil
 _addon.core["HealIndexPool"] = nil
-_addon.core["AllIndexPool"] = nil
 
-_addon.core["MiscScrollItem"] = 1
-_addon.core["ObserveScrollItem"] = 1
-_addon.core["KickScrollItem"] = 1
+_addon.core["misc1ScrollItem"] = 1
+_addon.core["misc2ScrollItem"] = 1
 _addon.core["HealScrollItem"] = 1
-_addon.core["AllScrollItem"] = 1
 
-_addon.core.allSelected = nil
 _addon.core.unitSelected = nil
 _addon.core.unitSelectedId = nil
 _addon.core.unitInSight = nil
-
-_addon.core.listAll = {}
 
 _addon.core.unit = {}
 _addon.core.prefixUnit = {}
@@ -94,69 +83,38 @@ function _addon.core.createSettingMenu()
   -- Beobachten
   controls[#controls+1] = {
     type = "title",
-    name = getString(ShissuMarks_observe),  
+    name = getString(ShissuMarks_misc2),  
   }
     
   controls[#controls+1] = {
-    type = "description",
-    text = blue .. getString(ShissuMarks_observeInfo) .. white .. "\n" ..
-      getString(ShissuMarks_observeInfo2) .. "\n" ..
-      getString(ShissuMarks_observeInfo3) .. "\n" ..
-      getString(ShissuMarks_observeInfo4),  
-  }
-  
-  for guildId = 1, numGuild do
-    local name = GetGuildName(guildId)           
+    type = "colorpicker", 
+    name = getString(ShissuChat_warningColor),
+    tooltip = getString(ShissuChat_warningColorTT),
+    getFunc = _addon.settings["color1"], 
+    setFunc = function (r, g, b, a)                                                                                                                                                           
+      _addon.settings["color1"] = {r, g, b, a}
+    end,
+  }    
 
-    controls[#controls+1] = {
-      type = "checkbox",
-      name = name,
-      getFunc = _addon.settings["guildObserve"][name] or true,
-      setFunc = function(_, value)
-        _addon.settings["guildObserve"][name] = value
-      end,
-    }
-  end
-  
-  -- Automatisches Kicken
   controls[#controls+1] = {
-    type = "title",
-    name = getString(ShissuMarks_autoKick),  
-  }
-    
-  controls[#controls+1] = {
-    type = "description",
-    text = blue .. getString(ShissuMarks_autoKickInfo) .. white .. "\n" ..
-      getString(ShissuMarks_autoKickInfo2) .. "\n" ..
-      getString(ShissuMarks_autoKickInfo3),
-  }
-  
-  for guildId = 1, numGuild do
-    local name = GetGuildName(guildId)           
-
-    controls[#controls+1] = {
-      type = "checkbox",
-      name = name,
-      getFunc = _addon.settings["autoKick"][name],
-      setFunc = function(_, value)
-        _addon.settings["autoKick"][name] = value
-      end,
-    }
-  end
-    
+    type = "colorpicker", 
+    name = getString(ShissuChat_warningColor),
+    tooltip = getString(ShissuChat_warningColorTT),
+    getFunc = _addon.settings["color2"], 
+    setFunc = function (r, g, b, a)                                                                                                                                                           
+      _addon.settings["color2"] = {r, g, b, a}
+    end,
+  }             
 end
 
 
 function _addon.core.showSymbol(groupName)
   local symbol = {
-    ["Misc"] = "ESOUI\\art\\progression\\progression_indexicon_world_down.dds",
+    ["misc1"] = "ESOUI\\art\\progression\\progression_indexicon_world_down.dds",
     ["Heal"] = "ESOUI\\art\\lfg\\lfg_healer_down_64.dds",
-    ["Kick"] = "ESOUI\\art\\emotes\\emotes_indexicon_fidget_down.dds",
-    ["Observe"] = "ESOUI\\art\\emotes\\emotes_indexicon_personality_down.dds",
+    ["misc2"] = "ESOUI\\art\\emotes\\emotes_indexicon_personality_down.dds",
   }
   
-  if (groupName == "All") then return end
-          
   local offsetX, offsetY = GetUIMousePosition()
     
   SMM_Symbol:ClearAnchors()
@@ -168,10 +126,6 @@ function _addon.core.showSymbol(groupName)
 end
 
 function _addon.core.getList(listName)
-  if (listName == "All") then
-      return _addon.core.listAll
-  end
-  
   return _addon.settings[listName]
 end
 
@@ -221,18 +175,6 @@ function _addon.core.filterScrollList(listName)
   end
 end
 
-function _addon.core.removeInAll(unitName)
-  local numPages = #_addon.core.listAll
-  
-  for i=1, numPages do
-    if _addon.core.listAll[i] == unitName then
-      table.remove(_addon.core.listAll, i)
-      break
-    end
-  end
-  
-  _addon.core.filterScrollList("All") 
-end
 
 function _addon.core.showPrefixSymbol(unitName)
   for unitPrefix, groupName in pairs(_addon.core.prefixUnit) do
@@ -245,20 +187,6 @@ function _addon.core.showPrefixSymbol(unitName)
   return false
 end
 
-function _addon.core.setHandlerTransferButton(control, listName)
-  control:SetHandler("OnClicked", function()
-    if _addon.core.unitSelected == nil then return end
-    
-    if _addon.core.unit[_addon.core.unitSelected] == "All" then
-                                                         
-      _addon.core.removeInAll(unitSelected)
-      table.insert(_addon.core.getList(listName), _addon.core.unitSelected)
-       
-      _addon.core.filterScrollList(listName)
-    end  
-  end)
-end
-
 function _addon.core.createScrollControls(var, offsetX)
   _addon.core[var .. "IndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)
   
@@ -266,7 +194,7 @@ function _addon.core.createScrollControls(var, offsetX)
   SM[var]:SetAnchor(TOPLEFT, SGT_Marks_Line2, BOTTOMLEFT, offsetX, 10)
   SM[var]:SetAnchor(BOTTOMLEFT, SGT_Marks, BOTTOMLEFT, offsetX, -10)
   SM[var]:SetWidth(150)
-  SM[var].scrollChild = SM[var]:GetNamedChild("ScrollChild") 
+  SM[var].scrollChild = SM[var]:GetNam1edChild("ScrollChild") 
 end
 
 function _addon.core.showDialog(dialogTitle, dialogText, callbackFunc, vars)
@@ -280,11 +208,9 @@ end
 function _addon.core.listButton(self, button)
   local var
   
-  if self == SGT_Marks_MiscButton then var = "Misc" end
-  if self == SGT_Marks_KickButton then var = "Kick" end
+  if self == SGT_Marks_misc1Button then var = "misc1" end
   if self == SGT_Marks_HealButton then var = "Heal" end
-  if self == SGT_Marks_ObserveButton then var = "Observe" end
-  if self == SGT_Marks_AllButton then var = "All" end
+  if self == SGT_Marks_misc2Button then var = "misc2" end
     
   if button == 1 then
     ESO_Dialogs["SHISSU_DIALOG_ADD"].title = {text = getString(ShissuMarks_add),}
@@ -305,11 +231,7 @@ function _addon.core.listButton(self, button)
   if button == 2 then
       _addon.core.showDialog(getString(ShissuMarks_confirmDel), getString(ShissuMarks_confirmDel2), function()
   
-      if (var == "All") then
-        _addon.core.listAll = {}
-      else
         _addon.settings[var] = {}
-      end
            
       _addon.core.filterScrollList(var)
         
@@ -320,11 +242,7 @@ function _addon.core.listButton(self, button)
   end
   
   if button == 3 then
-    if (var == "Kick") then
-      checkObserver(1)  
-    elseif (var == "Observe") then
-      checkObserver()
-    end    
+      checkmisc2r()
   end
 end
 
@@ -335,16 +253,9 @@ function _addon.core.addToGroup(listName)
     return false
   end
   
-  if _addon.core.unit[_addon.core.unitInSight ] and _addon.core.unit[_addon.core.unitInSight ] ~= "All" then
-    d(white .. getString(ShissuMarks_add5) .. ": " .. blue .. _addon.core.unit[_addon.core.unitInSight ] .. "." )
-    return false
-  else
-    table.insert(_addon.core.getList(listName), _addon.core.unitInSight )
-    _addon.core.filterScrollList(listName)
-    --_addon.core.removeInAll(unitName)
-    --d(white .. getString(ShissuMarks_add3) .. ": " .. blue .. listName .. white .. " " .. getString(ShissuMarks_add4) .. "." )
-    _addon.core.unitInSight = nil
-  end
+  table.insert(_addon.core.getList(listName), _addon.core.unitInSight )
+  _addon.core.filterScrollList(listName)
+  _addon.core.unitInSight = nil
 end
                                              
 function _addon.core.createDivider(anchor, count)
@@ -352,6 +263,7 @@ function _addon.core.createDivider(anchor, count)
   control:SetAnchor(TOPLEFT, anchor, TOPRIGHT, -10, 0)
   control:SetAnchor(BOTTOMLEFT, anchor, BOTTOMRIGHT, -10, -20)
   control:SetWidth(1)
+  control:SetHidden(false)
   control:SetTexture("ShissuGuildTools/textures/vertikal.dds")
   control:SetColor(0.49019607901573, 0.74117648601532, 1, 1)  
   
@@ -367,14 +279,8 @@ function _addon.core.RETICLE_TARGET_CHANGED (_, Name)
   end
 
   if unitName == nil or unitName == "" then return end
-     
-  if _addon.core.unit[unitName] == nil then                  
-    table.insert(_addon.core.listAll, unitName)
-    _addon.core.filterScrollList("All")
-    return
-  end
-  
-  if _addon.core.unit[unitName] ~= nil or _addon.core.unit[unitName] ~= "All" then
+       
+  if _addon.core.unit[unitName] ~= nil then
     if _addon.core.showSymbol(_addon.core.unit[unitName]) then return end
   end 
   
@@ -384,13 +290,10 @@ end
 -- Einzelne Listen Einträge erstellen
 function _addon.core.createIndexButton(indexPool)
   local listName
-  dddd = 0
-  if indexPool == _addon.core["MiscIndexPool"] then listName = "Misc" end
-  if indexPool == _addon.core["KickIndexPool"] then listName = "Kick" end
-  if indexPool == _addon.core["ObserveIndexPool"] then listName = "Observe" end
+
+  if indexPool == _addon.core["misc1IndexPool"] then listName = "misc1" end
+  if indexPool == _addon.core["misc2IndexPool"] then listName = "misc2" end
   if indexPool == _addon.core["HealIndexPool"] then listName = "Heal" end
-  if indexPool == _addon.core["AllIndexPool"] then listName = "All" end
-  
   local control = ZO_ObjectPool_CreateControl("SM_" .. listName .. "Index", indexPool, _addon.ui[listName].scrollChild)
   local anchorBtn = _addon.core[listName .. "ScrollItem"] == 1 and _addon.ui[listName].scrollChild or indexPool:AcquireObject( _addon.core[listName.."ScrollItem"]-1 )
   
@@ -401,10 +304,6 @@ function _addon.core.createIndexButton(indexPool)
   control:SetHandler("OnMouseUp", function(self, button)   
     _addon.core.unitSelected = self.unit
     _addon.core.unitSelectedId = self.id
-    
-    _addon.ui.allSelected:SetHidden(false)
-    _addon.ui.allSelected:ClearAnchors()
-    _addon.ui.allSelected:SetAnchorFill(self)
     
     -- Entfernen
     if button == 2 then
@@ -441,71 +340,21 @@ function _addon.core.removeIndexButton(control)
 end 
 
 function _addon.core.UI()
-  _SGT.createFlatWindow(
-    "SGT_Marks",
-    SGT_Marks,  
-    {850, 400}, 
-    function() SGT_Marks:SetHidden(true) end,
-    getString(ShissuMarks_title)
-  ) 
-
-  SGT_Marks_Version:SetText(_addon.fN .. " " .. _addon.Version)
-
-  setDefaultColor(SGT_Marks_Line2)
-  
-  SGT_Marks_Misc:SetText(getString(ShissuMarks_misc))
-  SGT_Marks_Observe:SetText(getString(ShissuMarks_observe))
-  SGT_Marks_Kick:SetText(getString(ShissuMarks_kick))
-  SGT_Marks_Heal:SetText(getString(ShissuMarks_heal))
-  SGT_Marks_All:SetText(getString(ShissuMarks_all))
-    
-  SGT_Marks_Info_Label:SetText("|c779cff<---|r")
-
-  SGT_Marks_KickInfo:SetText(red .. getString(ShissuMarks_rightItem) .. white .. " = " .. getString(ShissuMarks_rightItem2))
-  
   _addon.ui["Heal"] = createScrollContainer("SM_HealList", 150, SGT_Marks, SGT_Marks_Line2, 10, 10, -10)
   _addon.core["HealIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)  
   _addon.ui.divider4 = _addon.core.createDivider(SM_HealList, "2")
- 
-  _addon.ui["Misc"] = createScrollContainer("SM_MiscList", 150, SGT_Marks, SGT_Marks_Line2, 170, 10, -10)
-  _addon.core["MiscIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)  
-  _addon.ui.divider1 = _addon.core.createDivider(SM_MiscList, "F")
   
-  _addon.ui["Observe"] = createScrollContainer("SM_ObserveList", 150, SGT_Marks, SGT_Marks_Line2, 170+160, 10, -10)
-  _addon.core["ObserveIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)
-  _addon.ui.divider2 = _addon.core.createDivider(SM_ObserveList, "H")
-
-  _addon.ui["Kick"] = createScrollContainer("SM_KickList", 150, SGT_Marks, SGT_Marks_Line2, 170+160+160, 10, -10)
-  _addon.core["KickIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton) 
-  _addon.ui.divider3 = _addon.core.createDivider(SM_KickList, "1")
-
-  _addon.ui["All"] = createScrollContainer("SM_AllList", 150, SGT_Marks, SGT_Marks_Line2, 170+160+160+200, 10, -10)  
-  _addon.core["AllIndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)
-
-  _addon.ui.allSelected = WINDOW_MANAGER:CreateControl(nil, _addon.ui["All"].scrollChild, CT_TEXTURE)
-  _addon.ui.allSelected:SetTexture("EsoUI\\Art\\Buttons\\generic_highlight.dds")
-  _addon.ui.allSelected:SetHidden(true)
-  setDefaultColor(_addon.ui.allSelected)
-    
-  _addon.core.setHandlerTransferButton(SGT_Marks_ButtonHeal, "Heal")
-  _addon.core.setHandlerTransferButton(SGT_Marks_ButtonMisc, "Misc")
+  _addon.ui["misc1"] = createScrollContainer("SM_misc1List", 150, SGT_Marks, SGT_Marks_Line2, 170, 10, -10)
+  _addon.core["misc1IndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)  
+  _addon.ui.divider1 = _addon.core.createDivider(SM_misc1List, "F")
   
-  SGT_Marks_HealButton:SetHandler("OnMouseUp", _addon.core.listButton)
-  SGT_Marks_MiscButton:SetHandler("OnMouseUp", _addon.core.listButton)
-  SGT_Marks_ObserveButton:SetHandler("OnMouseUp", _addon.core.listButton)
-  SGT_Marks_KickButton:SetHandler("OnMouseUp", _addon.core.listButton)
-  SGT_Marks_AllButton:SetHandler("OnMouseUp", _addon.core.listButton)
-  
-  local stdTool = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuMarks_leftMouse) .. "\n" .. blue .. getString(ShissuModule_rightMouse) .. white .." - " .. getString(ShissuMarks_rightMouse)
-  local stdTool2 = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuMarks_leftMouse) .. "\n" .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks_middleMouse) .. "\n" .. blue .. getString(ShissuModule_rightMouse) .. white .." - " .. getString(ShissuMarks_rightMouse)
-   
-  _addon.core.tooltip(SGT_Marks_HealButton, stdTool)
-  _addon.core.tooltip(SGT_Marks_MiscButton, stdTool)  
-  _addon.core.tooltip(SGT_Marks_ObserveButton, stdTool2)
-  _addon.core.tooltip(SGT_Marks_KickButton, stdTool2)  
-  _addon.core.tooltip(SGT_Marks_AllButton, blue.. getString(ShissuModule_rightMouse) .. white .. " - " .. getString(ShissuMarks_rightMouse))
-  _addon.core.tooltip(SGT_Marks_ButtonHeal, blue .. getString(ShissuMarks_leftMouse) .. white .. ": " .. getString(ShissuMarks_heal))
-  _addon.core.tooltip(SGT_Marks_ButtonMisc, blue .. getString(ShissuMarks_leftMouse) .. white .. ": " .. getString(ShissuMarks_misc))
+  _addon.ui["misc2"] = createScrollContainer("SM_misc2List", 150, SGT_Marks, SGT_Marks_Line2, 170+160, 10, -10)
+  _addon.core["misc2IndexPool"] = ZO_ObjectPool:New(_addon.core.createIndexButton, _addon.core.removeIndexButton)
+  _addon.ui.divider2 = _addon.core.createDivider(SM_misc2List, "H")
+
+  --SGT_Marks_HealButton:SetHandler("OnMouseUp", _addon.core.listButton)
+--  SGT_Marks_misc1Button:SetHandler("OnMouseUp", _addon.core.listButton)
+ -- SGT_Marks_misc2Button:SetHandler("OnMouseUp", _addon.core.listButton)
   
   if (_addon.settings["position"] == nil) then
     _addon.settings["position"] = {}
@@ -515,109 +364,53 @@ function _addon.core.UI()
   getWindowPosition(SGT_Marks, _addon.settings["position"])
   
   -- Gespeicherten Listen auslesen!
-  _addon.core.filterScrollList("Heal")
-  _addon.core.filterScrollList("Misc")
-  _addon.core.filterScrollList("Kick")
-  _addon.core.filterScrollList("Observe")
+ -- _addon.core.filterScrollList("Heal")
+ -- _addon.core.filterScrollList("misc1")
+ -- _addon.core.filterScrollList("misc2")
+
+
 
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_RETICLE_TARGET_CHANGED, _addon.core.RETICLE_TARGET_CHANGED)        
 end
 
-function _addon.core.tooltip(control, text)
+function _addon.core.setMiscTitle(control, i18n, colorVar)
+  control:SetText(getString(i18n))
+  
+  local c = _addon.settings[colorVar]
+  control:SetColor(c[1], c[2], c[3], c[4])  
+end
+
+function _addon.core.tooltip(control)
+  local stdTool = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuMarks_leftMouse) .. "\n" .. blue .. getString(ShissuModule_rightMouse) .. white .." - " .. getString(ShissuMarks_rightMouse)
+
   control:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOPRIGHT, text) end)
   control:SetHandler("OnMouseExit", function(self) ZO_Tooltips_HideTextTooltip() end)  
 end
  
-function checkObserver(kick)
-  local list = _addon.settings["Observe"]
+function _addon.core.UI2()
+  _SGT.createFlatWindow(
+    "SGT_Marks",
+    SGT_Marks,  
+    {550, 400}, 
+    function() SGT_Marks:SetHidden(true) end,
+    getString(ShissuMarks_title)
+  )
   
-  if (kick) then
-    list = _addon.settings["Kick"]
-  end
+  SGT_Marks_Version:SetText(_addon.fN .. " " .. _addon.Version)
+
+  -- Buttons / Überschriften
+  SGT_Marks_Heal:SetText(getString(ShissuMarks_heal))
+  _addon.core.tooltip(SGT_Marks_HealButton)
   
-  local numPages = #list
+  _addon.core.setMiscTitle(SGT_Marks_Misc1, ShissuMarks_misc1, color1) 
+  _addon.core.tooltip(SGT_Marks_Misc1Button)  
   
-  local observeAllow = false
-  local kickAllow = false
-    
-  for i=1, numPages do 
-    local accName = list[i]
-    local data = _SGTaccountList[accName]
-    local found = 0
-    local foundFirst = 0 
-    local foundGuilds = ""  
-    local kickGuild = {}
-    
-    if (data ~= nil) then      
-      local numEntrys = #data["guilds"]
-      data2 = data["guilds"]
-      
-      for y=1, numEntrys do
-        local accGuildId = data2[y][2]
-        local accGuildName = data2[y][1]
-
-        if (_addon.settings["autoKick"][accGuildName]) then
-          table.insert(kickGuild, { data.id, data2[y][2]} )   
-        end
-        
-        if (_addon.settings["guildObserve"][accGuildName]) then
-          observeAllow = true
-        end     
-        
-        if ( foundFirst == 0 ) then
-          foundFirst = 1
-          foundGuilds = foundGuilds .. data2[y][1]
-        else
-          foundGuilds = foundGuilds .. ", " .. data2[y][1]
-        end
-          
-        found = 1
-      end
-
-      -- Array > 0 = Gefunden
-      if ( found == 1) then
-        if (kick) then
-          foundGuilds = foundGuilds .. " " .. getString(ShissuMarks_found2)
-        end
-      
-        if (observeAllow) then
-          d(_addon.fN .. ": " .. red .. accName .. white .. " " .. getString(ShissuMarks_found) .. ": " .. foundGuilds)
-        end
-        
-        if (kick) then
-          for y=1, #kickGuild do        
-            accGuildId = kickGuild[y][2]   
-            accGuildName = GetGuildName(accGuildId)   
-
-            if (_addon.settings["guildObserve"][accGuildName]) then
-              GuildRemove(accGuildId, accName)
-              
-              if (observeAllow or kickAllow) then
-                d(_addon.fN .. ": " .. red .. accName .. white .. " " .. getString(ShissuMarks_found) .. ": " .. foundGuilds)
-              end
-            end
-          end
-        end
-      end
-    
-    end
-  end
+  _addon.core.setMiscTitle(SGT_Marks_Misc2, ShissuMarks_misc2, color2)  
+  _addon.core.tooltip(SGT_Marks_Misc2Button)  
 end
- 
-_addon.core.firstLoad = 1 
- 
-function _addon.core.startCheck(eventCode)
-  if (_addon.core.firstLoad == 1) then
-    _addon.core.firstLoad = 0 
-    
-    zo_callLater(function() 
-      checkObserver()
-      checkObserver(1)    
-    end, 5000)
-  else
-    checkObserver()
-    checkObserver(1)
-  end
+
+function _addon.core.createNewVar(saveVar, value)
+  if _addon.settings[saveVar] == nil then _addon.settings[saveVar] = value end
 end
  
 -- * Initialisierung
@@ -625,24 +418,12 @@ function _addon.core.initialized()
   shissuGT = shissuGT or {}
   shissuGT[_addon.Name] = shissuGT[_addon.Name] or _addon.settings
   _addon.settings = shissuGT[_addon.Name]
-   
-     -- Hat jemand die neue SaveVar schon?  
-  if (_addon.settings["guildObserve"] == nil) then _addon.settings["guildObserve"] = {} end
-  if (_addon.settings["autoKick"] == nil) then _addon.settings["autoKick"] = {} end
-
-  for guildId=1, GetNumGuilds() do
-    local guildName = GetGuildName(guildId)  
-    if (_addon.settings["guildObserve"][guildName] == nil) then _addon.settings["guildObserve"][guildName] = true end
-    if (_addon.settings["autoKick"][guildName] == nil) then _addon.settings["autoKick"][guildName] = false end
-  end
-                     
-  _addon.core.createSettingMenu()  
-  _addon.core.UI()
  
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_ADDED, _addon.core.startCheck)
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_REMOVED, _addon.core.startCheck)
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_PLAYER_ACTIVATED, _addon.core.startCheck)
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED, _addon.core.startCheck)
+ _addon.core.createNewVar("color1", {0.50196081399918, 0.80000001192093, 1, 1})
+ _addon.core.createNewVar("color2", {0.8901960849762, 0.93333333730698, 1, 1})
+                       
+  _addon.core.createSettingMenu()  
+  _addon.core.UI2()
 end                               
 
 Shissu_SuiteManager._settings[_addon.Name] = {}

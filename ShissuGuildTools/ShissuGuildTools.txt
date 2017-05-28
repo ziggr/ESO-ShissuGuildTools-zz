@@ -6,7 +6,7 @@
 
 ; Author: @Shissu on EU-Server!
  
-## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.1.0.7
+## Title: |cAFD3FFShissu's|r|ceeeeee Guild Tools|r v3.1.1.9
 ## APIVersion: 100018
 ## Author: |c779cff@Shissu|r [EU]
 ## SavedVariables: shissuGT
@@ -41,7 +41,5 @@ module/notifications.xml
 module/roster.lua
 module/scanner.lua
 module/chat.lua
-module/marker.lua
-module/marker.xml
 
 bindings.xml

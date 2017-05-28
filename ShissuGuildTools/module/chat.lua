@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: chat.lua
--- Version: v2.0.12
--- Last Update: 14.05.2017
+-- Version: v2.0.14
+-- Last Update: 20.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -20,7 +20,7 @@ local RGBtoHex = _SGT.RGBtoHex2
  
 local _addon = {}
 _addon.Name	= "ShissuChat2"
-_addon.Version = "2.0.12"
+_addon.Version = "2.0.14"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuChat))             
 
@@ -36,6 +36,7 @@ _addon.settings = {
   ["nameFormat"] = 3,
   ["registerTab"] = 1,
   ["channel"] = "/zone",
+  ["startChannel"] = true,
   ["url"] = true,
   ["partySwitch"] = true,
   ["partyLead"] = true,
@@ -191,6 +192,16 @@ function _addon.core.createSettingMenu()
   } 
   
   local channels = {}
+
+  controls[#controls+1] = {
+    type = "checkbox",
+    name = getString(ShissuChat_channel),
+    tooltip = getString(ShissuChat_channelTT),
+    getFunc = _addon.settings["startChannel"],
+    setFunc = function(_, value)
+      _addon.settings["startChannel"] = value
+    end,
+  } 
   
   for chanId = 1, table.getn(CHAT_SYSTEM.channelData) do
     if (CHAT_SYSTEM.channelData[chanId] ~= nil) then
@@ -851,7 +862,7 @@ function _addon.core.startModule()
   _addon.core.createNewTab()
   _addon.core.defaultRegister()
   
-  if (_addon.settings["channel"]) then
+  if (_addon.settings["channel"] and _addon.settings["startChannel"]) then
     _addon.settings["channel"] = _lib.cutStringAtLetter(_addon.settings["channel"], ' ') 
     ZO_ChatWindowTextEntryEditBox:SetText(_addon.settings["channel"] .. " ")
   end
@@ -924,6 +935,7 @@ function _addon.core.initNewVariables()
   _addon.core.createNewVar("alliance", true)
   _addon.core.createNewVar("rank", true)
   _addon.core.createNewVar("guild", true) 
+  _addon.core.createNewVar("startChannel", true) 
   
   -- einmaliges Übernehmen der alten Einstellungen
   if shissuGT["ShissuChat"] ~= nil then
@@ -957,7 +969,7 @@ function _addon.core.initialized()
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_PLAYER_ACTIVATED, _addon.core.startModule)
 
   if (_addon.enabled == false) then
-    zo_callLater(function() _addon.core.startModule() end, 5000)  
+    zo_callLater(function() _addon.core.startModule() end, 10000)  
   end
 end                               
 

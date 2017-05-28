@@ -279,12 +279,10 @@ ZO_CreateStringId("ShissuChat_timeStampFormatTT", "|ceeeeeeFORMAT|r:\n" ..
 
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Markierungen")
-ZO_CreateStringId("ShissuMarks_title", "Monster (NPC) & Spieler Markierungen")
-ZO_CreateStringId("ShissuMarks_misc", "Misc")
-ZO_CreateStringId("ShissuMarks_kick", "Auto Kick")
+ZO_CreateStringId("ShissuMarks_title", "NPC/Spieler Markierungen")
+ZO_CreateStringId("ShissuMarks_misc1", "Misc 1")
 ZO_CreateStringId("ShissuMarks_heal", "Heiler")
-ZO_CreateStringId("ShissuMarks_observe", "Beobachten")
-ZO_CreateStringId("ShissuMarks_all", "All What You See")
+ZO_CreateStringId("ShissuMarks_misc2", "Misc 2")
 ZO_CreateStringId("ShissuMarks_confirmDel", "Liste löschen?")
 ZO_CreateStringId("ShissuMarks_confirmDel2", "Möchten Sie den Listeninhalt wirklick löschen?")  
 ZO_CreateStringId("ShissuMarks_add", "Monster (NPC) / Spieler")

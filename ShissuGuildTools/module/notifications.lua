@@ -1,14 +1,14 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notifications.lua
--- Version: v2.0.2
--- Last Update: 13.05.2017
+-- Version: v2.0.4
+-- Last Update: 20.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 local _addon = {}
 _addon.Name	= "ShissuNotifications"
-_addon.Version = "2.0.2"
+_addon.Version = "2.0.4"
 _addon.core = {}
 
 local _globals = Shissu_SuiteManager._globals
@@ -25,7 +25,7 @@ _addon.settings = {
   ["guildRank"] = true,
   ["guildJoined"] = true,
   ["guildKicked"] = true,
-  ["memberNote"] = true,
+  ["memberNote"] = false,
   ["mail"] = false,
   ["memberRank"] = true,
   ["inSight"] = {},
@@ -419,48 +419,50 @@ function _addon.core.memberInSight(_, name)
       local acc = text
       local charName = _lib.cutStringAtLetter(unitName, '^')
 
-      local class = "|t28:28:" .. GetClassIcon(class) .. "|t"
-      local alliance = "|t28:28:" .. GetAllianceBannerIcon(alliance) .. "|t"
- 
-      text = blue .. acc .. "\n"
-      text = text .. alliance .. class .. "|ceeeeee" .. charName
-
-      if vr == 0 then
-        text = text .. " |ceeeeee(|cAFD3FFLvL " .. "|ceeeeee" .. lvl .. ")"
-      else
-        text = text .. " |ceeeeee(|cAFD3FFCP " .. "|ceeeeee" .. vr .. ")"
-      end
-      
-      if (_addon.settings["inSight"][1] or _addon.settings["inSight"][2] or _addon.settings["inSight"][3] or _addon.settings["inSight"][4] or _addon.settings["inSight"][5]) then   
-        memberData = memberData["guilds"]                        
+      if (class ~= nil and alliance ~= nil) then
+        local class = "|t28:28:" .. GetClassIcon(class) .. "|t"
+        local alliance = "|t28:28:" .. GetAllianceBannerIcon(alliance) .. "|t"
+   
+        text = blue .. acc .. "\n"
+        text = text .. alliance .. class .. "|ceeeeee" .. charName
+  
+        if vr == 0 then
+          text = text .. " |ceeeeee(|cAFD3FFLvL " .. "|ceeeeee" .. lvl .. ")"
+        else
+          text = text .. " |ceeeeee(|cAFD3FFCP " .. "|ceeeeee" .. vr .. ")"
+        end
         
-        local first = 0
-
-        for numGuild = 1, #memberData do
-          if (_addon.settings["inSight"][1] and memberData[numGuild][2] == 1 
-          or _addon.settings["inSight"][2] and memberData[numGuild][2] == 2 
-          or _addon.settings["inSight"][3] and memberData[numGuild][2] == 3 
-          or _addon.settings["inSight"][4] and memberData[numGuild][2] == 4 
-          or _addon.settings["inSight"][5] and memberData[numGuild][2] == 5) then
-            
-            count = count + 1
-                
-            if (first == 0) then
-              first = 1
-              text = text .. "\n\n"
-            end
-
-            text = text .. "|ceeeeee" .. memberData[numGuild][1]
-            
-            if numGuild ~= #memberData then
-              text = text .. "\n"
+        if (_addon.settings["inSight"][1] or _addon.settings["inSight"][2] or _addon.settings["inSight"][3] or _addon.settings["inSight"][4] or _addon.settings["inSight"][5]) then   
+          memberData = memberData["guilds"]                        
+          
+          local first = 0
+  
+          for numGuild = 1, #memberData do
+            if (_addon.settings["inSight"][1] and memberData[numGuild][2] == 1 
+            or _addon.settings["inSight"][2] and memberData[numGuild][2] == 2 
+            or _addon.settings["inSight"][3] and memberData[numGuild][2] == 3 
+            or _addon.settings["inSight"][4] and memberData[numGuild][2] == 4 
+            or _addon.settings["inSight"][5] and memberData[numGuild][2] == 5) then
+              
+              count = count + 1
+                  
+              if (first == 0) then
+                first = 1
+                text = text .. "\n\n"
+              end
+  
+              text = text .. "|ceeeeee" .. memberData[numGuild][1]
+              
+              if numGuild ~= #memberData then
+                text = text .. "\n"
+              end
             end
           end
         end
-      end
-
-      if (count > 0 ) then
-        ZO_Tooltips_ShowTextTooltip(SGT_notificationsInSight, TOPRIGHT, text)
+  
+        if (count > 0 ) then
+          ZO_Tooltips_ShowTextTooltip(SGT_notificationsInSight, TOPRIGHT, text)
+        end
       end
     end
   end
@@ -471,26 +473,27 @@ function _addon.core.memberRankChanged(_, guildId, displayName, rankIndex)
   local guildName = GetGuildName(guildId)
   
   if (GetAllianceBannerIcon(guildId) ~= nil) then
-    local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
-    
+    local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24) 
     local rankName = GetFinalGuildRankName(guildId, rankIndex)
     local rankIcon = zo_iconFormat(GetGuildRankLargeIcon(GetGuildRankIconIndex(guildId, rankIndex)), 24, 24)  
   
-    if _addon.settings["guildRank"] == true then 
-      if displayName == GetUnitDisplayName("player") then
+    if (allianceIcon ~= nil and guildName ~=nil and rankIcon ~=nil and rankName ~= nil and displayName ~=  nil) then
+      if _addon.settings["guildRank"] == true then 
+        if displayName == GetUnitDisplayName("player") then
+          _addon.core.createNotif(
+            getString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER),
+            zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
+          )
+          return
+        end
+      end
+      
+      if _addon.settings["memberRank"] == true then
         _addon.core.createNotif(
-          getString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER),
+          displayName,
           zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
         )
-        return
       end
-    end
-    
-    if _addon.settings["memberRank"] == true then
-      _addon.core.createNotif(
-        displayName,
-        zo_strformat(getString(ShissuNotifications_rankChange), allianceIcon, guildName, rankIcon, rankName)  
-      )
     end
   end
 end
@@ -513,11 +516,13 @@ function _addon.core.leftGuild(_, guildId, guildName)
   
  -- local guildId = GetGuildId(guildId)
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
-    
-  _addon.core.createNotif(
-    GetString(SI_GAMEPAD_GUILD_KIOSK_GUILD_LABEL),
-    zo_strformat(getString(ShissuNotifications_leftGuild), allianceIcon, guildName)  
-  )
+  
+  if (allianceIcon ~= nil and guildName ~=nil) then
+    _addon.core.createNotif(
+      GetString(SI_GAMEPAD_GUILD_KIOSK_GUILD_LABEL),
+      zo_strformat(getString(ShissuNotifications_leftGuild), allianceIcon, guildName)  
+    )
+  end
 end
 
 function _addon.core.joinGuild(_, guildId, guildName)
@@ -525,11 +530,13 @@ function _addon.core.joinGuild(_, guildId, guildName)
   
 --  local guildId = GetGuildId(guildId)
   local allianceIcon = zo_iconFormat(GetAllianceBannerIcon(guildId), 24, 24)
-    
-  _addon.core.createNotif(
-    GetString(SI_GAMEPAD_GUILD_KIOSK_GUILD_LABEL),
-    zo_strformat(getString(ShissuNotifications_joinGuild), allianceIcon, guildName)  
-  )  
+  
+  if (allianceIcon ~= nil and guildName ~=nil) then  
+    _addon.core.createNotif(
+      GetString(SI_GAMEPAD_GUILD_KIOSK_GUILD_LABEL),
+      zo_strformat(getString(ShissuNotifications_joinGuild), allianceIcon, guildName)  
+    )  
+  end
 end
                      
 function _addon.core.createNotif(heading, message, note)
@@ -600,7 +607,7 @@ function _addon.core.initialized()
   if (_addon.settings["guildJoined"] == nil) then _addon.settings["guildJoined"] = true end
   if (_addon.settings["guildKicked"] == nil) then _addon.settings["guildKicked"] = true end
   if (_addon.settings["memberRank"] == nil) then _addon.settings["memberRank"] = true end
-  if (_addon.settings["memberNote"] == nil) then _addon.settings["memberNote"] = true end
+  if (_addon.settings["memberNote"] == nil) then _addon.settings["memberNote"] = false end
     
   for guildId=1, GetNumGuilds() do
     local guildName = GetGuildName(guildId)  

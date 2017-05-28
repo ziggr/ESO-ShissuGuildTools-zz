@@ -1,15 +1,38 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.1.0.7
--- Last Update: 13.05.2017
+-- Version: v3.1.1.9
+-- Last Update: 21.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
 --[[
   v3.1.0.7
   ********
-  - Chat Modul lässt sich deaktiveren
+  * Chat
+  - StandardChannel lässt sich auf Wunsch deaktivieren
+  
+  * Notifications
+  - Notizen Benachrichtigungen sind standard deaktiviert    
+  
+  * Scanner History
+  - Überarbeitung
+  - 5 Gilde wird erfasst
+  - Reduzierung der SaveVars pro Gilde um min. 32% 
+  
+  * Roster
+  - Überarbeitung aufgrund der Änderungen des HistoryScanner und der neuen SaveVars
+  - Fehlerbehebungen
+  
+  * Teleport
+  - Berücksichtigt nicht mich den eigenen Account
+  
+  * Misc
+  - div. kleine Optimierungen
+  
+  * Marks
+  - currently disabled! next version, split in 2 modules: guildblock + marks
+  
 ]]
 
 local _globals = Shissu_SuiteManager._globals
@@ -167,14 +190,14 @@ function _addon.core.chatButton(button)
         SGT_Teleport:SetHidden(true)
       end
     end
-   elseif (button == 3) then
-    if (checkSetting("ShissuMarks")) then
-      if (SGT_Marks:IsHidden()) then
-        SGT_Marks:SetHidden(false)
-      else
-        SGT_Marks:SetHidden(true)
-      end
-    end   
+ --  elseif (button == 3) then
+ --   if (checkSetting("ShissuMarks")) then
+  --    if (SGT_Marks:IsHidden()) then
+ --       SGT_Marks:SetHidden(false)
+  --    else
+  --      SGT_Marks:SetHidden(true)
+  --    end
+--    end   
   end  
 end
 
@@ -244,7 +267,7 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     _addon.loadModule(ShissuGuildHome, "ShissuGuildHome")
     _addon.loadModule(ShissuMemberStatus, "ShissuMemberStatus")
     _addon.loadModule(ShissuContextMenu, "ShissuContextMenu")
-    --_addon.loadModule(ShissuMarks, "ShissuMarks") 
+ --   _addon.loadModule(ShissuMarks, "ShissuMarks") 
     _addon.loadModule(ShissuTeleporter, "ShissuTeleporter")
     _addon.loadModule(ShissuWelcomeInvite, "ShissuWelcomeInvite")
     _addon.loadModule(ShissuNotebook, "ShissuNotebook") 
@@ -276,13 +299,13 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
         buttonText = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuNotebook)
       end
       
-   --   if (checkSetting("ShissuMarks")) then
-    --    if (string.len(buttonText) > 2) then
-    --      buttonText = buttonText .. "\n"
-    --    end
+--      if (checkSetting("ShissuMarks")) then
+ --       if (string.len(buttonText) > 2) then
+ --         buttonText = buttonText .. "\n"
+  --      end
         
-   --     buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
-    -- end    
+  --      buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
+  --   end    
             
       if (checkSetting("ShissuTeleporter")) then                                                                  
         if (string.len(buttonText) > 2) then
@@ -327,9 +350,9 @@ Shissu_SuiteManager._bindings[_addon.Name] = {}
 --    if (SGT_Marks:IsHidden()) then
 --      SGT_Marks:SetHidden(false)
 --    else
---      SGT_Marks:SetHidden(true)
---    end
---  end
+ --     SGT_Marks:SetHidden(true)
+ --   end
+ -- end
 --end  
 
 Shissu_SuiteManager._bindings[_addon.Name].notes = function() 
@@ -370,7 +393,6 @@ end
 --  local currentTime = _SGT.currentTime()
 --  local nextKiosk = currentTime + _SGT.getKioskTime()
 --  local lastKiosk = nextKiosk - 604800
-  
 
 -- Not offical, testing
 function checkGoldDeposits(guildName, goldDeposit, removeReminder)
@@ -551,6 +573,26 @@ function checkGoldDeposits(guildName, goldDeposit, removeReminder)
       end
     end)
   end
+end
+
+function ZO_PlayerToPlayer:TryShowingStandardInteractLabel()
+  local function GetPlatformIgnoredString()
+    return IsConsoleUI() and SI_PLAYER_TO_PLAYER_TARGET_BLOCKED or SI_PLAYER_TO_PLAYER_TARGET_IGNORED
+  end
+
+  self.resurrectable = false
+  self:SetTargetIdentification()
+
+  local isIgnored = IsUnitIgnored(P2P_UNIT_TAG)
+  local interactLabel = isIgnored and GetPlatformIgnoredString() or SI_PLAYER_TO_PLAYER_TARGET
+
+  self.actionKeybindButton:SetHidden(false)
+  self.targetLabel:SetText(zo_strformat(interactLabel, ZO_GetPrimaryPlayerNameWithSecondary(self.currentTargetDisplayName, self.currentTargetCharacterName)))
+  self.actionKeybindButton:SetText(GetString(SI_PLAYER_TO_PLAYER_ACTION_MENU))
+   
+  self.targetLabel:SetColor(0.50196081399918, 0.80000001192093, 1, 1)
+
+  return true
 end
 
 EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_ADD_ON_LOADED, _addon.EVENT_ADD_ON_LOADED)  
