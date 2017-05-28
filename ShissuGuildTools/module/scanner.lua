@@ -1,7 +1,7 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: scanner.lua
--- Version: v1.3.1
+-- Version: v1.3.3
 -- Last Update: 21.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
@@ -18,7 +18,7 @@ _addon = {}
 _addon.Name = "ShissuScanner"
 
 _addon.scanGuild = 5 * 60 * 1000
-_addon.scanInterval = 2500
+_addon.scanInterval = 3000
 _addon.guildId = nil
 _addon.firstGuildScan = false
 _addon.firstScan = true
@@ -274,12 +274,12 @@ function _addon.core.openHistoryPages()
   end
 
   if (not historyPage) then          
-    if (GetNumGuilds() > 0) then
-      if (GetNumGuilds() == _addon.guildId) then
-        _addon.guildId = 1
-        guildId = GetGuildId(_addon.guildId) 
-      end
-    end
+    --if (GetNumGuilds() > 0) then
+    --  if (GetNumGuilds() == _addon.guildId) then
+     --   _addon.guildId = 1
+     --   guildId = GetGuildId(_addon.guildId) 
+     -- end
+    --end
     
     _addon.core.processEvents(guildId, _addon.scanCategory)
     _addon.core.scanNext()
@@ -341,8 +341,10 @@ end
 
 function _addon.core.removeOldData2(guildName, displayName, eventType)
   if _history[guildName] ~= nil then
-    if _history[guildName][displayName]  ~= nil then
-      if _history[guildName][displayName][eventType]  ~= nil then
+    if _history[guildName][displayName] ~= nil then
+      local newTable = _history[guildName][displayName][eventType]
+      
+      if (type(newTable) == "table") then
         if (_history[guildName][displayName][eventType].timeFirst == 0) then _history[guildName][displayName][eventType].timeFirst = nil end
         if (_history[guildName][displayName][eventType].timeLast == 0) then _history[guildName][displayName][eventType].timeLast= nil end
         if (_history[guildName][displayName][eventType].total == 0) then _history[guildName][displayName][eventType].total = nil end  
@@ -370,10 +372,12 @@ function _addon.core.removeOldData()
         
       if (type(guildData) == "table") then
         for displayName, memberData in pairs(guildData) do
-          _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
-          _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_REMOVED)
-          _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_ADDED)
-          _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_REMOVED)
+          if (type(memberData) == "table") then
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_ADDED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKGOLD_REMOVED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_ADDED)
+            _addon.core.removeOldData2(guildName, displayName, GUILD_EVENT_BANKITEM_REMOVED)
+          end
         end  
       end
     end

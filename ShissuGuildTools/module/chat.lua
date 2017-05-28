@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: chat.lua
--- Version: v2.0.14
--- Last Update: 20.05.2017
+-- Version: v2.0.15
+-- Last Update: 21.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -422,6 +422,9 @@ end
 -- FENSTER FUNKTIONEN
 -- ******************
 function _addon.core.defaultRegister()
+  if (CHAT_SYSTEM == nil) then return end
+  if (CHAT_SYSTEM.primaryContainer == nil) then return end
+  
   local numRegister = #CHAT_SYSTEM.primaryContainer.windows
 	
 	if numRegister > 1 then
