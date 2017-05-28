@@ -299,7 +299,7 @@ function _addon.core.getKioskTime(which)
 
   -- Anzahl der Wochen seit 01.01.1970
   local week = math.floor(currentTime / weekSeconds)
-  local beginnKiosk = firstWeek + (weekSeconds * week)
+  local beginnKiosk = firstWeek + (weekSeconds * week) + 60 *60
   
   -- Gebots Ende 
   if (which == 1) then

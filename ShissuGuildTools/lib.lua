@@ -39,7 +39,7 @@ function _lib.getKioskTime(which, additional, day)
 
   -- Anzahl der Wochen seit 01.01.1970
   local week = math.floor(currentTime / weekSeconds) + additional
-  local beginnKiosk = firstWeek + (weekSeconds * week)
+  local beginnKiosk = firstWeek + (weekSeconds * week) + 60 * 60
   
   -- Gebots Ende 
   if (which == 1) then
