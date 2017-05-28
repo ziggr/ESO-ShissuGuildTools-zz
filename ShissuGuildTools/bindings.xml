@@ -9,8 +9,6 @@
 	<Layer name="SI_KEYBINDINGS_LAYER_GENERAL">
 		<Category name="|cAFD3FFShissu's|r|ceeeeee Guild Tools|r">
 			<Action name="SGT_Notes"><Down>Shissu_SuiteManager._bindings["ShissuGuildTools"].notes()</Down></Action>
-      <Action name="SGT_Teleporter"><Down>Shissu_SuiteManager._bindings["ShissuGuildTools"].teleport()</Down></Action>
-      <Action name="SGT_Marks"><Down>Shissu_SuiteManager._bindings["ShissuGuildTools"].marks()</Down></Action>
 		</Category>
 	</Layer>
 </Bindings>
