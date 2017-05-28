@@ -266,23 +266,14 @@ function _addon.core.getGuildList()
 
     local guildName = GetGuildName(_mail.currentGuild)
 
-    if (_checkBox["aldmeri"].value and charVar[5] == 1)
-      or (_checkBox["ebonheart"].value and charVar[5] == 2)
-      or (_checkBox["daggerfall"].value and charVar[5] == 3) then
+    if _mail.currentRank == 0 and memberOfflineSince >= _mail.offlineSince
+      or memberVar[3] == _mail.currentRank and memberOfflineSince >= _mail.offlineSince then
+      if (searchTerm == "" or string.find(sortedData[i].name, searchTerm) or string.find(memberVar[2], searchTerm)) then
 
-      if (_checkBox["online"].value and (memberVar[4] == 1 or memberVar[4] == 2 or memberVar[4] == 3))
-        or (_checkBox["offline"].value and (memberVar[4] == 4)) then
+        local historyData = _addon.core.getHistoryInfo(guildName, sortedData[i].name)
 
-        if _mail.currentRank == 0 and memberOfflineSince >= _mail.offlineSince
-          or memberVar[3] == _mail.currentRank and memberOfflineSince >= _mail.offlineSince then
-          if (searchTerm == "" or string.find(sortedData[i].name, searchTerm) or string.find(memberVar[2], searchTerm)) then
-
-            local historyData = _addon.core.getHistoryInfo(guildName, sortedData[i].name)
-
-            if historyData[1] == true and historyData[2] == true then
-              table.insert(availableNames, { sortedData[i].name, false, sortedData[i].id} )
-            end
-          end
+        if historyData[1] == true and historyData[2] == true then
+          table.insert(availableNames, { sortedData[i].name, false, sortedData[i].id} )
         end
       end
     end
@@ -856,55 +847,55 @@ function _addon.core.mail()
   _mail.button1 = _SGT.createFlatButton("SGT_Notebook_NewSendListButton", SGT_Notebook_MessagesRecipient, {180, -20}, {90, 30}, white .. getString(ShissuNotebookMail_choice), BOTTOMLEFT)
   _mail.button2 = _SGT.createFlatButton("SGT_Notebook_NewSendChoiceButton", SGT_Notebook_NewSendListButton, {100, 0}, {90, 30}, white .. getString(ShissuNotebookMail_list), TOPRIGHT)
 
-  _checkBox["aldmeri"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_FactionAldmeri",
-    SGT_Notebook_MessagesRecipient_FactionLabel,
-    {20, 0},
-    TOPRIGHT,
-    function(value) _mail.fillScrollList() end,
-    {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_ALDMERI_DOMINION), 24, 24), 30, 25}, nil, true)
+  -- _checkBox["aldmeri"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_FactionAldmeri",
+  --   SGT_Notebook_MessagesRecipient_FactionLabel,
+  --   {20, 0},
+  --   TOPRIGHT,
+  --   function(value) _mail.fillScrollList() end,
+  --   {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_ALDMERI_DOMINION), 24, 24), 30, 25}, nil, true)
 
-  _checkBox["ebonheart"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_FactionEbonheart",
-    SGT_Notebook_MessagesRecipient_FactionAldmeri,
-    {50, 0},
-    TOPRIGHT,
-    function(value) _mail.fillScrollList() end,
-    {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_EBONHEART_PACT), 24, 24), 30, 25},
-    nil,
-    true
-  )
-  _checkBox["daggerfall"]  = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_FactionDaggerfall",
-    SGT_Notebook_MessagesRecipient_FactionEbonheart,
-    {50, 0},
-    TOPRIGHT,
-    function(value) _mail.fillScrollList() end,
-    {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_DAGGERFALL_COVENANT), 24, 24), 30, 25},
-    nil,
-    true
-  )
+  -- _checkBox["ebonheart"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_FactionEbonheart",
+  --   SGT_Notebook_MessagesRecipient_FactionAldmeri,
+  --   {50, 0},
+  --   TOPRIGHT,
+  --   function(value) _mail.fillScrollList() end,
+  --   {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_EBONHEART_PACT), 24, 24), 30, 25},
+  --   nil,
+  --   true
+  -- )
+  -- _checkBox["daggerfall"]  = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_FactionDaggerfall",
+  --   SGT_Notebook_MessagesRecipient_FactionEbonheart,
+  --   {50, 0},
+  --   TOPRIGHT,
+  --   function(value) _mail.fillScrollList() end,
+  --   {zo_iconFormat(GetAllianceSymbolIcon(ALLIANCE_DAGGERFALL_COVENANT), 24, 24), 30, 25},
+  --   nil,
+  --   true
+  -- )
 
-  _checkBox["online"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_StatusOnline",
-    SGT_Notebook_MessagesRecipient_StatusLabel,
-    {30, 0},
-    TOPRIGHT,
-    function(value) _mail.fillScrollList() end,
-    {zo_iconFormat(GetPlayerStatusIcon(PLAYER_STATUS_ONLINE), 24, 24), 30, 25},
-    nil,
-    true
-  )
-  _checkBox["offline"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_StatusOffline",
-    SGT_Notebook_MessagesRecipient_StatusOnline,
-    {50, 0},
-    TOPRIGHT,
-    function(value) _mail.fillScrollList() end,
-    {zo_iconFormat(GetPlayerStatusIcon(PLAYER_STATUS_OFFLINE), 24, 24), 30, 25},
-    nil,
-    true
-  )
+  -- _checkBox["online"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_StatusOnline",
+  --   SGT_Notebook_MessagesRecipient_StatusLabel,
+  --   {30, 0},
+  --   TOPRIGHT,
+  --   function(value) _mail.fillScrollList() end,
+  --   {zo_iconFormat(GetPlayerStatusIcon(PLAYER_STATUS_ONLINE), 24, 24), 30, 25},
+  --   nil,
+  --   true
+  -- )
+  -- _checkBox["offline"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_StatusOffline",
+  --   SGT_Notebook_MessagesRecipient_StatusOnline,
+  --   {50, 0},
+  --   TOPRIGHT,
+  --   function(value) _mail.fillScrollList() end,
+  --   {zo_iconFormat(GetPlayerStatusIcon(PLAYER_STATUS_OFFLINE), 24, 24), 30, 25},
+  --   nil,
+  --   true
+  -- )
 
   _checkBox["kick"] = _addon.core.createFlatCheckBox(
     "SGT_Notebook_MessagesRecipient_CheckboxKick",
@@ -932,8 +923,8 @@ function _addon.core.mail()
 
   SGT_Notebook_MessagesRecipient_FilterText:SetHandler("OnTextChanged", _mail.fillScrollList)
 
-  SGT_Notebook_MessagesRecipient_StatusOnline:SetHandler("OnMouseEnter", function() _addon.core.toolTip(self, ShissuNotebookMail_online) end)
-  SGT_Notebook_MessagesRecipient_StatusOffline:SetHandler("OnMouseEnter", function() _addon.core.toolTip(self, ShissuNotebookMail_offlineSince) end)
+  -- SGT_Notebook_MessagesRecipient_StatusOnline:SetHandler("OnMouseEnter", function() _addon.core.toolTip(self, ShissuNotebookMail_online) end)
+  -- SGT_Notebook_MessagesRecipient_StatusOffline:SetHandler("OnMouseEnter", function() _addon.core.toolTip(self, ShissuNotebookMail_offlineSince) end)
 
   SGT_Notebook_MessagesRecipient_FilterLabel:SetText(blue .. getString(ShissuNotebookMail_Filter))
   SGT_Notebook_MessagesRecipient_ActionLabel:SetText(blue .. getString(ShissuNotebookMail_Action))
@@ -962,7 +953,7 @@ function _addon.core.mail()
 
   SGT_Notebook_MessagesRecipient_RanksLabel:SetText(getString(Shissu_rank))
   SGT_Notebook_MessagesRecipient_OfflineSinceLabel:SetText(getString(ShissuNotebookMail_offlineSince))
-  SGT_Notebook_MessagesRecipient_FactionLabel:SetText(getString(ShissuNotebookMail_alliance))
+  -- SGT_Notebook_MessagesRecipient_FactionLabel:SetText(getString(ShissuNotebookMail_alliance))
   SGT_Notebook_MessagesRecipient_MemberSinceLabel:SetText(getString(ShissuNotebookMail_Member))
   SGT_Notebook_MessagesRecipient_GoldSinceLabel:SetText(getString(ShissuNotebookMail_SinceGold))
 

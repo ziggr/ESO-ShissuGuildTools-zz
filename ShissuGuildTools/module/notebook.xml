@@ -243,6 +243,7 @@
 				  <Anchor point="TOPLEFT" relativeTo="$(parent)_RanksLabel" relativePoint="TOPRIGHT" offsetX="21" offsetY="-5" />
 				</Control>
 
+<!-- ZZ Begin the great purge -->
 				<!-- Fraktion Checkbox -->
 				<Label name="$(parent)_FactionLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Fraktion">
 				  <Dimensions x="60" />
@@ -315,6 +316,9 @@
 				<Label name="$(parent)_CheckboxMailLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Keine Nachricht">
 					<Anchor point="TOPLEFT" relativeTo="$(parent)_CheckboxDemoteLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
 				</Label>
+
+<!-- zz purge ends here -->
+
 
   			<Label name="$(parent)_SendLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Senden">
   				<Anchor point="TOPLEFT" relativeTo="$(parent)_CheckboxMailLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
