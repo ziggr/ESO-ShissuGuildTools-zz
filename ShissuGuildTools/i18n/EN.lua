@@ -94,9 +94,8 @@ ZO_CreateStringId("ShissuContextMenu_forward_prefix", "Fwd")
 ZO_CreateStringId("ShissuContextMenu_answer_prefix", "Re")
 
 -- Modul: ShissuMemberStatus
-ZO_CreateStringId("ShissuMemberStatus", "Guild members status")
-ZO_CreateStringId("ShissuContextMenu_memberStatus", "Player status (Online/BRB/AFK/Offline)")
-ZO_CreateStringId("ShissuContextMenu_added", "to join")
+ZO_CreateStringId("ShissuMemberStatus", "Guild: Members Status")
+ZO_CreateStringId("ShissuContextMenu_added", "Joined")
 ZO_CreateStringId("ShissuContextMenu_removed", "left / kicked")
                                                         
 -- Modul: ShissuGuildHome

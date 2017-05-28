@@ -79,28 +79,6 @@ function _addon.core.playerRemoved(_, guildId, accName)
   d(text)
 end         
 
--- Event: EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED
-function _addon.core.playerStatusChanged(_, guildId, accName, _, newStatus)
-  if (_guildId == guildId and _status == newStatus) then return end
-  local guildName = GetGuildName(guildId)
-  
-  if _addon.settings["memberstatus"][guildName] == false then return end
-  
-  _guildId = guildId
-  _status = newStatus
-  
-  local statusText = {
-    green .. "Online",
-    yellow .. "AFK",
-    red .. "BRB",                                   
-    gray .. "Offline",
-  }
-
-  text = blue .. guildName .. ": " .. white .. accName .. " - " .. statusText[_status]
-
-  d(text)
-end
-
 -- Initialisierung
 function _addon.core.initialized()
   shissuGT = shissuGT or {}  
@@ -108,24 +86,20 @@ function _addon.core.initialized()
   _addon.settings = shissuGT[_addon.Name]
 
    -- Hat jemand die neue SaveVar schon?  
-  if (_addon.settings["memberstatus"] == nil) then _addon.settings["invite"] = {} end
   if (_addon.settings["added"] == nil) then _addon.settings["message"] = {} end
   if (_addon.settings["removed"] == nil) then _addon.settings["message"] = {} end
   
   for guildId=1, GetNumGuilds() do
     local guildName = GetGuildName(guildId)  
-    if (_addon.settings["memberstatus"][guildName] == nil) then _addon.settings["memberstatus"][guildName] = false end
     if (_addon.settings["added"][guildName] == nil) then _addon.settings["added"][guildName] = true end
     if (_addon.settings["removed"][guildName] == nil) then _addon.settings["removed"][guildName] = true end
   end
 
-  _addon.core.createGuildSettings(ShissuContextMenu_memberStatus, "memberstatus")
   _addon.core.createGuildSettings(ShissuContextMenu_added, "added")
   _addon.core.createGuildSettings(ShissuContextMenu_removed, "removed")
 
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_REMOVED, _addon.core.playerRemoved)
   EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_ADDED, _addon.core.playerAdded)
-  EVENT_MANAGER:RegisterForEvent(_addon.Name, EVENT_GUILD_MEMBER_PLAYER_STATUS_CHANGED, _addon.core.playerStatusChanged)
 end                               
 
 Shissu_SuiteManager._settings[_addon.Name] = {}
