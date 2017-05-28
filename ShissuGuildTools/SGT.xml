@@ -8,8 +8,8 @@
 		<!-- ChatButton -->
 		<Button name="SGT_ZO_ToogleButton" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
         	<Anchor point="RIGHT" relativeTo="ZO_ChatWindowOptions" relativePoint="RIGHT" offsetX="36" offsetY="0" />
-        	<Dimensions x="36" y="36" />
-          <Textures normal="/esoui/art/progression/morph_up.dds" mouseOver="//esoui/art/progression/morph_over.dds" />
+        	<Dimensions x="48" y="48" />
+          <Textures normal="/esoui/art/icons/guildranks/guild_indexicon_misc01_up.dds" mouseOver="/esoui/art/icons/guildranks/guild_indexicon_misc01_up.dds" />
 		</Button> 	
     
     
