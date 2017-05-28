@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notebookMail.lua
--- Version: v2.2.7
--- Last Update: 18.03.2017
+-- Version: v2.2.8
+-- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -27,7 +27,7 @@ local saveWindowPosition = _SGT.saveWindowPosition
 
 local _addon = {}
 _addon.Name	= "ShissuNotebookMail"
-_addon.Version = "2.2.7"
+_addon.Version = "2.2.8"
 _addon.core = {}
 _addon.fN = _SGT["title"]("Notebook Mailer")
 _addon.friends = "--|r " .. white .. getString(Shissu_friend) 
@@ -458,6 +458,7 @@ function _mail.mailButtons(all, kick)
   
   SGT_Notebook_Splash:SetHidden(false)  
   SGT_Notebook:SetHidden(true)
+  SGT_Notebook_MessagesRecipient:SetHidden(true)
   
   EVENT_MANAGER:RegisterForUpdate("SGT_EVENT_EMAIL", sleepTime, function()    
     if _checkBox["noMail"].value == false or kick == 0 then

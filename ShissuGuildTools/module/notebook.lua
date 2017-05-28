@@ -1,8 +1,8 @@
 -- Shissu GuildTools Module File
 --------------------------------
 -- File: notebook.lua
--- Version: v2.1.5
--- Last Update: 10.03.2017
+-- Version: v2.2.0
+-- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
 
@@ -25,10 +25,11 @@ local showDialog = _SGT.showDialog
 local getString = _SGT.getString
 local getWindowPosition = _SGT.getWindowPosition
 local saveWindowPosition = _SGT.saveWindowPosition
+local notesDD = nil
 
 local _addon = {}
 _addon.Name	= "ShissuNotebook"
-_addon.Version = "2.1.5"
+_addon.Version = "2.2.0"
 _addon.core = {}
 _addon.fN = _SGT["title"](getString(ShissuNotebook))
 _addon.hexColorPicker = nil
@@ -144,7 +145,11 @@ function _note.fillScrollList()
     sortedData[i].number = number
   end
 
+  notesDD.notes:ClearItems()
+
   for i = 1, numPages do
+    notesDD.notes:AddItem(notesDD.notes:CreateItemEntry(sortedData[i].title, _addon.core.setMailContent))
+          
     local control = _note.indexPool:AcquireObject(i)
     control.noteTitle = sortedData[i].title
     control.text = sortedData[i].text
@@ -188,6 +193,19 @@ function _addon.core.selectColor(color)
       _note.lastFocus:SetText(currentText .. _color[color] .. getString(Shissu_yourText) .. "|r")
     end
   end
+end
+
+function _addon.core.setMailContent(_, statusText)
+  local numPages = #_note.data
+
+  for i = 1, numPages do
+    if (statusText == _note.data[i].title) then
+      ZO_MailSendSubjectField:SetText(statusText)
+      ZO_MailSendBodyField:SetText(_note.data[i].text)  
+      break
+    end
+  end
+  
 end
 
 function _note.onTextChanged()
@@ -388,11 +406,20 @@ function _addon.core.notebook()
   ZO_CheckButton_SetLabelText(SGT_Notebook_AutoStringEnabled, white .. "Auto Post")
   ZO_CheckButton_SetToggleFunction(SGT_Notebook_AutoStringEnabled, function(control, checked) _note.autoPost = checked end)
   
-  
+
   _note.setControlToolTip(SGT_Notebook_NoteTitleText)                                                                                    
   _note.setControlToolTip(SGT_Notebook_NoteText) 
+    
+  notesDD = WINDOW_MANAGER:CreateControlFromVirtual("SGT_TTTTTTTTT", ZO_MailSend, "ZO_ComboBox")
+  notesDD:SetAnchor(TOPLEFT, ZO_MailSend, TOPLEFT, 200, 30)
+  notesDD:SetHidden(false)
+  notesDD:SetWidth(140) 
+  notesDD.dropdown = ZO_ComboBox_ObjectFromContainer(notesDD)
   
-  _note.fillScrollList()
+  notesDD.notes = notesDD.dropdown
+  notesDD.notes:SetSortsItems(false) 
+
+  _note.fillScrollList()  
 end
 
 function _addon.core.autoPost(_, channelType, fromName, text, isCustomerService, fromDisplayName)

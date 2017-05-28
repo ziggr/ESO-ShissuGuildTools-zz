@@ -44,9 +44,6 @@ module/chat.lua
 module/marker.lua
 module/marker.xml
 
-notimplemented/collectedData.xml
-notimplemented/collectedData.lua
-
 bindings.xml
 
 # Ext. Libraries

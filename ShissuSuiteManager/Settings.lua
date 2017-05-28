@@ -172,7 +172,7 @@ function ShissuCreateControl.colorpicker(parent, colorData)
   local function ColorPickerCallback(r, g, b, a)
     control.thumb:SetColor(r, g, b, a or 1)
 
-    d(r .. " - " .. g.. " - ".. b)
+    --d(r .. " - " .. g.. " - ".. b)
 
     if colorData.setFunc then
       colorData.setFunc(r, g, b, a or 1)
@@ -373,6 +373,16 @@ function ShissuCreateControl.textbox(parent, textBoxData)
 
   control.textbox:SetHandler("OnEscape", function(self) self:LoseFocus() end)
   control.textbox:SetHandler("OnMouseExit", function() ZO_Options_OnMouseExit(control) end)	
+
+  if textBoxData.tooltip then 
+    control.textbox:SetHandler("OnMouseEnter", function(self)
+      ZO_Tooltips_ShowTextTooltip(control.textbox, TOPRIGHT, Shissu_SuiteManager._lib.ReplaceCharacter(textBoxData.tooltip))
+    end)
+    
+    control.textbox:SetHandler("OnMouseExit", function(self)
+      ZO_Tooltips_HideTextTooltip()
+    end)   
+  end
   
 	local width = control.container:GetWidth()
 	local height = 30

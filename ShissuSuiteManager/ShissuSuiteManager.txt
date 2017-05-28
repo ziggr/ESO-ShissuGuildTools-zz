@@ -1,4 +1,4 @@
-## Title: |cAFD3FFShissu's|r|ceeeeee Suite Manager|r v1.4.1
+## Title: |cAFD3FFShissu's|r|ceeeeee Suite Manager|r v1.4.2
 ## APIVersion: 100018
 ## Author: |c779cff@Shissu|r [EU]
 

@@ -1,8 +1,8 @@
 -- Shissu GuildTools LanguageFile
 ---------------------------------
 -- File: RU.lua
--- Version: v1.3.0
--- Last Update: 12.03.2017
+-- Version: v1.4.0
+-- Last Update: 06.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Translated by KiriX
 
@@ -31,7 +31,6 @@ ZO_CreateStringId("Shissu_addInfo", "Дополнительная информа
 ZO_CreateStringId("ShissuModule_module", "Модули / Функции")
 ZO_CreateStringId("ShissuModule_moduleInfo", "Если вы хотите ускорить работу SGT, вы можете отдельно отключить некоторые модули и функции в соответствии с вашими потребностями.")
 ZO_CreateStringId("ShissuModule_moduleInfo2", "Выключение и включение отдельных модулей требует презагрузки интерфейса (/reloadui).")
-
 ZO_CreateStringId("ShissuModule_rightMouse", "ПКМ")
 ZO_CreateStringId("ShissuModule_leftMouse", "ЛКМ")
 ZO_CreateStringId("ShissuModule_middleMouse", "СКМ")
@@ -67,8 +66,10 @@ ZO_CreateStringId("ShissuNotifications_motD", GetString(SI_GUILD_MOTD_HEADER))
 ZO_CreateStringId("ShissuNotifications_background", GetString(SI_GUILD_BACKGROUND_INFO_HEADER))
 ZO_CreateStringId("ShissuNotifications_rank", "Список рангов")
 ZO_CreateStringId("ShissuNotifications_guild", GetString(SI_GAMEPAD_CAMPAIGN_BROWSER_TOOLTIP_GUILD_MEMBERS))
-ZO_CreateStringId("ShissuNotifications_background2", "от")
-ZO_CreateStringId("ShissuNotifications_background3", "был изменён")
+ZO_CreateStringId("ShissuNotifications_background2", "Справочная информация <<X:1>>|cffffff<<2>>|r была изменена.")
+ZO_CreateStringId("ShissuNotifications_rankChange", "Ранг Изменение в гильдии <<X:1>>|cffffff<<2>>|r: <<3>><<4>>.")
+ZO_CreateStringId("ShissuNotifications_joinGuild", "<<X:1>>|cffffff<<2>>|r: Присоединился")
+ZO_CreateStringId("ShissuNotifications_leftGuild", "<<X:1>>|cffffff<<2>>|r: Оставление / получить ноги")
 
 -- Modul: ShissuHistory
 ZO_CreateStringId("ShissuHistory", "Гильдия: " .. GetString(SI_WINDOW_TITLE_GUILD_HISTORY))
@@ -186,14 +187,12 @@ ZO_CreateStringId("ShissuNotebookMail_protocol", "Протокол рассыл�
 ZO_CreateStringId("ShissuNotebookMail_mailAbort", _color.blue .. "Закрыть окно" .. _color.white .. "\nЗакрытие окна завершит рассылку/исключение.")
 ZO_CreateStringId("ShissuNotebookMail_newMail", GetString(SI_SOCIAL_MENU_SEND_MAIL))       
 ZO_CreateStringId("ShissuNotebookMail_ERR_FAIL_BLANK_MAIL", "Письмо не отправлено")
-
 ZO_CreateStringId("ShissuNotebookMail_Filter", "Фильтр")
 ZO_CreateStringId("ShissuNotebookMail_Action", "Действие")
 ZO_CreateStringId("ShissuNotebookMail_Send", "Отправить")
 ZO_CreateStringId("ShissuNotebookMail_Member", "Участник")
 ZO_CreateStringId("ShissuNotebookMail_SinceGold", "за  мин. дней")
 ZO_CreateStringId("ShissuNotebookMail_noMail", "Без письма")
-
 ZO_CreateStringId("ShissuNotebookMail_countDays", "Число дней")
 
 -- Modul: ShissuRoster
@@ -226,8 +225,6 @@ ZO_CreateStringId("ShissuScanner_scan2", "сейчас читаются. Пож�
 -- Modul: Chat
 ZO_CreateStringId("ShissuChat", "Чат")
 ZO_CreateStringId("ShissuChat_auto", "Автоматическое переключение")
-ZO_CreateStringId("ShissuChat_date", "Дата")
-ZO_CreateStringId("ShissuChat_time", "Время")
 ZO_CreateStringId("ShissuChat_sound", "Сигнал (Личное сообщение)")
 ZO_CreateStringId("ShissuChat_guilds", "Согильдейцы")
 ZO_CreateStringId("ShissuChat_rang", GetString(SI_GAMEPAD_GUILD_ROSTER_RANK_HEADER))
@@ -237,13 +234,43 @@ ZO_CreateStringId("ShissuChat_char", "Имя персонажа")
 ZO_CreateStringId("ShissuChat_whisper", GetString(SI_CHAT_PLAYER_CONTEXT_WHISPER))
 ZO_CreateStringId("ShissuChat_party", GetString(SI_CHAT_CHANNEL_NAME_PARTY))
 ZO_CreateStringId("ShissuChat_guildchan", GetString(SI_CHAT_OPTIONS_GUILD_CHANNELS))
-ZO_CreateStringId("ShissuChat_charAcc1", "Аккаунт")
-ZO_CreateStringId("ShissuChat_charAcc2", "Персонаж")
-ZO_CreateStringId("ShissuChat_charAcc3", "Аккаунт + Персонаж")
 ZO_CreateStringId("ShissuChat_guildInfo", "Информация гильдии")
 ZO_CreateStringId("ShissuChat_guildWhich", "Для каких гильдий выводить дополнительную информацию?")
 ZO_CreateStringId("ShissuChat_guildNames1", "Названия")
 ZO_CreateStringId("ShissuChat_guildNames2", "Как гильдии отображаются в чате?")
+ZO_CreateStringId("ShissuChat_brackets" , "удалить скобки имена")
+ZO_CreateStringId("ShissuChat_bracketsTT" , "Вдали скобки [] имена игроков")
+ZO_CreateStringId("ShissuChat_char", "Отображаемое имя")
+ZO_CreateStringId("ShissuChat_charAcc1", "Аккаунт")
+ZO_CreateStringId("ShissuChat_charAcc2", "Персонаж")
+ZO_CreateStringId("ShissuChat_charAcc3", "Персонаж@Аккаунт")
+ZO_CreateStringId("ShissuChat_window", "окно чата")
+ZO_CreateStringId("ShissuChat_hideText", "Скрыть текст")
+ZO_CreateStringId("ShissuChat_hideTextTT", "может общаться текст автоматически скрывать")
+ZO_CreateStringId("ShissuChat_register", "Стандартный Регистрация / вкладка")
+ZO_CreateStringId("ShissuChat_registerTT", "Выбор вкладки открыт после входа в систему / reloadui")
+ZO_CreateStringId("ShissuChat_channel", "стандартный канал")
+ZO_CreateStringId("ShissuChat_channelTT", "Определяет, какой канал чата в соответствии с приложением / reloadui автоматически используется в первую очередь.")
+ZO_CreateStringId("ShissuChat_url", "сделать URL-адреса / ссылки кликабельны")
+ZO_CreateStringId("ShissuChat_urlTT", "http(s) / www")
+ZO_CreateStringId("ShissuChat_partySwitch", "Автоматическая смена: группа")
+ZO_CreateStringId("ShissuChat_partySwitchTT", "Изменения в канале чата: Группа раз группа, образованная.")
+ZO_CreateStringId("ShissuChat_partyLead", GetString(SI_GROUP_LEADER_TOOLTIP) .. " выделить цвет.")
+ZO_CreateStringId("ShissuChat_soundTT", "Звуковой сигнал звук, который воспроизводится, когда один шепчет")
+ZO_CreateStringId("ShissuChat_warningColor", "Визуальный акцент")
+ZO_CreateStringId("ShissuChat_warningColor", "Цвет текста выделить для (новых) чатов")
+ZO_CreateStringId("ShissuChat_timeStamp", "отметка времени")
+ZO_CreateStringId("ShissuChat_timeStampTT", "Добавляет сообщения чата добавил метку времени.")
+ZO_CreateStringId("ShissuChat_date", "Дата")
+ZO_CreateStringId("ShissuChat_time", "Время")
+ZO_CreateStringId("ShissuChat_timeStampFormat", "Отметка формат")
+ZO_CreateStringId("ShissuChat_timeStampFormatTT", "|ceeeeeeFORMAT|r:\n" ..
+  "|cAFD3FFDDDate|r\n" ..
+  "|cAFD3FFDD|rDay\n|cAFD3FFD|r: Day(no previous 0)\n\|cAFD3FFMM|r: Month\n|cAFD3FFM|r: Month (no previous 0)\n|cAFD3FFY|r: Year\n\n" ..
+  "|cAFD3FFDDTime\n" ..
+  "|cAFD3FFHH|rHour (24)\n|cAFD3FFhh|r: Hour (12)\n|cAFD3FFH|r: Hour (24, no previous 0)\n|cAFD3FFh|r: Hpur (12, no previous 0)\n" ..
+  "|cAFD3FFA|r: AM/PM\n|cAFD3FFa|r: am/pm\n|cAFD3FFm|r: Minutes\n|cAFD3FFs|r: Seconds")
+
      
 -- Modul: Marks
 ZO_CreateStringId("ShissuMarks", "Отметки")

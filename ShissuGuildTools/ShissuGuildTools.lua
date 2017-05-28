@@ -1,10 +1,101 @@
 -- Shissu GuildTools 3
 ----------------------
 -- File: SGT.lua
--- Version: v3.0.5.7
--- Last Update: 19.03.2017
+-- Version: v3.1.0.0
+-- Last Update: 04.05.2017
 -- Written by Christian Flory (@Shissu) - esoui@flory.one
 -- Distribution without license is prohibited!
+
+--[[
+  v3.1.0.0 Update
+  ***************
+                SuiteManager
+  ************
+  - NEU: Zusätzliche Möglichkeiten zur Verwendung von Tooltips
+  - FIX: ColorPicker Debug = false^^
+  - NEU: DEBUG/ERROR Fenster: Fehler kopieren / per Mail versenden
+
+  Notifications 2.0.0
+  *******************
+  - Der Hinweis das sich die "Hintergrundinformationen" geändert haben wird nun bei den Benachrichtigungen angezeigt, statt im Chat!
+  - Benachrichtigung: Dein Rank hat sich geändert.
+  - Benachrichtigung: Du hast die Gilde verlassen / wurdest gekickt.
+                                                                          
+  - Benachrichtigung Gildenmitglieder [Live, wenn du online bist]
+  ***********************************
+  - Benachrichtigung: Gildenmitglied XYZ hat die Notiz verändert! 
+  - Benachrichtigung: Gildenmitglied XYZ wurde befördert / degradiert
+
+  Chat Update 2.0.0
+  *****************  
+  - EDIT: Entfernung libChat
+  - EDIT: Überarbeitung einzelner Funktionen / Entfernung von nicht mehr benötigte Funktionen
+  
+  - NEU: Klammern um Namen entfernen
+  - NEU: Zusätzliche Möglichkeiten den Zeitstempel zu manipulieren
+  - NEU: Formatierung des Namens: Charaktername, Accountname, Charaktername+Accountname
+  
+  Fenster
+  **********
+  - NEU: Standard Register
+  - NEU: Standard Channel
+  - NEU: Anzahl max. Zeilen in Chat auf 1000 erhöht
+  - NEU: Text ausblenden AN/AUS - NO FADE
+  
+  Neue Funktionen
+  ***************
+  - NEU: URLHandling + Anklickbar + Einfärbung
+  - NEU: Automatischer Wechsel in den Gruppenchat
+  - NEU: Gruppenanführer/in farbig einfärben/hervorheben
+  - NEU: Gildeninformationen nun auch im Gildenchat, Flüstermodus
+  
+  ALT [FERTIG]
+  ************
+  - FIX: Soundausgabe bei Flüstern
+  - FIX: Automatischer Chatwechsel (je nach Aktivität)
+  Notebook
+  ********
+  - Notizen, Mails lassen sich direkt nun im Fenster: Neue Mail auswählen.
+  
+  SuiteManager
+  ************
+  - Zusätzliche Möglichkeiten zur Verwendung von Tooltips
+
+  NotebookMailer v2.2.8
+  *********************
+  - Fenster schließen sich wieder korrekt
+  
+  Misc
+  ****
+  - Entfernung libChat
+  - Überarbeitung einzelner Funktionen
+  - Entfernung von nicht mehr benötigte Funktionen
+  
+  Formatierungen
+  **************
+  - Klammern um Namen entfernen
+  - Zusätzliche Möglichkeiten den Zeitstempel zu manipulieren
+  - Formatierung des Namens: Charaktername, Accountname, Charaktername+Accountname
+  
+  Fenster
+  *******
+  - Standard Register
+  - Standard Channel
+  - Anzahl max. Zeilen in Chat auf 1000 erhöht
+  - Text ausblenden AN/AUS - NO FADE
+  
+  Neue Funktionen
+  ***************
+  - URLHandling + Anklickbar + Einfärbung
+  - Automatischer Wechsel in den Gruppenchat
+  - Gruppenanführer/in farbig einfärben/hervorheben
+  - Gildeninformationen nun auch im Gildenchat, Flüstermodus
+  
+  ALT [FERTIG]
+  ************
+  - Soundausgabe bei Flüstern
+  - Automatischer Chatwechsel (je nach Aktivität)
+]]
 
 local _globals = Shissu_SuiteManager._globals
 local white = _globals["color"]["white"]
@@ -16,7 +107,7 @@ local getString = _SGT.getString
            
 local _addon = {}
 _addon.Name	= "ShissuGuildTools"
-_addon.Version = "3.0.5.7"
+_addon.Version = "3.1.0.0"
 _addon.formattedName	= "|cAFD3FFShissu's|r|ceeeeee Guild Tools"
 _addon.core = {}        
 _addon.settings = {}
@@ -44,6 +135,8 @@ _addon.controls = {
 
 local _module = {}
 
+activeNotifications = {}
+
 --_memberList = {}
 _SGTcharacterList = {}
 _SGTaccountList = {}
@@ -55,7 +148,7 @@ function _addon.core.initialized()
 
   zo_callLater(function()              
     _addon.core.createCharacterList()  
-    _addon.core.createAccountList()      
+    _addon.core.createAccountList()   
   end, 1500); 
 end
 
@@ -236,11 +329,13 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
     _addon.loadModule(ShissuGuildHome, "ShissuGuildHome")
     _addon.loadModule(ShissuMemberStatus, "ShissuMemberStatus")
     _addon.loadModule(ShissuContextMenu, "ShissuContextMenu")
-    _addon.loadModule(ShissuMarks, "ShissuMarks") 
+    --_addon.loadModule(ShissuMarks, "ShissuMarks") 
     _addon.loadModule(ShissuTeleporter, "ShissuTeleporter")
     _addon.loadModule(ShissuWelcomeInvite, "ShissuWelcomeInvite")
     _addon.loadModule(ShissuNotebook, "ShissuNotebook") 
     _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
+    
+    _addon.loadModule(ShissuNotebook, "ShissuChat2") 
     
     --_addon.loadModule(ShissuRoster, "ShissuCollectedData")  
                                   
@@ -250,7 +345,7 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
       _addon.loadModule(ShissuScanner, "ShissuScanner")
     end
     
-    if checkSetting("ShissuNostebook") then
+    if checkSetting("ShissuNotebook") then
       _addon.loadModule(ShissuNotebookMail, "ShissuNotebookMail")
       SGT_Notebook_MessagesRecipient:SetHidden(true)
     end
@@ -266,13 +361,13 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
         buttonText = blue .. getString(ShissuModule_leftMouse) .. white .. " - " .. getString(ShissuNotebook)
       end
       
-      if (checkSetting("ShissuMarks")) then
-        if (string.len(buttonText) > 2) then
-          buttonText = buttonText .. "\n"
-        end
+   --   if (checkSetting("ShissuMarks")) then
+    --    if (string.len(buttonText) > 2) then
+    --      buttonText = buttonText .. "\n"
+    --    end
         
-        buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
-      end    
+   --     buttonText = buttonText .. blue .. getString(ShissuModule_middleMouse) .. white .. " - " .. getString(ShissuMarks)
+    -- end    
             
       if (checkSetting("ShissuTeleporter")) then                                                                  
         if (string.len(buttonText) > 2) then
@@ -286,6 +381,14 @@ function _addon.EVENT_ADD_ON_LOADED(_, addOnName)
       SGT_ZO_ToogleButton:SetHandler("OnMouseExit", ZO_Tooltips_HideTextTooltip)
       SGT_ZO_ToogleButton:SetHandler("OnMouseUp", function(_, button) _addon.core.chatButton(button) end)
     end
+
+  --_roster.rank:SetSortsItems(false) 
+  --roster.setRank(_roster.rank)
+  --
+  --_roster.rank:SetSelectedItem(blue .. "-- " .. white .. getString(ShissuNotebookMail_all2))
+
+    
+    
   end, 500); 
   
   EVENT_MANAGER:UnregisterForEvent(_addon.Name, EVENT_ADD_ON_LOADED)
@@ -297,22 +400,22 @@ Shissu_SuiteManager._settings[_addon.Name].panel = _addon.panel
 Shissu_SuiteManager._settings[_addon.Name].controls = _addon.controls                 
 Shissu_SuiteManager._init[_addon.Name] = _addon.core.initialized     
 
-ZO_CreateStringId("SI_BINDING_NAME_SGT_Marks", "Markierungen")
+--ZO_CreateStringId("SI_BINDING_NAME_SGT_Marks", "Markierungen")
 ZO_CreateStringId("SI_BINDING_NAME_SGT_Notes", "Notizbuch")      
 ZO_CreateStringId("SI_BINDING_NAME_SGT_Teleporter", "Teleporter")  
     
 Shissu_SuiteManager._bindings[_addon.Name] = {}
-Shissu_SuiteManager._bindings[_addon.Name].marks = function() 
-  checkSetting = _addon.checkSetting
+--Shissu_SuiteManager._bindings[_addon.Name].marks = function() 
+--  checkSetting = _addon.checkSetting
   
-  if (checkSetting("ShissuMarks")) then
-    if (SGT_Marks:IsHidden()) then
-      SGT_Marks:SetHidden(false)
-    else
-      SGT_Marks:SetHidden(true)
-    end
-  end
-end  
+--  if (checkSetting("ShissuMarks")) then
+--    if (SGT_Marks:IsHidden()) then
+--      SGT_Marks:SetHidden(false)
+--    else
+--      SGT_Marks:SetHidden(true)
+--    end
+--  end
+--end  
 
 Shissu_SuiteManager._bindings[_addon.Name].notes = function() 
   checkSetting = _addon.checkSetting
@@ -346,11 +449,17 @@ Shissu_SuiteManager._bindings[_addon.Name].teleport = function()
 end    
 
 -- /script checkGoldDeposits("Tamrilando", 2000, true)
--- /script checkGoldDeposits("Tamrilando", 2000)
+-- /script checkGoldDeposits("Tamrilando", 2500)
+-- /script checkGoldDeposits("Tamrizon", 2000)
+                             
+--  local currentTime = _SGT.currentTime()
+--  local nextKiosk = currentTime + _SGT.getKioskTime()
+--  local lastKiosk = nextKiosk - 604800
+  
 
 -- Not offical, testing
 function checkGoldDeposits(guildName, goldDeposit, removeReminder)
-  local lastKiosk = GetTimeStamp() - _SGT.getKioskTime() - 604800
+  local lastKiosk = _SGT.currentTime() + _SGT.getKioskTime() - 604800
   local _history = shissuGT["History"]
 
   d("Letzter Gildenhändler: " .. GetDateStringFromTimestamp(lastKiosk) .. " - " .. ZO_FormatTime((lastKiosk) % 86400, TIME_FORMAT_STYLE_CLOCK_TIME, TIME_FORMAT_PRECISION_TWENTY_FOUR_HOUR))
