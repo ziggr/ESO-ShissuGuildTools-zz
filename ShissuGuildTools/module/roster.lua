@@ -61,7 +61,6 @@ local _filter = {
 _addon.settings = {
   ["gold"] = getString(ShissuRoster_total),
   ["colGold"] = true,
-  ["colChar"] = true,
   ["colNote"] = true,
 }
 
@@ -81,15 +80,6 @@ function _addon.core.createSettingMenu()
     name = getString(ShissuRoster_colAdd2) .. blue .. "\n\reloadui",
   }
 
-  controls[#controls+1] = {
-    type = "checkbox",
-    name = getString(ShissuRoster_colChar),
-    getFunc = _addon.settings["colChar"],
-    setFunc = function(_, value)
-      _addon.settings["colChar"] = value
-    --  Shissu_SuiteManager._bindings.reload()
-    end,
-  }
   controls[#controls+1] = {
     type = "checkbox",
     name = getString(ShissuRoster_colGold),
@@ -733,37 +723,14 @@ function _addon.core:InitRosterChanges()
   local headers = ZO_GuildRosterHeaders
   local zoneHeader = headers:GetNamedChild('Zone')
 
-  if (_addon.settings["colGold"] or _addon.settings["colChar"] ) then
+  if (_addon.settings["colGold"] ) then
 
     local headerDisplayName = headers:GetNamedChild('DisplayName')
     zoneHeader:SetDimensions(220, 32)
 
-    -- Spalte Charakter
-    if _addon.settings["colChar"] then
-      additionalWidth = additionalWidth + 100
-
-      local control = headers:GetName() .. getString(ShissuRoster_char)
-      local characterHeader = CreateControlFromVirtual(control, headers, 'ZO_SortHeader')
-      ZO_SortHeader_Initialize(characterHeader, getString(ShissuRoster_char), 'character', ZO_SORT_ORDER_DOWN, TEXT_ALIGN_LEFT, 'ZoFontGameLargeBold')
-
-      characterHeader:SetAnchor(TOPLEFT, headerDisplayName, TOPRIGHT, 0, 0)
-      characterHeader:SetDimensions(200,32)
-      characterHeader:SetHidden(false)
-
-      GUILD_ROSTER_KEYBOARD.sortHeaderGroup:AddHeader(characterHeader)
-
-      -- Spalte Zone
-      zoneHeader:ClearAnchors()
-      zoneHeader:SetAnchor(TOPLEFT, characterHeader, TOPRIGHT, 0, 0)
-    end
-
     -- Spalte Einzahlungen
     if _addon.settings["colGold"] then
       additionalWidth = additionalWidth + 10
-
-      if _addon.settings["colChar"] then
-        additionalWidth = additionalWidth + 80
-      end
 
       controlName = headers:GetName() .. getString(ShissuRoster_goldDeposit)
       local goldDepositHeader = CreateControlFromVirtual(controlName, headers, 'ZO_SortHeader')
@@ -832,49 +799,15 @@ function GUILD_ROSTER_MANAGER:SetupEntry(control, data, selected)
     end
   end
 
-  if (_addon.settings["colChar"]) then
-    local character = control:GetNamedChild(getString(ShissuRoster_char))
-    if(not character) then
-      local controlName = control:GetName() .. getString(ShissuRoster_char)
-    	character = control:CreateControl(controlName, CT_LABEL)
-    	character:SetAnchor(LEFT, rowDisplayName, RIGHT, 0, 0)
-    	character:SetFont('ZoFontGame')
-      character:SetWidth(195)
-      character:SetHidden(false)
-    end
 
-    local characterName = data.characterName
-
-    if string.len(data.characterName) > 28 then
-      characterName = string.sub(data.characterName, 0, 28) .. "..."
-    end
-
-    if (data.online) then
-      character:SetText(characterName)
-    else
-      characterName = string.gsub(characterName, "|ceeeeee", "")
-      character:SetText("|cadadad" .. characterName)
-    end
-
-    if data.characterNameTT then
-      character:SetMouseEnabled(true);
-      character:SetHandler("OnMouseEnter", function (self) ZO_Tooltips_ShowTextTooltip(self, TOP, data.characterNameTT) end)
-      character:SetHandler("OnMouseExit", function (self) ZO_Tooltips_HideTextTooltip() end)
-    end
-
-    -- Spalte Zone
+  local character = control:GetNamedChild(getString(ShissuRoster_char))
+  if (character) then
+    character:SetHidden(true)
     rowZone:ClearAnchors()
-    rowZone:SetAnchor(TOPLEFT, character, TOPRIGHT, 8)
-  else
-    local character = control:GetNamedChild(getString(ShissuRoster_char))
-    if (character) then
-      character:SetHidden(true)
-      rowZone:ClearAnchors()
-      rowZone:SetAnchor(TOPLEFT, rowDisplayName, TOPRIGHT, 8)
-    end
+    rowZone:SetAnchor(TOPLEFT, rowDisplayName, TOPRIGHT, 8)
   end
 
-  if _addon.settings["colGold"] or _addon.settings["colChar"] then
+  if _addon.settings["colGold"] then
     rowZone:SetWidth(210)
   else
     rowZone:SetWidth(320)
@@ -925,34 +858,6 @@ function SGT_GuildRosterManager:BuildMasterList()
 
     local characterName = data.characterName
     local characterName2 = string.gsub(characterName, "|ceeeeee", "")
-
-    -- Charaktername Tooltip
-    if _addon.settings["colChar"] then
-      if memberChars then
-        local firstChar = 1
-        local newCharacterNameTT = ""
-
-        for charName, charInfo in pairs(memberChars) do
-          if (characterName2) then
-            if ( characterName2 == charName ) then
-              charName = green .. charName
-            end
-          end
-
-          if firstChar == 1 then
-            newCharacterNameTT = _addon.core.newCharName(charName, charInfo)
-            firstChar = 0
-          else
-            if (not string.find(newCharacterNameTT, _addon.core.newCharName(charName, charInfo))) then
-              newCharacterNameTT = newCharacterNameTT .. "\n" .. _addon.core.newCharName(charName, charInfo)
-            end
-          end
-
-        end
-
-        data.characterNameTT = blue .. displayName .. white .. "\n\n" .. newCharacterNameTT
-      end
-    end
 
     -- Spalte: Gold Einzahlung
     local guildName = GetGuildName(guildId)
@@ -1052,7 +957,6 @@ function _addon.core.initialized()
   end
 
   if (_addon.settings["colGold"] == nil) then _addon.settings["colGold"] = true end
-  if (_addon.settings["colChar"] == nil) then _addon.settings["colChar"] = true end
   if (_addon.settings["colNote"] == nil) then _addon.settings["colNote"] = true end
 
   _addon.core.rosterUI()
