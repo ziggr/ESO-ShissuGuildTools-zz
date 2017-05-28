@@ -235,22 +235,12 @@ function _addon.EVENT_ADD_ON_LOADED (eventCode, addOnName)
      
     -- Register Base Commands
     _addon._lib.registerCommand("rl", function() SLASH_COMMANDS["/reloadui"]() end) 
-    _addon._lib.registerCommand("on",  function() SelectPlayerStatus(PLAYER_STATUS_ONLINE) end)
-    _addon._lib.registerCommand("off", function() SelectPlayerStatus(PLAYER_STATUS_OFFLINE) end)
-    _addon._lib.registerCommand("brb", function() SelectPlayerStatus(PLAYER_STATUS_DO_NOT_DISTURB) end)
-    _addon._lib.registerCommand("dnd", function() SelectPlayerStatus(PLAYER_STATUS_DO_NOT_DISTURB) end)
-    _addon._lib.registerCommand("afk", function() SelectPlayerStatus(PLAYER_STATUS_AWAY) end)         
-   
-    -- Misc Commands
-    _addon._lib.registerCommand("helm", _addon.helmToogle)     
-    
-    -- Roll/Dice Commands
-    _addon._lib.registerCommand("roll", _addon.dice)     
-    _addon._lib.registerCommand("dice", _addon.dice)     
         
+       -- Misc Commands
+    _addon._lib.registerCommand("helm", _addon.helmToogle)     
+     
     -- Bindings
-    _addon._bindings.helmToogle = _addon.helmToogle
-    _addon._bindings.offlineToogle = _addon.offlineToogle   
+    _addon._bindings.helmToogle = _addon.helmToogle  
     _addon._bindings.reload = _addon.reload
         
     -- Feedback Language    
