@@ -65,7 +65,7 @@ _mail.memberSince = 0
 _mail.gold = 0
 _mail.goldSince = 0
 
-local _checkBox = {}
+-- local _checkBox = {}
 
 local _direction = {
   ["offlineSince"] = true,
@@ -424,8 +424,8 @@ function _mail.mailButtons(all, kick)
     _mail.all = kick
   end
 
-  if _checkBox["kick"].value == true then sleepTime = 500 end
-  if _checkBox["demote"].value == true then sleepTime = 2000 end
+  -- if _checkBox["kick"].value == true then sleepTime = 500 end
+  -- if _checkBox["demote"].value == true then sleepTime = 2000 end
 
   _mail.isSend = true
   if _mail.isOpen == false then RequestOpenMailbox() end
@@ -435,14 +435,15 @@ function _mail.mailButtons(all, kick)
   -- Splash Screen Text
   SGT_Notebook_Splash_Subject:SetText(_mail.cache.title)
 
-  if _checkBox["kick"].value == true and kick == 1 and not kick == 3 then
-    SGT_Notebook_Splash_Title:SetText("E-Mail Kick")
-  elseif kick == 1 and not kick == 3  then
-    if _checkBox["kick"].value == true then
-      SGT_Notebook_Splash_Title:SetText(getString(ShissuNotebookMail_progressKickTitle))
-    elseif _checkBox["demote"].value == true then
-      SGT_Notebook_Splash_Title:SetText(getString(ShissuNotebookMail_progressDemoteTitle))
-    end
+  -- if _checkBox["kick"].value == true and kick == 1 and not kick == 3 then
+  --   SGT_Notebook_Splash_Title:SetText("E-Mail Kick")
+  -- elseif kick == 1 and not kick == 3  then
+  if kick == 1 and not kick == 3  then
+    -- if _checkBox["kick"].value == true then
+    --   SGT_Notebook_Splash_Title:SetText(getString(ShissuNotebookMail_progressKickTitle))
+    -- elseif _checkBox["demote"].value == true then
+    --   SGT_Notebook_Splash_Title:SetText(getString(ShissuNotebookMail_progressDemoteTitle))
+    -- end
   elseif not kick == 3 then
     SGT_Notebook_Splash_Title:SetText(getString(ShissuNotebookMail_progressTitle))
   end
@@ -451,7 +452,8 @@ function _mail.mailButtons(all, kick)
   SGT_Notebook:SetHidden(true)
 
   EVENT_MANAGER:RegisterForUpdate("SGT_EVENT_EMAIL", sleepTime, function()
-    if _checkBox["noMail"].value == false or kick == 0 then
+    -- if _checkBox["noMail"].value == false or kick == 0 then
+    if  kick == 0 then
       if _mail.emailIsOpen == false then RequestOpenMailbox() end
 
       if recipient[i] ~= nil then
@@ -470,13 +472,13 @@ function _mail.mailButtons(all, kick)
           QueueMoneyAttachment(0)
           SendMail(recipient[i], _mail.cache.title, _mail.cache.text)
 
-          if kick == 1 then
-            if _checkBox["kick"].value == true then
-              GuildRemove(guildId, recipient[i])
-            elseif _checkBox["demote"].value == true  then
-              GuildDemote(guildId, recipient[i])
-            end
-          end
+          -- if kick == 1 then
+            -- if _checkBox["kick"].value == true then
+            --   GuildRemove(guildId, recipient[i])
+            -- elseif _checkBox["demote"].value == true  then
+            --   GuildDemote(guildId, recipient[i])
+            -- end
+          -- end
 
           i = i + 1
           _mail.isSend = false
@@ -485,11 +487,11 @@ function _mail.mailButtons(all, kick)
     else
       if kick == 1 then
         SGT_Notebook_Splash_Recipient:SetText(blue.. recipient[i])
-        if _checkBox["kick"].value == true  then
-          GuildRemove(guildId, recipient[i])
-        elseif _checkBox["demote"].value == true  then
-          GuildDemote(guildId, recipient[i])
-        end
+        -- if _checkBox["kick"].value == true  then
+        --   GuildRemove(guildId, recipient[i])
+        -- elseif _checkBox["demote"].value == true  then
+        --   GuildDemote(guildId, recipient[i])
+        -- end
       end
       i = i + 1
     end
@@ -749,64 +751,64 @@ function _addon.core.createFlatCheckBox(name, parent, parentPos, parentAnchor, c
   return control
 end
 
-function _addon.core.filterEdit(variable)
-  local control = SGT_Notebook_MessagesRecipient_OfflineSince
-  local title = getString(ShissuNotebookMail_offlineSince)
-  local mainText = getString(ShissuNotebookMail_days)
+-- function _addon.core.filterEdit(variable)
+--   local control = SGT_Notebook_MessagesRecipient_OfflineSince
+--   local title = getString(ShissuNotebookMail_offlineSince)
+--   local mainText = getString(ShissuNotebookMail_days)
 
-  if (variable == "gold") then
-    control = SGT_Notebook_MessagesRecipient_Gold
-    title = "Gold?"
-    mainText = "1000? 2000? 3000? 4000? 10000? ...?"
-  elseif (variable == "memberSince") then
-    control = SGT_Notebook_MessagesRecipient_MemberSince
-    title = getString(ShissuNotebookMail_countDays) .. "?"
-    mainText = ""
-  elseif (variable == "goldSince") then
-    control = SGT_Notebook_MessagesRecipient_GoldSince
-    title = getString(ShissuNotebookMail_countDays) .. "?"
-    mainText = ""
-  end
+--   if (variable == "gold") then
+--     control = SGT_Notebook_MessagesRecipient_Gold
+--     title = "Gold?"
+--     mainText = "1000? 2000? 3000? 4000? 10000? ...?"
+--   elseif (variable == "memberSince") then
+--     control = SGT_Notebook_MessagesRecipient_MemberSince
+--     title = getString(ShissuNotebookMail_countDays) .. "?"
+--     mainText = ""
+--   elseif (variable == "goldSince") then
+--     control = SGT_Notebook_MessagesRecipient_GoldSince
+--     title = getString(ShissuNotebookMail_countDays) .. "?"
+--     mainText = ""
+--   end
 
-  local func = function(dialog)
-    local number = dialog:GetNamedChild("EditBox"):GetText()
-    number = tonumber(number)
+--   local func = function(dialog)
+--     local number = dialog:GetNamedChild("EditBox"):GetText()
+--     number = tonumber(number)
 
-    if (number ~= nil) then
-      if (type(number) == "number") then
-        control:SetText(blue .. number)
-        _mail[variable] = number
-        _mail.fillScrollList()
-      end
-    end
-  end
+--     if (number ~= nil) then
+--       if (type(number) == "number") then
+--         control:SetText(blue .. number)
+--         _mail[variable] = number
+--         _mail.fillScrollList()
+--       end
+--     end
+--   end
 
-  ESO_Dialogs["SGT_EDIT"].title = {text = title,}
-  ESO_Dialogs["SGT_EDIT"].mainText = {text = mainText .. "?",}
-  ESO_Dialogs["SGT_EDIT"].buttons[1] = {text = "OK",}
-  ESO_Dialogs["SGT_EDIT"].buttons[1].callback = func
-  ZO_Dialogs_ShowDialog("SGT_EDIT")
-end
+--   ESO_Dialogs["SGT_EDIT"].title = {text = title,}
+--   ESO_Dialogs["SGT_EDIT"].mainText = {text = mainText .. "?",}
+--   ESO_Dialogs["SGT_EDIT"].buttons[1] = {text = "OK",}
+--   ESO_Dialogs["SGT_EDIT"].buttons[1].callback = func
+--   ZO_Dialogs_ShowDialog("SGT_EDIT")
+-- end
 
-function _addon.core.setDirection(control, controlText, variable)
-  control:SetHandler("OnMouseUp", function(self, button)
-    if(button == 2) then
-      if (_direction[variable]) then
-        controlText:SetText(blue .. "<")
-        _direction[variable] = false
-      else
-        controlText:SetText(blue .. ">")
-        _direction[variable] = true
-      end
+-- function _addon.core.setDirection(control, controlText, variable)
+--   control:SetHandler("OnMouseUp", function(self, button)
+--     if(button == 2) then
+--       if (_direction[variable]) then
+--         controlText:SetText(blue .. "<")
+--         _direction[variable] = false
+--       else
+--         controlText:SetText(blue .. ">")
+--         _direction[variable] = true
+--       end
 
-      _mail.fillScrollList()
-    elseif (button == 1) then
-      if variable then
-        _addon.core.filterEdit(variable)
-      end
-    end
-  end)
-end
+--       _mail.fillScrollList()
+--     elseif (button == 1) then
+--       if variable then
+--         _addon.core.filterEdit(variable)
+--       end
+--     end
+--   end)
+-- end
 
 function _mail.checkKick(choice)
 --  SGT_Notebook_MessagesRecipient_ButtonChoice:SetHandler("OnClicked", function() _mail.mailButtons(0, 0) end)
@@ -814,19 +816,19 @@ function _mail.checkKick(choice)
  -- SGT_Notebook_MessagesRecipient_ButtonKick:SetHandler("OnClicked", function() showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_confirmKick), function() _mail.mailButtons(0, 1) end, nil) end)
 --  SGT_Notebook_MessagesRecipient_ButtonAllKick:SetHandler("OnClicked", function() showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_confirmKick), function() _mail.mailButtons(1, 1) end, nil) end)
 
-  if _checkBox["kick"].value then
-    showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_confirmKick), function()
-      _mail.mailButtons(choice, 1)
-    end, nil)
-  elseif _checkBox["demote"].value then
-    showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_demoteKick), function()
-      _mail.mailButtons(choice, 1)
-    end, nil)
-  else
-    if (_checkBox["noMail"].value == false) then
+  -- if _checkBox["kick"].value then
+  --   showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_confirmKick), function()
+  --     _mail.mailButtons(choice, 1)
+  --   end, nil)
+  -- elseif _checkBox["demote"].value then
+  --   showDialog(GetString(SI_PROMPT_TITLE_GUILD_REMOVE_MEMBER), getString(ShissuNotebookMail_demoteKick), function()
+  --     _mail.mailButtons(choice, 1)
+  --   end, nil)
+  -- else
+    -- if (_checkBox["noMail"].value == false) then
       _mail.mailButtons(choice, 0)
-    end
-  end
+  --   end
+  -- end
 
 end
 
@@ -897,29 +899,29 @@ function _addon.core.mail()
   --   true
   -- )
 
-  _checkBox["kick"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_CheckboxKick",
-    SGT_Notebook_MessagesRecipient,
-    {-10, 320},
-    TOPRIGHT,
-    function(value)
-    end
-  )
-  _checkBox["demote"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_CheckboxDemote",
-    SGT_Notebook_MessagesRecipient_CheckboxKick,
-    {0, 25},
-    TOPLEFT,
-    function(value)
-    end
-  )
-  _checkBox["noMail"] = _addon.core.createFlatCheckBox(
-    "SGT_Notebook_MessagesRecipient_CheckboxMail",
-    SGT_Notebook_MessagesRecipient_CheckboxDemote,
-    {0, 25},
-    TOPLEFT,
-    function(value) end
-  )
+  -- _checkBox["kick"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_CheckboxKick",
+  --   SGT_Notebook_MessagesRecipient,
+  --   {-10, 320},
+  --   TOPRIGHT,
+  --   function(value)
+  --   end
+  -- )
+  -- _checkBox["demote"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_CheckboxDemote",
+  --   SGT_Notebook_MessagesRecipient_CheckboxKick,
+  --   {0, 25},
+  --   TOPLEFT,
+  --   function(value)
+  --   end
+  -- )
+  -- _checkBox["noMail"] = _addon.core.createFlatCheckBox(
+  --   "SGT_Notebook_MessagesRecipient_CheckboxMail",
+  --   SGT_Notebook_MessagesRecipient_CheckboxDemote,
+  --   {0, 25},
+  --   TOPLEFT,
+  --   function(value) end
+  -- )
 
   SGT_Notebook_MessagesRecipient_FilterText:SetHandler("OnTextChanged", _mail.fillScrollList)
 
@@ -927,35 +929,35 @@ function _addon.core.mail()
   -- SGT_Notebook_MessagesRecipient_StatusOffline:SetHandler("OnMouseEnter", function() _addon.core.toolTip(self, ShissuNotebookMail_offlineSince) end)
 
   SGT_Notebook_MessagesRecipient_FilterLabel:SetText(blue .. getString(ShissuNotebookMail_Filter))
-  SGT_Notebook_MessagesRecipient_ActionLabel:SetText(blue .. getString(ShissuNotebookMail_Action))
+  -- SGT_Notebook_MessagesRecipient_ActionLabel:SetText(blue .. getString(ShissuNotebookMail_Action))
   SGT_Notebook_MessagesRecipient_SendLabel:SetText(yellow .. getString(ShissuNotebookMail_Send))
 
-  SGT_Notebook_MessagesRecipient_OfflineSinceDir:SetText(blue .. ">")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSinceDir, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSinceLabel, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSince, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
+  -- SGT_Notebook_MessagesRecipient_OfflineSinceDir:SetText(blue .. ">")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSinceDir, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSinceLabel, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_OfflineSince, SGT_Notebook_MessagesRecipient_OfflineSinceDir, "offlineSince")
 
-  SGT_Notebook_MessagesRecipient_MemberSinceDir:SetText(blue .. ">")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSinceDir, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSinceLabel, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSince, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
+  -- SGT_Notebook_MessagesRecipient_MemberSinceDir:SetText(blue .. ">")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSinceDir, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSinceLabel, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_MemberSince, SGT_Notebook_MessagesRecipient_MemberSinceDir, "memberSince")
 
-  SGT_Notebook_MessagesRecipient_GoldDir:SetText(blue .. ">")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldDir, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldLabel, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_Gold, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
+  -- SGT_Notebook_MessagesRecipient_GoldDir:SetText(blue .. ">")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldDir, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldLabel, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_Gold, SGT_Notebook_MessagesRecipient_GoldDir, "gold")
 
-  _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldSince, SGT_Notebook_MessagesRecipient_GoldDir, "goldSince")
+  -- _addon.core.setDirection(SGT_Notebook_MessagesRecipient_GoldSince, SGT_Notebook_MessagesRecipient_GoldDir, "goldSince")
 
-  SGT_Notebook_MessagesRecipient_CheckboxKickLabel:SetText(getString(ShissuNotebookMail_progressKickTitle))
-  SGT_Notebook_MessagesRecipient_CheckboxDemoteLabel:SetText(getString(ShissuNotebookMail_progressDemoteTitle))
-  SGT_Notebook_MessagesRecipient_CheckboxMailLabel:SetText(getString(ShissuNotebookMail_noMail))
+  -- SGT_Notebook_MessagesRecipient_CheckboxKickLabel:SetText(getString(ShissuNotebookMail_progressKickTitle))
+  -- SGT_Notebook_MessagesRecipient_CheckboxDemoteLabel:SetText(getString(ShissuNotebookMail_progressDemoteTitle))
+  -- SGT_Notebook_MessagesRecipient_CheckboxMailLabel:SetText(getString(ShissuNotebookMail_noMail))
 
   SGT_Notebook_MessagesRecipient_RanksLabel:SetText(getString(Shissu_rank))
-  SGT_Notebook_MessagesRecipient_OfflineSinceLabel:SetText(getString(ShissuNotebookMail_offlineSince))
+  -- SGT_Notebook_MessagesRecipient_OfflineSinceLabel:SetText(getString(ShissuNotebookMail_offlineSince))
   -- SGT_Notebook_MessagesRecipient_FactionLabel:SetText(getString(ShissuNotebookMail_alliance))
-  SGT_Notebook_MessagesRecipient_MemberSinceLabel:SetText(getString(ShissuNotebookMail_Member))
-  SGT_Notebook_MessagesRecipient_GoldSinceLabel:SetText(getString(ShissuNotebookMail_SinceGold))
+  -- SGT_Notebook_MessagesRecipient_MemberSinceLabel:SetText(getString(ShissuNotebookMail_Member))
+  -- SGT_Notebook_MessagesRecipient_GoldSinceLabel:SetText(getString(ShissuNotebookMail_SinceGold))
 
   -- Benutzerdefinierte Listen
   SGT_Notebook_MessagesRecipient_Add:SetHandler("OnMouseEnter", function(self) _addon.core.toolTip(self, ShissuNotebookMail_listPlayerAdd) end)
