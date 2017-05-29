@@ -404,7 +404,7 @@ function _mail.mailButtons(all, kick)
 
   -- aktueller Titel (Betreff) + Text zwischenspeichern, damit aktiv weitergearbeitet werden kann im Notizbuch
   _mail.cache.title = SGT_Notebook_NoteTitleText:GetText()
-  _mail.cache.text = SGT_Notebook_NoteText:GetText() .. "\n\nSent via |c779cffShissu's|r GuildTools 3"
+  _mail.cache.text = SGT_Notebook_NoteText:GetText() -- .. "\n\nSent via |c779cffShissu's|r GuildTools 3"
 
   if all == 1 then
     for i = 1, #_mail.guildList do
