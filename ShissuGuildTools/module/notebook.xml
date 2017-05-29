@@ -243,85 +243,8 @@
 				  <Anchor point="TOPLEFT" relativeTo="$(parent)_RanksLabel" relativePoint="TOPRIGHT" offsetX="21" offsetY="-5" />
 				</Control>
 
-<!-- ZZ Begin the great purge -->
-				<!-- Fraktion Checkbox -->
-				<Label name="$(parent)_FactionLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Fraktion">
-				  <Dimensions x="60" />
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_RanksLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="35" />
-				</Label>
-
-		    <!-- Status Checkbox -->
-				<Label name="$(parent)_StatusLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Status">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_FactionLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-
-				<Label name="$(parent)_OfflineSinceLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Offline">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_StatusLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-				<Label name="$(parent)_OfflineSinceDir" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="H">
-				  <Dimensions x="100" y="25" />
-				  <Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-20" offsetY="194" />
-				</Label>
-				<Label name="$(parent)_OfflineSince" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="0">
-				  <Dimensions x="95" y="25" />
-				  <Anchor point="TOPRIGHT" relativeTo="$(parent)_OfflineSinceDir" relativePoint="TOPRIGHT" offsetX="20" offsetY="0" />
-				</Label>
-
-				<Label name="$(parent)_MemberSinceLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="Mitglied">
-				  <Dimensions x="100" y="25" />
-				  <Anchor point="TOPLEFT" relativeTo="$(parent)_OfflineSinceLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="22" />
-				</Label>
-				<Label name="$(parent)_MemberSinceDir" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="H">
-				  <Dimensions x="100" y="25" />
-				  <Anchor point="TOPLEFT" relativeTo="$(parent)_OfflineSinceDir" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-				<Label name="$(parent)_MemberSince" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="0">
-				  <Dimensions x="95" y="25" />
-				  <Anchor point="TOPRIGHT" relativeTo="$(parent)_MemberSinceDir" relativePoint="TOPRIGHT" offsetX="20" offsetY="0" />
-				</Label>
-
-				<Label name="$(parent)_GoldLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="Gold">
-				  <Dimensions x="100" y="25" />
-				  <Anchor point="TOPLEFT" relativeTo="$(parent)_MemberSinceLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-				<Label name="$(parent)_GoldDir" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="H">
-				  <Dimensions x="100" y="25" />
-				  <Anchor point="TOPLEFT" relativeTo="$(parent)_MemberSinceDir" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-				<Label name="$(parent)_Gold" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="0">
-				  <Dimensions x="95" y="25" />
-				  <Anchor point="TOPRIGHT" relativeTo="$(parent)_GoldDir" relativePoint="TOPRIGHT" offsetX="20" offsetY="0" />
-				</Label>
-        <Label name="$(parent)_GoldSinceLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" horizontalAlignment="RIGHT"  text="vor min. Tage:">
-				  <Dimensions x="95" y="25" />
-				  <Anchor point="TOPRIGHT" relativeTo="$(parent)_GoldDir" relativePoint="TOPRIGHT" offsetX="-87" offsetY="25" />
-				</Label>
-        <Label name="$(parent)_GoldSince" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" mouseEnabled="true" verticalAlignment="CENTER" text="...">
-				  <Dimensions x="95" y="25" />
-				  <Anchor point="TOPLEFT" relativeTo="$(parent)_Gold" relativePoint="TOPLEFT" offsetX="0" offsetY="25" />
-				</Label>
-
-				<Label name="$(parent)_ActionLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Aktion">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_GoldLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="50" />
-				</Label>
-
-        <Label name="$(parent)_CheckboxKickLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Spieler entfernen">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_ActionLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="20" />
-				</Label>
-
-        <Label name="$(parent)_CheckboxDemoteLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Spieler degradieren">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_CheckboxKickLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
-				</Label>
-
-				<Label name="$(parent)_CheckboxMailLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Keine Nachricht">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)_CheckboxDemoteLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
-				</Label>
-
-<!-- zz purge ends here -->
-
-
   			<Label name="$(parent)_SendLabel" font="SGT_BUTTONFONT" wrapMode="ELLIPSIS" verticalAlignment="CENTER" text="Senden">
-  				<Anchor point="TOPLEFT" relativeTo="$(parent)_CheckboxMailLabel" relativePoint="TOPLEFT" offsetX="0" offsetY="30" />
+  				<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMRIGHT" offsetX="-200" offsetY="-55" />
   			</Label>
 
         <Button name="$(parent)_NewList" inheritAlpha="true" verticalAlignment="CENTER" horizontalAlignment="CENTER">
